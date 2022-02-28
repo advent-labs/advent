@@ -1,6 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
-import periodTable from "./reducer/periodtable"
 import borrowui from "./ui/borrowui"
 import variableDepositUI from "./ui/variableDeposit"
 import variableBorrowUI from "./ui/variableBorrow"
@@ -21,7 +20,6 @@ const sagaMiddleware = createSagaMiddleware({
 
 export const store = configureStore({
   reducer: {
-    periodTable,
     borrowui,
     depositui,
     userTokenAccounts,
