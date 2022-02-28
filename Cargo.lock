@@ -3,6 +3,15 @@
 version = 3
 
 [[package]]
+name = "advent"
+version = "0.1.0"
+dependencies = [
+ "anchor-lang",
+ "anchor-spl",
+ "spl-token",
+]
+
+[[package]]
 name = "ahash"
 version = "0.7.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -869,15 +878,6 @@ dependencies = [
  "syn",
  "version_check",
  "yansi",
-]
-
-[[package]]
-name = "prog"
-version = "0.1.0"
-dependencies = [
- "anchor-lang",
- "anchor-spl",
- "spl-token",
 ]
 
 [[package]]
