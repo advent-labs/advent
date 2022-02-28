@@ -115,20 +115,12 @@ export type Prog = {
             "type": "publicKey"
           },
           {
-            "name": "cachedPriceQuote",
-            "type": "u64"
-          },
-          {
             "name": "decimals",
             "type": "u8"
           },
           {
-            "name": "vault",
-            "type": "publicKey"
-          },
-          {
-            "name": "pythOraclePrice",
-            "type": "publicKey"
+            "name": "cachedPriceQuote",
+            "type": "u64"
           },
           {
             "name": "totalDebt",
@@ -145,6 +137,14 @@ export type Prog = {
           {
             "name": "totalDepositNotes",
             "type": "u64"
+          },
+          {
+            "name": "vault",
+            "type": "publicKey"
+          },
+          {
+            "name": "pythOraclePrice",
+            "type": "publicKey"
           },
           {
             "name": "depositNoteMint",
@@ -262,6 +262,10 @@ export type Prog = {
           {
             "name": "collateralCoefficient",
             "type": "u64"
+          },
+          {
+            "name": "collateralVaultAccount",
+            "type": "publicKey"
           }
         ]
       }
@@ -428,20 +432,12 @@ export const IDL: Prog = {
             "type": "publicKey"
           },
           {
-            "name": "cachedPriceQuote",
-            "type": "u64"
-          },
-          {
             "name": "decimals",
             "type": "u8"
           },
           {
-            "name": "vault",
-            "type": "publicKey"
-          },
-          {
-            "name": "pythOraclePrice",
-            "type": "publicKey"
+            "name": "cachedPriceQuote",
+            "type": "u64"
           },
           {
             "name": "totalDebt",
@@ -458,6 +454,14 @@ export const IDL: Prog = {
           {
             "name": "totalDepositNotes",
             "type": "u64"
+          },
+          {
+            "name": "vault",
+            "type": "publicKey"
+          },
+          {
+            "name": "pythOraclePrice",
+            "type": "publicKey"
           },
           {
             "name": "depositNoteMint",
@@ -575,6 +579,10 @@ export const IDL: Prog = {
           {
             "name": "collateralCoefficient",
             "type": "u64"
+          },
+          {
+            "name": "collateralVaultAccount",
+            "type": "publicKey"
           }
         ]
       }
