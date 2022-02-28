@@ -30,6 +30,7 @@ pub struct VariableDeposit {
     pub deposit_notes: u64,
     pub collateral_coefficient: u64,
     pub collateral_vault_account: Pubkey,
+    pub collateral_vault_account_bump: u8,
 }
 
 #[account(zero_copy)]
@@ -63,7 +64,7 @@ impl Default for Portfolio {
 }
 
 impl Portfolio {
-    fn register_variable_deposit(&mut self, new: VariableDeposit) -> Result<(), ErrorCode> {
+    pub fn register_variable_deposit(&mut self, new: VariableDeposit) -> Result<(), ErrorCode> {
         for d in self.variable_deposits.iter_mut() {
             if d.token == new.token {
                 panic!(
@@ -85,7 +86,7 @@ impl Portfolio {
         Err(ErrorCode::NoFreeVariableDeposits)
     }
 
-    fn add_fixed_borrow(&mut self, new: FixedBorrow) -> Result<(), ErrorCode> {
+    pub fn add_fixed_borrow(&mut self, new: FixedBorrow) -> Result<(), ErrorCode> {
         for x in self.fixed_borrows.iter_mut() {
             if x.token != Pubkey::default() {
                 continue;
@@ -99,7 +100,7 @@ impl Portfolio {
         Err(ErrorCode::NoFreeVariableDeposits)
     }
 
-    fn add_variable_deposit(
+    pub fn add_variable_deposit(
         &mut self,
         token: Pubkey,
         amount: u64,
@@ -110,7 +111,7 @@ impl Portfolio {
         Ok(())
     }
 
-    fn get_variable_deposit_mut(
+    pub fn get_variable_deposit_mut(
         &mut self,
         token: Pubkey,
     ) -> Result<&mut VariableDeposit, ErrorCode> {
@@ -124,7 +125,7 @@ impl Portfolio {
 }
 
 impl VariableDeposit {
-    fn add(&mut self, amount: u64, notes_amount: u64) {
+    pub fn add(&mut self, amount: u64, notes_amount: u64) {
         self.amount.checked_add(amount).unwrap();
         self.deposit_notes.checked_add(notes_amount).unwrap();
     }
