@@ -1,0 +1,187 @@
+$navbar-background-color: transparent;
+
+@mixin TextColors {
+  &.is-primary {
+    color: var(--brand-primary);
+  }
+  &.is-secondary {
+    color: var(--brand-primary);
+  }
+  &.is-action {
+    color: var(--brand-action);
+  }
+}
+
+$column-gap: 0.5rem;
+
+@mixin Regular {
+  font-weight: 400;
+}
+
+@mixin Medium {
+  font-weight: 500 !important;
+}
+
+@mixin Semi {
+  font-weight: 600;
+}
+
+@mixin Bold {
+  font-weight: 700 !important;
+}
+
+@mixin XS2 {
+  @include Regular;
+  font-size: 10px;
+  line-height: 14px;
+}
+
+@mixin XS {
+  @include Regular;
+  font-size: 11px;
+  line-height: 14.52px;
+}
+
+@mixin XS-Bold {
+  @include Bold;
+  font-size: 11px;
+  line-height: 14.52px;
+}
+
+@mixin Small {
+  @include Regular;
+  font-size: 12px;
+  line-height: 16.94px;
+}
+
+@mixin Small-Semi {
+  @include Semi;
+  font-size: 12px;
+  line-height: 16.94px;
+}
+
+@mixin Small-Bold {
+  @include Bold;
+  font-size: 12px;
+  line-height: 16.94px;
+}
+
+@mixin Medium {
+  @include Regular;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+@mixin Medium-Medium {
+  @include Medium;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+@mixin Medium-Semi {
+  @include Semi;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+@mixin Medium-Bold {
+  @include Bold;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+@mixin Large {
+  @include Regular;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+@mixin Large-Semi {
+  @include Semi;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+@mixin Large-Bold {
+  @include Bold;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+@mixin XL {
+  @include Regular;
+  font-size: 18px;
+  line-height: 25px;
+}
+
+@mixin XL-Medium {
+  @include Medium;
+  font-size: 18px;
+  line-height: 25px;
+}
+
+@mixin XL-Semi {
+  @include Semi;
+  font-size: 18px;
+  line-height: 25px;
+}
+
+@mixin XL-Bold {
+  @include Bold;
+  font-size: 18px;
+  line-height: 25px;
+}
+
+@mixin XL2 {
+  @include Regular;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+@mixin XL2-Semi {
+  @include Semi;
+  font-size: 20px;
+  line-height: 28px;
+}
+
+@mixin XL3 {
+  @include Regular;
+  font-size: 23px;
+  line-height: 32px;
+}
+
+@mixin XL3-Semi {
+  @include Semi;
+  font-size: 23px;
+  line-height: 32px;
+}
+
+@mixin XL4 {
+  @include Regular;
+  font-size: 26px;
+  line-height: 37px;
+}
+
+@mixin XL5 {
+  @include Regular;
+  font-size: 29px;
+  line-height: 41px;
+}
+
+@mixin XL5-Bold {
+  @include Bold;
+  font-size: 29px;
+  line-height: 41px;
+}
+
+@mixin XL6 {
+  @include Regular;
+  font-size: 32px;
+  line-height: 44px;
+}
+
+@mixin XL6-Bold {
+  @include Bold;
+  font-size: 32px;
+  line-height: 44px;
+}
