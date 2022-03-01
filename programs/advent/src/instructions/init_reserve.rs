@@ -31,14 +31,18 @@ pub struct InitReserve<'info> {
 }
 
 pub fn handler(ctx: Context<InitReserve>, policy: ReservePolicy) -> Result<()> {
-    ctx.accounts.settlement_table.load_init()?;
+    let mut t = ctx.accounts.settlement_table.load_init()?;
     let r = &mut ctx.accounts.reserve;
+
+    t.reserve = r.key();
+    t.market = ctx.accounts.market.key();
 
     let bump = *ctx.bumps.get("reserve").unwrap();
     r.market = ctx.accounts.market.key();
     r.bump = bump;
     r.policy = policy;
-    r.settlment_table = ctx.accounts.settlement_table.key();
+    r.settlement_table = ctx.accounts.settlement_table.key();
+    r.token = ctx.accounts.token.key();
 
     Ok(())
 }

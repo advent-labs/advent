@@ -11,9 +11,10 @@ import {
 import { Prog as AdventType, IDL } from "./program"
 
 const DEFAULT_PROGRAM_ID = "ke798ave2o7MMZkriRUPSCz1aLrrmPQY2zHdrikJ298"
+type ReadonlyProgram = Omit<Program<AdventType>, "rpc">
 
 export class AdventSDK {
-  public program: Omit<Program<AdventType>, "rpc">
+  public program: ReadonlyProgram
 
   constructor(public connection: Connection, program = DEFAULT_PROGRAM_ID) {
     const wallet = new Wallet(Keypair.generate())
@@ -62,7 +63,7 @@ export class AdventSDK {
 
 export class AdventMarket {
   constructor(
-    private program: Omit<Program<AdventType>, "rpc">,
+    private program: ReadonlyProgram,
     public address: PublicKey,
     public rewardTokenMint: PublicKey,
     public authority: PublicKey,
@@ -76,6 +77,17 @@ export class AdventMarket {
 
   async fetchAllReserves() {
     return this.program.account.reserve.all([
+      {
+        memcmp: {
+          bytes: utils.bytes.bs58.encode(this.address.toBuffer()),
+          offset: 8,
+        },
+      },
+    ])
+  }
+
+  async fetchAllSettlementTables() {
+    return this.program.account.settlementTable.all([
       {
         memcmp: {
           bytes: utils.bytes.bs58.encode(this.address.toBuffer()),
@@ -102,6 +114,38 @@ export class AdventMarket {
     return this.program.account.positions.fetch(address)
   }
 
+  async fetchReserve(address: PublicKey) {
+    return (await this.program.account.reserve.fetch(address)) as ReserveAccount
+  }
+
+  async fetchSettlmentTable(address: PublicKey) {
+    return (await this.program.account.settlementTable.fetch(
+      address
+    )) as SettlementTableAccount
+  }
+
+  async reserve(token: PublicKey) {
+    const [a, _] = await this.reservePDA(token)
+    const r = await this.fetchReserve(a)
+    const t = r.settlementTable
+    const table = await this.fetchSettlmentTable(t)
+
+    return reserveAccountToClass(r, this.program, table)
+  }
+
+  async allReserves() {
+    const rs = await this.fetchAllReserves()
+    const ts = await this.fetchAllSettlementTables()
+
+    const findTable = (r: PublicKey) =>
+      ts.find((t) => t.account.reserve.toBase58() === r.toBase58())
+        .account as SettlementTableAccount
+
+    return rs.map((r) =>
+      reserveAccountToClass(r.account, this.program, findTable(r.publicKey))
+    )
+  }
+
   async initPositionsIX(authority: PublicKey, positions: PublicKey) {
     const space = 5640
     const lamports =
@@ -118,7 +162,7 @@ export class AdventMarket {
   }
 
   async initSettlementTableIX(authority: PublicKey, target: PublicKey) {
-    const space = this.program.account.settlementTable.size
+    const space = 8832
     const lamports =
       await this.program.provider.connection.getMinimumBalanceForRentExemption(
         space
@@ -206,6 +250,26 @@ export class AdventMarket {
   }
 }
 
+function reserveAccountToClass(
+  r: ReserveAccount,
+  p: ReadonlyProgram,
+  t: SettlementTableAccount
+) {
+  return new Reserve(p, r.market, r.token, r.settlementTable, t)
+}
+
+interface ReserveAccount {
+  market: PublicKey
+  token: PublicKey
+  decimals: number
+  settlementTable: PublicKey
+}
+
+interface SettlementTableAccount {
+  reserve: PublicKey
+  periods: { deposited: BN; borrowed: BN; freeInterest: BN }[]
+}
+
 export class Portfolio {
   constructor(
     private program: Omit<Program<AdventType>, "rpc">,
@@ -216,6 +280,25 @@ export class Portfolio {
   ) {}
 }
 
+export class Reserve {
+  constructor(
+    private program: Omit<Program<AdventType>, "rpc">,
+    public market: PublicKey,
+    public token: PublicKey,
+    public settlementTableKey: PublicKey,
+    public settlementTable: SettlementTable
+  ) {}
+}
+
+export interface SettlementTable {
+  periods: SettlementPeriod[]
+}
+
+export interface SettlementPeriod {
+  deposited: BN
+  borrowed: BN
+  freeInterest: BN
+}
 export interface VariableDeposit {
   amount: BN
   token: PublicKey

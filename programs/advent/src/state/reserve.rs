@@ -14,14 +14,16 @@ pub struct Reserve {
     pub vault: Pubkey,
     pub pyth_oracle_price: Pubkey,
     pub deposit_note_mint: Pubkey,
-    pub settlment_table: Pubkey,
+    pub settlement_table: Pubkey,
     pub policy: ReservePolicy,
     pub bump: u8,
 }
 
 #[account(zero_copy)]
 pub struct SettlementTable {
-    periods: [SettlementPeriod; 365],
+    pub market: Pubkey,
+    pub reserve: Pubkey,
+    pub periods: [SettlementPeriod; 365],
 }
 
 #[derive(Default, AnchorDeserialize, AnchorSerialize, Clone)]
@@ -49,6 +51,8 @@ impl Default for SettlementTable {
     #[inline]
     fn default() -> SettlementTable {
         SettlementTable {
+            market: Pubkey::default(),
+            reserve: Pubkey::default(),
             periods: [SettlementPeriod {
                 deposited: 0,
                 borrowed: 0,

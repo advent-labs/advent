@@ -35,5 +35,35 @@ describe.only("reserves", () => {
       token.publicKey
     )
     await signAllAndSend(ixs, [admin, table], admin.publicKey, connection)
+
+    const reserve = await market.fetchReserve(
+      (
+        await market.reservePDA(token.publicKey)
+      )[0]
+    )
+    assert.equal(reserve.token.toBase58(), token.publicKey.toBase58())
+    assert.equal(reserve.market.toBase58(), market.address.toBase58())
+
+    const reserves = await market.fetchAllReserves()
+
+    assert.equal(reserves.length, 1)
+    assert.equal(
+      reserves[0].account.token.toBase58(),
+      token.publicKey.toBase58()
+    )
+
+    {
+      const r = await market.reserve(token.publicKey)
+      assert.equal(r.market.toBase58(), market.address.toBase58())
+      assert.equal(r.settlementTable.periods.length, 365)
+      assert.equal(r.settlementTable.periods[0].borrowed.toString(), 0)
+    }
+
+    {
+      const rs = await market.allReserves()
+      assert.equal(rs.length, 1)
+      assert.equal(rs[0].token.toBase58(), token.publicKey.toBase58())
+      assert.equal(rs[0].settlementTable.periods.length, 365)
+    }
   })
 })

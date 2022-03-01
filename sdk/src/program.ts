@@ -386,7 +386,7 @@ export type Prog = {
             "type": "publicKey"
           },
           {
-            "name": "settlmentTable",
+            "name": "settlementTable",
             "type": "publicKey"
           },
           {
@@ -407,6 +407,14 @@ export type Prog = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "market",
+            "type": "publicKey"
+          },
+          {
+            "name": "reserve",
+            "type": "publicKey"
+          },
           {
             "name": "periods",
             "type": {
@@ -980,7 +988,7 @@ export const IDL: Prog = {
             "type": "publicKey"
           },
           {
-            "name": "settlmentTable",
+            "name": "settlementTable",
             "type": "publicKey"
           },
           {
@@ -1001,6 +1009,14 @@ export const IDL: Prog = {
       "type": {
         "kind": "struct",
         "fields": [
+          {
+            "name": "market",
+            "type": "publicKey"
+          },
+          {
+            "name": "reserve",
+            "type": "publicKey"
+          },
           {
             "name": "periods",
             "type": {
