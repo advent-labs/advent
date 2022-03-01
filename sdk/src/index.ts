@@ -177,9 +177,34 @@ export class AdventMarket {
     })
   }
 
+  async initVariableDepositIX(
+    authority: PublicKey,
+    token: PublicKey,
+    collateralVaultAccount: PublicKey,
+    reserveDepositNoteMint: PublicKey
+  ) {
+    const [reserve, _] = await this.reservePDA(token)
+    const [portfolio, __] = await this.portfolioPDA(token)
+
+    return this.program.instruction.initVariableDeposit({
+      accounts: {
+        authority,
+        market: this.address,
+        collateralVaultAccount,
+        reserve,
+        portfolio,
+        depositNoteMint: reserveDepositNoteMint,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        systemProgram: SystemProgram.programId,
+        rent: SYSVAR_RENT_PUBKEY,
+      },
+    })
+  }
+
   async initReserveIX(
     authority: PublicKey,
     settlementTable: PublicKey,
+    depositNoteMint: PublicKey,
     token: PublicKey
   ) {
     const [reserve, _] = await this.reservePDA(token)
@@ -200,8 +225,11 @@ export class AdventMarket {
             market: this.address,
             token,
             reserve,
+            depositNoteMint,
             settlementTable,
             systemProgram: SystemProgram.programId,
+            tokenProgram: TOKEN_PROGRAM_ID,
+            rent: SYSVAR_RENT_PUBKEY,
           },
         }
       ),

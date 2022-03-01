@@ -6,7 +6,7 @@ import { signAllAndSend } from "../sdk/src/util"
 import { initialize, initMarket } from "./common"
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 import * as spl from "@solana/spl-token"
-describe.only("reserves", () => {
+describe("reserves", () => {
   const admin = Keypair.generate()
   const connection = new Connection("http://localhost:8899", {
     commitment: "confirmed",
@@ -21,6 +21,7 @@ describe.only("reserves", () => {
     const sdk = await initialize(admin, connection)
     const market = await initMarket(admin, connection, sdk)
     const table = Keypair.generate()
+    const depositNoteMint = Keypair.generate()
     const token = await spl.Token.createMint(
       connection,
       admin,
@@ -32,9 +33,15 @@ describe.only("reserves", () => {
     const ixs = await market.initReserveIX(
       admin.publicKey,
       table.publicKey,
+      depositNoteMint.publicKey,
       token.publicKey
     )
-    await signAllAndSend(ixs, [admin, table], admin.publicKey, connection)
+    await signAllAndSend(
+      ixs,
+      [admin, table, depositNoteMint],
+      admin.publicKey,
+      connection
+    )
 
     const reserve = await market.fetchReserve(
       (

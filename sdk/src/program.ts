@@ -200,12 +200,27 @@ export type Prog = {
           "isSigner": false
         },
         {
+          "name": "depositNoteMint",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
           "name": "settlementTable",
           "isMut": true,
           "isSigner": false
         },
         {
           "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
           "isMut": false,
           "isSigner": false
         }
@@ -802,12 +817,27 @@ export const IDL: Prog = {
           "isSigner": false
         },
         {
+          "name": "depositNoteMint",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
           "name": "settlementTable",
           "isMut": true,
           "isSigner": false
         },
         {
           "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
           "isMut": false,
           "isSigner": false
         }

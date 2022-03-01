@@ -25,14 +25,14 @@ pub struct VariableDeposit<'info> {
     pub reserve_source: Account<'info, TokenAccount>,
 
     #[account(mut)]
-    pub reserve: Account<'info, Reserve>,
+    pub reserve: AccountLoader<'info, Reserve>,
 
     pub token_program: Program<'info, Token>,
 }
 
 pub fn handler(ctx: Context<VariableDeposit>, amount: u64) -> Result<()> {
     let mut portfolio = ctx.accounts.portfolio.load_mut()?;
-    let reserve = &mut ctx.accounts.reserve;
+    let mut reserve = ctx.accounts.reserve.load_mut()?;
     let market = ctx.accounts.market.load()?;
 
     portfolio.add_variable_deposit(reserve.token, amount, amount)?;

@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
 
-#[account]
+#[account(zero_copy)]
+#[repr(packed)]
 #[derive(Default)]
 pub struct Reserve {
     pub market: Pubkey,
@@ -20,13 +21,15 @@ pub struct Reserve {
 }
 
 #[account(zero_copy)]
+#[repr(packed)]
 pub struct SettlementTable {
     pub market: Pubkey,
     pub reserve: Pubkey,
     pub periods: [SettlementPeriod; 365],
 }
 
-#[derive(Default, AnchorDeserialize, AnchorSerialize, Clone)]
+#[zero_copy]
+#[derive(Default, AnchorDeserialize, AnchorSerialize)]
 pub struct ReservePolicy {
     pub target_utilization: u64,
     pub borrow_rate_0: u64,

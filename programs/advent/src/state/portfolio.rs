@@ -34,6 +34,7 @@ pub struct VariableDeposit {
 }
 
 #[account(zero_copy)]
+#[repr(packed)]
 pub struct Positions {
     pub fixed_deposits: [FixedDeposit; 32],
     pub fixed_borrows: [FixedBorrow; 32],
