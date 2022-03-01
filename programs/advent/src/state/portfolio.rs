@@ -7,7 +7,7 @@ use crate::errors::ErrorCode;
 pub struct FixedDeposit {
     pub token: Pubkey,
     pub start: u64,
-    pub duration: u32,
+    pub duration: u64,
     pub amount: u64,
     pub interest: u64,
 }
@@ -17,7 +17,7 @@ pub struct FixedDeposit {
 pub struct FixedBorrow {
     pub token: Pubkey,
     pub start: u64,
-    pub duration: u32,
+    pub duration: u64,
     pub amount: u64,
     pub interest: u64,
 }
@@ -26,29 +26,33 @@ pub struct FixedBorrow {
 #[derive(Default)]
 pub struct VariableDeposit {
     pub token: Pubkey,
+    pub collateral_vault_account: Pubkey,
     pub amount: u64,
     pub deposit_notes: u64,
     pub collateral_coefficient: u64,
-    pub collateral_vault_account: Pubkey,
     pub collateral_vault_account_bump: u8,
 }
 
 #[account(zero_copy)]
-pub struct Portfolio {
-    pub main: Pubkey,
-    pub authority: Pubkey,
+pub struct Positions {
     pub fixed_deposits: [FixedDeposit; 32],
     pub fixed_borrows: [FixedBorrow; 32],
     pub variable_deposits: [VariableDeposit; 16],
+}
+
+#[account]
+#[derive(Default)]
+pub struct Portfolio {
+    pub main: Pubkey,
+    pub positions: Pubkey,
+    pub authority: Pubkey,
     pub bump: u8,
 }
 
-impl Default for Portfolio {
+impl Default for Positions {
     #[inline]
-    fn default() -> Portfolio {
-        Portfolio {
-            main: Pubkey::default(),
-            authority: Pubkey::default(),
+    fn default() -> Positions {
+        Positions {
             fixed_borrows: [FixedBorrow {
                 ..Default::default()
             }; 32],
@@ -58,12 +62,11 @@ impl Default for Portfolio {
             variable_deposits: [VariableDeposit {
                 ..Default::default()
             }; 16],
-            bump: 0,
         }
     }
 }
 
-impl Portfolio {
+impl Positions {
     pub fn register_variable_deposit(&mut self, new: VariableDeposit) -> Result<()> {
         for d in self.variable_deposits.iter_mut() {
             if d.token == new.token {

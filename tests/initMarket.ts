@@ -31,7 +31,7 @@ describe("init market", () => {
       connection
     )
 
-    const [marketAddress, _] = await sdk.marketPDA(rewardTokenMint.publicKey)
+    const [marketAddress, bump] = await sdk.marketPDA(rewardTokenMint.publicKey)
 
     const market = await sdk.market(marketAddress)
 
@@ -40,5 +40,6 @@ describe("init market", () => {
       market.rewardTokenMint.toBase58(),
       rewardTokenMint.publicKey.toBase58()
     )
+    assert.equal(market.bump, bump)
   })
 })

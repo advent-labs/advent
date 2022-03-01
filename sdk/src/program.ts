@@ -57,6 +57,11 @@ export type Prog = {
           "isSigner": false
         },
         {
+          "name": "positions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -185,7 +190,17 @@ export type Prog = {
           "isSigner": false
         },
         {
+          "name": "token",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "settlementTable",
           "isMut": true,
           "isSigner": false
         },
@@ -257,18 +272,10 @@ export type Prog = {
       }
     },
     {
-      "name": "portfolio",
+      "name": "positions",
       "type": {
         "kind": "struct",
         "fields": [
-          {
-            "name": "main",
-            "type": "publicKey"
-          },
-          {
-            "name": "authority",
-            "type": "publicKey"
-          },
           {
             "name": "fixedDeposits",
             "type": {
@@ -301,6 +308,26 @@ export type Prog = {
                 16
               ]
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "portfolio",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "main",
+            "type": "publicKey"
+          },
+          {
+            "name": "positions",
+            "type": "publicKey"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
           },
           {
             "name": "bump",
@@ -359,15 +386,8 @@ export type Prog = {
             "type": "publicKey"
           },
           {
-            "name": "periods",
-            "type": {
-              "array": [
-                {
-                  "defined": "SettlementPeriod"
-                },
-                365
-              ]
-            }
+            "name": "settlmentTable",
+            "type": "publicKey"
           },
           {
             "name": "policy",
@@ -378,6 +398,25 @@ export type Prog = {
           {
             "name": "bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "settlementTable",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "periods",
+            "type": {
+              "array": [
+                {
+                  "defined": "SettlementPeriod"
+                },
+                365
+              ]
+            }
           }
         ]
       }
@@ -415,7 +454,7 @@ export type Prog = {
           },
           {
             "name": "duration",
-            "type": "u32"
+            "type": "u64"
           },
           {
             "name": "amount",
@@ -443,7 +482,7 @@ export type Prog = {
           },
           {
             "name": "duration",
-            "type": "u32"
+            "type": "u64"
           },
           {
             "name": "amount",
@@ -466,6 +505,10 @@ export type Prog = {
             "type": "publicKey"
           },
           {
+            "name": "collateralVaultAccount",
+            "type": "publicKey"
+          },
+          {
             "name": "amount",
             "type": "u64"
           },
@@ -476,10 +519,6 @@ export type Prog = {
           {
             "name": "collateralCoefficient",
             "type": "u64"
-          },
-          {
-            "name": "collateralVaultAccount",
-            "type": "publicKey"
           },
           {
             "name": "collateralVaultAccountBump",
@@ -527,26 +566,28 @@ export type Prog = {
           }
         ]
       }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "NoFreeReserves",
+      "msg": "no free space left to add a new reserve in the market"
     },
     {
-      "name": "ErrorCode",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "NoFreeReserves"
-          },
-          {
-            "name": "NoFreeVariableDeposits"
-          },
-          {
-            "name": "NoFreeFixedBorrow"
-          },
-          {
-            "name": "UnregisteredVariableDeposit"
-          }
-        ]
-      }
+      "code": 6001,
+      "name": "NoFreeVariableDeposits",
+      "msg": "no free space left to add a new variable deposit to the portfolio"
+    },
+    {
+      "code": 6002,
+      "name": "NoFreeFixedBorrow",
+      "msg": "no free space left to add a new fixed borrow to the portfolio"
+    },
+    {
+      "code": 6003,
+      "name": "UnregisteredVariableDeposit",
+      "msg": "unregistered variable deposit"
     }
   ]
 };
@@ -610,6 +651,11 @@ export const IDL: Prog = {
           "isSigner": false
         },
         {
+          "name": "positions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "systemProgram",
           "isMut": false,
           "isSigner": false
@@ -738,7 +784,17 @@ export const IDL: Prog = {
           "isSigner": false
         },
         {
+          "name": "token",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
           "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "settlementTable",
           "isMut": true,
           "isSigner": false
         },
@@ -810,18 +866,10 @@ export const IDL: Prog = {
       }
     },
     {
-      "name": "portfolio",
+      "name": "positions",
       "type": {
         "kind": "struct",
         "fields": [
-          {
-            "name": "main",
-            "type": "publicKey"
-          },
-          {
-            "name": "authority",
-            "type": "publicKey"
-          },
           {
             "name": "fixedDeposits",
             "type": {
@@ -854,6 +902,26 @@ export const IDL: Prog = {
                 16
               ]
             }
+          }
+        ]
+      }
+    },
+    {
+      "name": "portfolio",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "main",
+            "type": "publicKey"
+          },
+          {
+            "name": "positions",
+            "type": "publicKey"
+          },
+          {
+            "name": "authority",
+            "type": "publicKey"
           },
           {
             "name": "bump",
@@ -912,15 +980,8 @@ export const IDL: Prog = {
             "type": "publicKey"
           },
           {
-            "name": "periods",
-            "type": {
-              "array": [
-                {
-                  "defined": "SettlementPeriod"
-                },
-                365
-              ]
-            }
+            "name": "settlmentTable",
+            "type": "publicKey"
           },
           {
             "name": "policy",
@@ -931,6 +992,25 @@ export const IDL: Prog = {
           {
             "name": "bump",
             "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "settlementTable",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "periods",
+            "type": {
+              "array": [
+                {
+                  "defined": "SettlementPeriod"
+                },
+                365
+              ]
+            }
           }
         ]
       }
@@ -968,7 +1048,7 @@ export const IDL: Prog = {
           },
           {
             "name": "duration",
-            "type": "u32"
+            "type": "u64"
           },
           {
             "name": "amount",
@@ -996,7 +1076,7 @@ export const IDL: Prog = {
           },
           {
             "name": "duration",
-            "type": "u32"
+            "type": "u64"
           },
           {
             "name": "amount",
@@ -1019,6 +1099,10 @@ export const IDL: Prog = {
             "type": "publicKey"
           },
           {
+            "name": "collateralVaultAccount",
+            "type": "publicKey"
+          },
+          {
             "name": "amount",
             "type": "u64"
           },
@@ -1029,10 +1113,6 @@ export const IDL: Prog = {
           {
             "name": "collateralCoefficient",
             "type": "u64"
-          },
-          {
-            "name": "collateralVaultAccount",
-            "type": "publicKey"
           },
           {
             "name": "collateralVaultAccountBump",
@@ -1080,26 +1160,28 @@ export const IDL: Prog = {
           }
         ]
       }
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "NoFreeReserves",
+      "msg": "no free space left to add a new reserve in the market"
     },
     {
-      "name": "ErrorCode",
-      "type": {
-        "kind": "enum",
-        "variants": [
-          {
-            "name": "NoFreeReserves"
-          },
-          {
-            "name": "NoFreeVariableDeposits"
-          },
-          {
-            "name": "NoFreeFixedBorrow"
-          },
-          {
-            "name": "UnregisteredVariableDeposit"
-          }
-        ]
-      }
+      "code": 6001,
+      "name": "NoFreeVariableDeposits",
+      "msg": "no free space left to add a new variable deposit to the portfolio"
+    },
+    {
+      "code": 6002,
+      "name": "NoFreeFixedBorrow",
+      "msg": "no free space left to add a new fixed borrow to the portfolio"
+    },
+    {
+      "code": 6003,
+      "name": "UnregisteredVariableDeposit",
+      "msg": "unregistered variable deposit"
     }
   ]
 };

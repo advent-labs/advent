@@ -12,20 +12,27 @@ pub struct InitPortfolio<'info> {
         init,
         seeds=[
             b"portfolio".as_ref(),
-            market.key().as_ref()
+            market.key().as_ref(),
+            authority.key().as_ref()
         ],
         bump,
         payer=authority
     )]
-    pub portfolio: AccountLoader<'info, Portfolio>,
+    pub portfolio: Account<'info, Portfolio>,
+
+    #[account(zero)]
+    pub positions: AccountLoader<'info, Positions>,
+
     pub system_program: Program<'info, System>,
 }
 
 pub fn handler(ctx: Context<InitPortfolio>) -> Result<()> {
-    let mut portfolio = ctx.accounts.portfolio.load_init()?;
+    ctx.accounts.positions.load_init()?;
+    let portfolio = &mut ctx.accounts.portfolio;
 
     portfolio.bump = *ctx.bumps.get("portfolio").unwrap();
     portfolio.authority = ctx.accounts.authority.key();
+    portfolio.positions = ctx.accounts.positions.key();
 
     Ok(())
 }

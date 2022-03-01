@@ -4,6 +4,7 @@ import {
   Connection,
   Keypair,
   PublicKey,
+  Signer,
   SystemProgram,
   SYSVAR_RENT_PUBKEY,
 } from "@solana/web3.js"
@@ -30,7 +31,8 @@ export class AdventSDK {
       this.program,
       market,
       m.rewardTokenMint,
-      m.authority
+      m.authority,
+      m.bump[0]
     )
   }
 
@@ -63,7 +65,8 @@ export class AdventMarket {
     private program: Omit<Program<AdventType>, "rpc">,
     public address: PublicKey,
     public rewardTokenMint: PublicKey,
-    public authority: PublicKey
+    public authority: PublicKey,
+    public bump: number
   ) {}
 
   async refresh() {
@@ -84,13 +87,120 @@ export class AdventMarket {
 
   async portfolio(authority: PublicKey) {
     const [a, _] = await this.portfolioPDA(authority)
-    const p = await this.program.account.portfolio.fetch(a)
+    const portfolio = await this.program.account.portfolio.fetch(a)
+    const positions = await this.fetchPositions(portfolio.positions)
+    return new Portfolio(
+      this.program,
+      authority,
+      this.address,
+      portfolio.positions,
+      positions.variableDeposits as VariableDeposit[]
+    )
   }
 
-  ///////// PDAS
+  async fetchPositions(address: PublicKey) {
+    return this.program.account.positions.fetch(address)
+  }
+
+  async initPositionsIX(authority: PublicKey, positions: PublicKey) {
+    const space = 5640
+    const lamports =
+      await this.program.provider.connection.getMinimumBalanceForRentExemption(
+        space
+      )
+    return SystemProgram.createAccount({
+      fromPubkey: authority,
+      newAccountPubkey: positions,
+      space,
+      lamports,
+      programId: this.program.programId,
+    })
+  }
+
+  async initSettlementTableIX(authority: PublicKey, target: PublicKey) {
+    const space = this.program.account.settlementTable.size
+    const lamports =
+      await this.program.provider.connection.getMinimumBalanceForRentExemption(
+        space
+      )
+
+    return SystemProgram.createAccount({
+      fromPubkey: authority,
+      newAccountPubkey: target,
+      space,
+      lamports,
+      programId: this.program.programId,
+    })
+  }
+
+  async initReserveIX(
+    authority: PublicKey,
+    settlementTable: PublicKey,
+    token: PublicKey
+  ) {
+    const [reserve, _] = await this.reservePDA(token)
+    const settlementTableIX = await this.initSettlementTableIX(
+      authority,
+      settlementTable
+    )
+    return [
+      settlementTableIX,
+      this.program.instruction.initReserve(
+        new BN(0),
+        new BN(0),
+        new BN(0),
+
+        {
+          accounts: {
+            authority,
+            market: this.address,
+            token,
+            reserve,
+            settlementTable,
+            systemProgram: SystemProgram.programId,
+          },
+        }
+      ),
+    ]
+  }
+
+  async initPortfolioIX(authority: PublicKey, positions: PublicKey) {
+    const [portfolio, _] = await this.portfolioPDA(authority)
+    const positionsIX = await this.initPositionsIX(authority, positions)
+
+    return [
+      positionsIX,
+      this.program.instruction.initPortfolio({
+        accounts: {
+          authority,
+          market: this.address,
+          portfolio,
+          positions,
+          systemProgram: SystemProgram.programId,
+        },
+      }),
+    ]
+  }
+
+  // PDAS
   portfolioPDA(authority: PublicKey) {
     return PublicKey.findProgramAddress(
-      [utils.bytes.utf8.encode("portfolio"), authority.toBuffer()],
+      [
+        utils.bytes.utf8.encode("portfolio"),
+        this.address.toBuffer(),
+        authority.toBuffer(),
+      ],
+      this.program.programId
+    )
+  }
+
+  reservePDA(token: PublicKey) {
+    return PublicKey.findProgramAddress(
+      [
+        utils.bytes.utf8.encode("reserve"),
+        this.address.toBuffer(),
+        token.toBuffer(),
+      ],
       this.program.programId
     )
   }
@@ -101,6 +211,7 @@ export class Portfolio {
     private program: Omit<Program<AdventType>, "rpc">,
     public authority: PublicKey,
     public market: PublicKey,
+    public positionsKey: PublicKey,
     public variableDeposits: VariableDeposit[]
   ) {}
 }
@@ -108,4 +219,11 @@ export class Portfolio {
 export interface VariableDeposit {
   amount: BN
   token: PublicKey
+}
+
+export interface Positions {
+  fixedBorrows: any[]
+  fixedDeposits: any[]
+  variableBorrows: any[]
+  variableDeposits: any[]
 }

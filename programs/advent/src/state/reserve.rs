@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
 
-#[account(zero_copy)]
+#[account]
+#[derive(Default)]
 pub struct Reserve {
     pub market: Pubkey,
     pub token: Pubkey,
@@ -13,13 +14,17 @@ pub struct Reserve {
     pub vault: Pubkey,
     pub pyth_oracle_price: Pubkey,
     pub deposit_note_mint: Pubkey,
-    pub periods: [SettlementPeriod; 365],
+    pub settlment_table: Pubkey,
     pub policy: ReservePolicy,
     pub bump: u8,
 }
 
-#[zero_copy]
-#[derive(Default)]
+#[account(zero_copy)]
+pub struct SettlementTable {
+    periods: [SettlementPeriod; 365],
+}
+
+#[derive(Default, AnchorDeserialize, AnchorSerialize, Clone)]
 pub struct ReservePolicy {
     pub target_utilization: u64,
     pub borrow_rate_0: u64,
@@ -40,30 +45,15 @@ impl Reserve {
     }
 }
 
-impl Default for Reserve {
+impl Default for SettlementTable {
     #[inline]
-    fn default() -> Reserve {
-        Reserve {
-            market: Pubkey::default(),
-            token: Pubkey::default(),
-            pyth_oracle_price: Pubkey::default(),
-            vault: Pubkey::default(),
-            cached_price_quote: 0,
-            decimals: 0,
-            total_debt: 0,
-            total_deposits: 0,
-            total_loan_notes: 0,
-            total_deposit_notes: 0,
-            deposit_note_mint: Pubkey::default(),
+    fn default() -> SettlementTable {
+        SettlementTable {
             periods: [SettlementPeriod {
                 deposited: 0,
                 borrowed: 0,
                 free_interest: 0,
             }; 365],
-            policy: ReservePolicy {
-                ..Default::default()
-            },
-            bump: 0,
         }
     }
 }
