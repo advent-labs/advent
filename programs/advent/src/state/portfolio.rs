@@ -3,7 +3,7 @@ use anchor_lang::prelude::*;
 use crate::errors::ErrorCode;
 
 #[zero_copy]
-#[derive(Default, Debug)]
+#[derive(Default)]
 pub struct FixedDeposit {
     pub token: Pubkey,
     pub start: u64,
@@ -13,7 +13,7 @@ pub struct FixedDeposit {
 }
 
 #[zero_copy]
-#[derive(Default, Debug)]
+#[derive(Default)]
 pub struct FixedBorrow {
     pub token: Pubkey,
     pub start: u64,
@@ -23,7 +23,7 @@ pub struct FixedBorrow {
 }
 
 #[zero_copy]
-#[derive(Default, Debug)]
+#[derive(Default)]
 pub struct VariableDeposit {
     pub token: Pubkey,
     pub amount: u64,
@@ -64,13 +64,13 @@ impl Default for Portfolio {
 }
 
 impl Portfolio {
-    pub fn register_variable_deposit(&mut self, new: VariableDeposit) -> Result<(), ErrorCode> {
+    pub fn register_variable_deposit(&mut self, new: VariableDeposit) -> Result<()> {
         for d in self.variable_deposits.iter_mut() {
             if d.token == new.token {
                 panic!(
                     "Cannot register {:?} for portfolio as it is \
                         already registered with {:?} for this obligation",
-                    new.token, d
+                    new.token, d.token
                 );
             }
 
@@ -83,10 +83,10 @@ impl Portfolio {
             return Ok(());
         }
 
-        Err(ErrorCode::NoFreeVariableDeposits)
+        Err(error!(ErrorCode::NoFreeVariableDeposits))
     }
 
-    pub fn add_fixed_borrow(&mut self, new: FixedBorrow) -> Result<(), ErrorCode> {
+    pub fn add_fixed_borrow(&mut self, new: FixedBorrow) -> Result<()> {
         for x in self.fixed_borrows.iter_mut() {
             if x.token != Pubkey::default() {
                 continue;
@@ -97,7 +97,7 @@ impl Portfolio {
             return Ok(());
         }
 
-        Err(ErrorCode::NoFreeVariableDeposits)
+        Err(error!(ErrorCode::NoFreeVariableDeposits))
     }
 
     pub fn add_variable_deposit(
@@ -105,21 +105,18 @@ impl Portfolio {
         token: Pubkey,
         amount: u64,
         notes_amount: u64,
-    ) -> Result<(), ErrorCode> {
+    ) -> Result<()> {
         let d = self.get_variable_deposit_mut(token)?;
         d.add(amount, notes_amount);
         Ok(())
     }
 
-    pub fn get_variable_deposit_mut(
-        &mut self,
-        token: Pubkey,
-    ) -> Result<&mut VariableDeposit, ErrorCode> {
+    pub fn get_variable_deposit_mut(&mut self, token: Pubkey) -> Result<&mut VariableDeposit> {
         let deposit = self
             .variable_deposits
             .iter_mut()
             .find(|d| d.token == token)
-            .ok_or(ErrorCode::UnregisteredVariableDeposit)?;
+            .ok_or(error!(ErrorCode::UnregisteredVariableDeposit))?;
         Ok(deposit)
     }
 }

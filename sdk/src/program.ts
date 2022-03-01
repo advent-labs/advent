@@ -3,14 +3,217 @@ export type Prog = {
   "name": "prog",
   "instructions": [
     {
-      "name": "initialize",
-      "accounts": [],
+      "name": "initMarket",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardTokenMint",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
       "args": []
+    },
+    {
+      "name": "initPortfolio",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "portfolio",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initVariableDeposit",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "collateralVaultAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "portfolio",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "variableDeposit",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "portfolio",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveSource",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initReserve",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "targetUtilization",
+          "type": "u64"
+        },
+        {
+          "name": "borrowRate0",
+          "type": "u64"
+        },
+        {
+          "name": "borrowRate1",
+          "type": "u64"
+        }
+      ]
     }
   ],
   "accounts": [
     {
-      "name": "main",
+      "name": "market",
       "type": {
         "kind": "struct",
         "fields": [
@@ -32,7 +235,12 @@ export type Prog = {
           },
           {
             "name": "bump",
-            "type": "u8"
+            "type": {
+              "array": [
+                "u8",
+                1
+              ]
+            }
           },
           {
             "name": "reserves",
@@ -107,7 +315,7 @@ export type Prog = {
         "kind": "struct",
         "fields": [
           {
-            "name": "main",
+            "name": "market",
             "type": "publicKey"
           },
           {
@@ -159,6 +367,12 @@ export type Prog = {
                 },
                 365
               ]
+            }
+          },
+          {
+            "name": "policy",
+            "type": {
+              "defined": "ReservePolicy"
             }
           },
           {
@@ -266,6 +480,30 @@ export type Prog = {
           {
             "name": "collateralVaultAccount",
             "type": "publicKey"
+          },
+          {
+            "name": "collateralVaultAccountBump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ReservePolicy",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "targetUtilization",
+            "type": "u64"
+          },
+          {
+            "name": "borrowRate0",
+            "type": "u64"
+          },
+          {
+            "name": "borrowRate1",
+            "type": "u64"
           }
         ]
       }
@@ -289,28 +527,26 @@ export type Prog = {
           }
         ]
       }
-    }
-  ],
-  "errors": [
-    {
-      "code": 6000,
-      "name": "NoFreeReserves",
-      "msg": "no free space left to add a new reserve in the market"
     },
     {
-      "code": 6001,
-      "name": "NoFreeVariableDeposits",
-      "msg": "no free space left to add a new variable deposit to the portfolio"
-    },
-    {
-      "code": 6002,
-      "name": "NoFreeFixedBorrow",
-      "msg": "no free space left to add a new fixed borrow to the portfolio"
-    },
-    {
-      "code": 6003,
-      "name": "UnregisteredVariableDeposit",
-      "msg": "unregistered variable deposit"
+      "name": "ErrorCode",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "NoFreeReserves"
+          },
+          {
+            "name": "NoFreeVariableDeposits"
+          },
+          {
+            "name": "NoFreeFixedBorrow"
+          },
+          {
+            "name": "UnregisteredVariableDeposit"
+          }
+        ]
+      }
     }
   ]
 };
@@ -320,14 +556,217 @@ export const IDL: Prog = {
   "name": "prog",
   "instructions": [
     {
-      "name": "initialize",
-      "accounts": [],
+      "name": "initMarket",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "rewardTokenMint",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
       "args": []
+    },
+    {
+      "name": "initPortfolio",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "portfolio",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "initVariableDeposit",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "collateralVaultAccount",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "portfolio",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteMint",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "rent",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": []
+    },
+    {
+      "name": "variableDeposit",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "portfolio",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveSource",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "initReserve",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": true,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "systemProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "targetUtilization",
+          "type": "u64"
+        },
+        {
+          "name": "borrowRate0",
+          "type": "u64"
+        },
+        {
+          "name": "borrowRate1",
+          "type": "u64"
+        }
+      ]
     }
   ],
   "accounts": [
     {
-      "name": "main",
+      "name": "market",
       "type": {
         "kind": "struct",
         "fields": [
@@ -349,7 +788,12 @@ export const IDL: Prog = {
           },
           {
             "name": "bump",
-            "type": "u8"
+            "type": {
+              "array": [
+                "u8",
+                1
+              ]
+            }
           },
           {
             "name": "reserves",
@@ -424,7 +868,7 @@ export const IDL: Prog = {
         "kind": "struct",
         "fields": [
           {
-            "name": "main",
+            "name": "market",
             "type": "publicKey"
           },
           {
@@ -476,6 +920,12 @@ export const IDL: Prog = {
                 },
                 365
               ]
+            }
+          },
+          {
+            "name": "policy",
+            "type": {
+              "defined": "ReservePolicy"
             }
           },
           {
@@ -583,6 +1033,30 @@ export const IDL: Prog = {
           {
             "name": "collateralVaultAccount",
             "type": "publicKey"
+          },
+          {
+            "name": "collateralVaultAccountBump",
+            "type": "u8"
+          }
+        ]
+      }
+    },
+    {
+      "name": "ReservePolicy",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "targetUtilization",
+            "type": "u64"
+          },
+          {
+            "name": "borrowRate0",
+            "type": "u64"
+          },
+          {
+            "name": "borrowRate1",
+            "type": "u64"
           }
         ]
       }
@@ -606,28 +1080,26 @@ export const IDL: Prog = {
           }
         ]
       }
-    }
-  ],
-  "errors": [
-    {
-      "code": 6000,
-      "name": "NoFreeReserves",
-      "msg": "no free space left to add a new reserve in the market"
     },
     {
-      "code": 6001,
-      "name": "NoFreeVariableDeposits",
-      "msg": "no free space left to add a new variable deposit to the portfolio"
-    },
-    {
-      "code": 6002,
-      "name": "NoFreeFixedBorrow",
-      "msg": "no free space left to add a new fixed borrow to the portfolio"
-    },
-    {
-      "code": 6003,
-      "name": "UnregisteredVariableDeposit",
-      "msg": "unregistered variable deposit"
+      "name": "ErrorCode",
+      "type": {
+        "kind": "enum",
+        "variants": [
+          {
+            "name": "NoFreeReserves"
+          },
+          {
+            "name": "NoFreeVariableDeposits"
+          },
+          {
+            "name": "NoFreeFixedBorrow"
+          },
+          {
+            "name": "UnregisteredVariableDeposit"
+          }
+        ]
+      }
     }
   ]
 };

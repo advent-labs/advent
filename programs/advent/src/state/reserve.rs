@@ -1,9 +1,8 @@
 use anchor_lang::prelude::*;
 
 #[account(zero_copy)]
-#[derive(Debug)]
 pub struct Reserve {
-    pub main: Pubkey,
+    pub market: Pubkey,
     pub token: Pubkey,
     pub decimals: u8,
     pub cached_price_quote: u64,
@@ -15,21 +14,37 @@ pub struct Reserve {
     pub pyth_oracle_price: Pubkey,
     pub deposit_note_mint: Pubkey,
     pub periods: [SettlementPeriod; 365],
+    pub policy: ReservePolicy,
     pub bump: u8,
 }
+
 #[zero_copy]
-#[derive(Default, Debug)]
+#[derive(Default)]
+pub struct ReservePolicy {
+    pub target_utilization: u64,
+    pub borrow_rate_0: u64,
+    pub borrow_rate_1: u64,
+}
+
+#[zero_copy]
+#[derive(Default)]
 pub struct SettlementPeriod {
     pub deposited: u64,
     pub borrowed: u64,
     pub free_interest: u64,
 }
 
+impl Reserve {
+    pub fn deposit(&mut self, amount: u64) {
+        self.total_deposits += amount;
+    }
+}
+
 impl Default for Reserve {
     #[inline]
     fn default() -> Reserve {
         Reserve {
-            main: Pubkey::default(),
+            market: Pubkey::default(),
             token: Pubkey::default(),
             pyth_oracle_price: Pubkey::default(),
             vault: Pubkey::default(),
@@ -45,6 +60,9 @@ impl Default for Reserve {
                 borrowed: 0,
                 free_interest: 0,
             }; 365],
+            policy: ReservePolicy {
+                ..Default::default()
+            },
             bump: 0,
         }
     }

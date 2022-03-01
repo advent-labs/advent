@@ -1,12 +1,12 @@
 use anchor_lang::prelude::*;
 
-use crate::state::{Main, Portfolio};
+use crate::state::*;
 
 #[derive(Accounts)]
-#[instruction(bump: u8)]
 pub struct InitPortfolio<'info> {
+    #[account(mut)]
     pub authority: Signer<'info>,
-    pub market: AccountLoader<'info, Main>,
+    pub market: AccountLoader<'info, Market>,
 
     #[account(
         init,
@@ -14,17 +14,17 @@ pub struct InitPortfolio<'info> {
             b"portfolio".as_ref(),
             market.key().as_ref()
         ],
-        bump=bump,
+        bump,
         payer=authority
     )]
     pub portfolio: AccountLoader<'info, Portfolio>,
     pub system_program: Program<'info, System>,
 }
 
-pub fn handle(ctx: Context<InitPortfolio>, bump: u8) -> ProgramResult {
+pub fn handler(ctx: Context<InitPortfolio>) -> Result<()> {
     let mut portfolio = ctx.accounts.portfolio.load_init()?;
 
-    portfolio.bump = bump;
+    portfolio.bump = *ctx.bumps.get("portfolio").unwrap();
     portfolio.authority = ctx.accounts.authority.key();
 
     Ok(())

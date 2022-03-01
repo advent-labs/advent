@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-#[error]
+#[error_code]
 pub enum ErrorCode {
     #[msg("no free space left to add a new reserve in the market")]
     NoFreeReserves,

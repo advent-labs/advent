@@ -4,11 +4,11 @@ use anchor_spl::token::{Mint, Token, TokenAccount};
 use crate::state::*;
 
 #[derive(Accounts)]
-#[instruction(bump: u8)]
 pub struct InitVariableDeposit<'info> {
+    #[account(mut)]
     pub authority: Signer<'info>,
 
-    pub market: AccountLoader<'info, Main>,
+    pub market: AccountLoader<'info, Market>,
 
     #[account(
         init,
@@ -17,7 +17,7 @@ pub struct InitVariableDeposit<'info> {
             market.key().as_ref(),
             reserve.key().as_ref()
         ],
-        bump=bump,
+        bump,
         payer=authority,
         token::mint = deposit_note_mint,
         token::authority = market
@@ -34,10 +34,10 @@ pub struct InitVariableDeposit<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
-pub fn handler(ctx: Context<InitVariableDeposit>, bump: u8) -> ProgramResult {
+pub fn handler(ctx: Context<InitVariableDeposit>) -> Result<()> {
     let mut portfolio = ctx.accounts.portfolio.load_mut()?;
     let reserve = ctx.accounts.reserve.load()?;
-
+    let bump = *ctx.bumps.get("collateral_vault_account").unwrap();
     let variable_deposit = VariableDeposit {
         token: reserve.token,
         collateral_vault_account: ctx.accounts.collateral_vault_account.key(),

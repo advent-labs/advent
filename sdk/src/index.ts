@@ -1,12 +1,20 @@
 import { BN, Program, Provider, utils, Wallet } from "@project-serum/anchor"
-import { bs58 } from "@project-serum/anchor/dist/cjs/utils/bytes"
-import { Connection, Keypair, PublicKey } from "@solana/web3.js"
+import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
+import {
+  Connection,
+  Keypair,
+  PublicKey,
+  SystemProgram,
+  SYSVAR_RENT_PUBKEY,
+} from "@solana/web3.js"
 import { Prog as AdventType, IDL } from "./program"
+
+const DEFAULT_PROGRAM_ID = "ke798ave2o7MMZkriRUPSCz1aLrrmPQY2zHdrikJ298"
 
 export class AdventSDK {
   public program: Omit<Program<AdventType>, "rpc">
 
-  constructor(public connection: Connection, program: string) {
+  constructor(public connection: Connection, program = DEFAULT_PROGRAM_ID) {
     const wallet = new Wallet(Keypair.generate())
     const provider = new Provider(
       this.connection,
@@ -16,14 +24,36 @@ export class AdventSDK {
     this.program = new Program(IDL, new PublicKey(program), provider)
   }
 
-  async market(market: string) {
-    const address = new PublicKey(market)
-    const m = await this.program.account.main.fetch(address)
+  async market(market: PublicKey) {
+    const m = await this.program.account.market.fetch(market)
     return new AdventMarket(
       this.program,
-      address,
+      market,
       m.rewardTokenMint,
       m.authority
+    )
+  }
+
+  async initMarketIX(authority: PublicKey, rewardTokenMint: PublicKey) {
+    const [market, bump] = await this.marketPDA(rewardTokenMint)
+
+    return this.program.instruction.initMarket({
+      accounts: {
+        authority,
+        market,
+        rewardTokenMint,
+        tokenProgram: TOKEN_PROGRAM_ID,
+        systemProgram: SystemProgram.programId,
+        rent: SYSVAR_RENT_PUBKEY,
+      },
+    })
+  }
+
+  // PDAS //
+  marketPDA(rewardMint: PublicKey) {
+    return PublicKey.findProgramAddress(
+      [utils.bytes.utf8.encode("market"), rewardMint.toBuffer()],
+      this.program.programId
     )
   }
 }
@@ -37,7 +67,7 @@ export class AdventMarket {
   ) {}
 
   async refresh() {
-    const m = this.program.account.main.fetch(this.address)
+    const m = this.program.account.market.fetch(this.address)
     const rs = await this.fetchAllReserves()
   }
 
