@@ -10,22 +10,25 @@ pub struct VariableDeposit<'info> {
     pub market: AccountLoader<'info, Market>,
 
     #[account(mut)]
+    pub reserve: AccountLoader<'info, Reserve>,
+
+    #[account(mut)]
     pub portfolio: AccountLoader<'info, Positions>,
 
     #[account(mut)]
     pub deposit_note_mint: Account<'info, Mint>,
 
+    /// Vault holding deposit notes as collateral
     #[account(mut)]
     pub deposit_note_vault: Account<'info, TokenAccount>,
 
+    /// Vault holding stored tokens for reserve
     #[account(mut)]
     pub reserve_vault: Account<'info, TokenAccount>,
 
+    /// User's token account
     #[account(mut)]
     pub reserve_source: Account<'info, TokenAccount>,
-
-    #[account(mut)]
-    pub reserve: AccountLoader<'info, Reserve>,
 
     pub token_program: Program<'info, Token>,
 }
@@ -41,6 +44,7 @@ pub fn handler(ctx: Context<VariableDeposit>, amount: u64) -> Result<()> {
 
     token::transfer(ctx.accounts.transfer_context(), amount)?;
 
+    // TODO - calc notes
     token::mint_to(
         ctx.accounts
             .note_mint_context()

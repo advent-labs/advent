@@ -30,15 +30,14 @@ pub struct VariableDeposit {
     pub amount: u64,
     pub deposit_notes: u64,
     pub collateral_coefficient: u64,
-    pub collateral_vault_account_bump: u8,
 }
 
 #[account(zero_copy)]
 #[repr(packed)]
 pub struct Positions {
+    pub variable_deposits: [VariableDeposit; 16],
     pub fixed_deposits: [FixedDeposit; 32],
     pub fixed_borrows: [FixedBorrow; 32],
-    pub variable_deposits: [VariableDeposit; 16],
 }
 
 #[account]

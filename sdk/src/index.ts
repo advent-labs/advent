@@ -28,6 +28,7 @@ export class AdventSDK {
 
   async market(market: PublicKey) {
     const m = await this.program.account.market.fetch(market)
+
     return new AdventMarket(
       this.program,
       market,
@@ -67,12 +68,14 @@ export class AdventMarket {
     public address: PublicKey,
     public rewardTokenMint: PublicKey,
     public authority: PublicKey,
-    public bump: number
+    public bump: number,
+    public reserves: Reserve[] = []
   ) {}
 
   async refresh() {
     const m = this.program.account.market.fetch(this.address)
     const rs = await this.fetchAllReserves()
+    this.reserves = await this.allReserves()
   }
 
   async fetchAllReserves() {
@@ -101,12 +104,13 @@ export class AdventMarket {
     const [a, _] = await this.portfolioPDA(authority)
     const portfolio = await this.program.account.portfolio.fetch(a)
     const positions = await this.fetchPositions(portfolio.positions)
-    return new Portfolio(
+    return new AdventPortfolio(
       this.program,
+      a,
       authority,
-      this.address,
+      this,
       portfolio.positions,
-      positions.variableDeposits as VariableDeposit[]
+      positions.variableDeposits as VariableDepositAccount[]
     )
   }
 
@@ -180,19 +184,18 @@ export class AdventMarket {
   async initVariableDepositIX(
     authority: PublicKey,
     token: PublicKey,
+    positions: PublicKey,
     collateralVaultAccount: PublicKey,
     reserveDepositNoteMint: PublicKey
   ) {
     const [reserve, _] = await this.reservePDA(token)
-    const [portfolio, __] = await this.portfolioPDA(token)
-
     return this.program.instruction.initVariableDeposit({
       accounts: {
         authority,
         market: this.address,
         collateralVaultAccount,
         reserve,
-        portfolio,
+        positions,
         depositNoteMint: reserveDepositNoteMint,
         tokenProgram: TOKEN_PROGRAM_ID,
         systemProgram: SystemProgram.programId,
@@ -208,6 +211,8 @@ export class AdventMarket {
     token: PublicKey
   ) {
     const [reserve, _] = await this.reservePDA(token)
+    const [vault, _v] = await this.reserveVaultPDA(token)
+
     const settlementTableIX = await this.initSettlementTableIX(
       authority,
       settlementTable
@@ -225,6 +230,7 @@ export class AdventMarket {
             market: this.address,
             token,
             reserve,
+            vault,
             depositNoteMint,
             settlementTable,
             systemProgram: SystemProgram.programId,
@@ -276,6 +282,28 @@ export class AdventMarket {
       this.program.programId
     )
   }
+
+  reserveVaultPDA(token: PublicKey) {
+    return PublicKey.findProgramAddress(
+      [
+        utils.bytes.utf8.encode("vault"),
+        this.address.toBuffer(),
+        token.toBuffer(),
+      ],
+      this.program.programId
+    )
+  }
+
+  depositNoteMintPDA(token: PublicKey) {
+    return PublicKey.findProgramAddress(
+      [
+        utils.bytes.utf8.encode("deposit-note-mint"),
+        this.address.toBuffer(),
+        token.toBuffer(),
+      ],
+      this.program.programId
+    )
+  }
 }
 
 function reserveAccountToClass(
@@ -283,14 +311,24 @@ function reserveAccountToClass(
   p: ReadonlyProgram,
   t: SettlementTableAccount
 ) {
-  return new Reserve(p, r.market, r.token, r.settlementTable, t)
+  return new Reserve(
+    p,
+    r.market,
+    r.token,
+    r.depositNoteMint,
+    r.vault,
+    r.settlementTable,
+    t
+  )
 }
 
 interface ReserveAccount {
   market: PublicKey
   token: PublicKey
   decimals: number
+  vault: PublicKey
   settlementTable: PublicKey
+  depositNoteMint: PublicKey
 }
 
 interface SettlementTableAccount {
@@ -298,14 +336,48 @@ interface SettlementTableAccount {
   periods: { deposited: BN; borrowed: BN; freeInterest: BN }[]
 }
 
-export class Portfolio {
+export class AdventPortfolio {
   constructor(
     private program: Omit<Program<AdventType>, "rpc">,
+    public address: PublicKey,
     public authority: PublicKey,
-    public market: PublicKey,
+    public market: AdventMarket,
     public positionsKey: PublicKey,
-    public variableDeposits: VariableDeposit[]
+    private _variableDeposits: VariableDepositAccount[]
   ) {}
+  async refresh() {
+    const positions = await this.program.account.positions.fetch(
+      this.positionsKey
+    )
+
+    this._variableDeposits =
+      positions.variableDeposits as VariableDepositAccount[]
+  }
+
+  get variableDeposits() {
+    return this._variableDeposits.filter(
+      (x) => x.token.toBase58() !== PublicKey.default.toBase58()
+    )
+  }
+
+  async variableDepositIX(token: PublicKey, amount: number) {
+    const [reserve, _r] = await this.market.reservePDA(token)
+    const [portfolio, _p] = await this.market.portfolioPDA(this.authority)
+    const [reserveVault, _rv] = await this.market.reserveVaultPDA(token)
+    const r = this.market.reserves.find(
+      (r) => r.token.toBase58() === token.toBase58()
+    )
+    this.program.instruction.variableDeposit(new BN(amount), {
+      accounts: {
+        authority: this.authority,
+        market: this.market.address,
+        reserve,
+        portfolio,
+        depositNoteMint: r.depositNoteMint,
+        depositNoteVault: reserveVault,
+      },
+    })
+  }
 }
 
 export class Reserve {
@@ -313,6 +385,8 @@ export class Reserve {
     private program: Omit<Program<AdventType>, "rpc">,
     public market: PublicKey,
     public token: PublicKey,
+    public depositNoteMint: PublicKey,
+    public vault: PublicKey,
     public settlementTableKey: PublicKey,
     public settlementTable: SettlementTable
   ) {}
@@ -327,9 +401,10 @@ export interface SettlementPeriod {
   borrowed: BN
   freeInterest: BN
 }
-export interface VariableDeposit {
+export interface VariableDepositAccount {
   amount: BN
   token: PublicKey
+  collateralVaultAccount: PublicKey
 }
 
 export interface Positions {

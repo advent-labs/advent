@@ -1,6 +1,7 @@
 import { Keypair, Connection } from "@solana/web3.js"
-import { AdventSDK } from "../sdk/src"
+import { AdventMarket, AdventSDK } from "../sdk/src"
 import { signAllAndSend } from "../sdk/src/util"
+import * as spl from "@solana/spl-token"
 
 export async function initialize(admin: Keypair, con: Connection) {
   const sig = await con.requestAirdrop(admin.publicKey, 100e10)
@@ -28,4 +29,50 @@ export async function initMarket(
   const market = await sdk.market(marketAddress)
 
   return market
+}
+
+export async function initReserve(
+  admin: Keypair,
+  connection,
+  market: AdventMarket
+) {
+  const table = Keypair.generate()
+  const depositNoteMint = Keypair.generate()
+  const token = await spl.Token.createMint(
+    connection,
+    admin,
+    admin.publicKey,
+    admin.publicKey,
+    6,
+    spl.TOKEN_PROGRAM_ID
+  )
+  const ixs = await market.initReserveIX(
+    admin.publicKey,
+    table.publicKey,
+    depositNoteMint.publicKey,
+    token.publicKey
+  )
+  await signAllAndSend(
+    ixs,
+    [admin, table, depositNoteMint],
+    admin.publicKey,
+    connection
+  )
+
+  const reserve = await market.reserve(token.publicKey)
+  return reserve
+}
+
+export async function initPortfolio(
+  admin: Keypair,
+  connection: Connection,
+  market: AdventMarket
+) {
+  const positions = Keypair.generate()
+
+  const ixs = await market.initPortfolioIX(admin.publicKey, positions.publicKey)
+
+  await signAllAndSend(ixs, [admin, positions], admin.publicKey, connection)
+
+  return market.portfolio(admin.publicKey)
 }

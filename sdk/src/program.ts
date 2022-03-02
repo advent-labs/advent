@@ -85,7 +85,7 @@ export type Prog = {
         {
           "name": "collateralVaultAccount",
           "isMut": true,
-          "isSigner": false
+          "isSigner": true
         },
         {
           "name": "reserve",
@@ -93,7 +93,7 @@ export type Prog = {
           "isSigner": false
         },
         {
-          "name": "portfolio",
+          "name": "positions",
           "isMut": true,
           "isSigner": false
         },
@@ -134,6 +134,11 @@ export type Prog = {
           "isSigner": false
         },
         {
+          "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "portfolio",
           "isMut": true,
           "isSigner": false
@@ -155,11 +160,6 @@ export type Prog = {
         },
         {
           "name": "reserveSource",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserve",
           "isMut": true,
           "isSigner": false
         },
@@ -203,6 +203,11 @@ export type Prog = {
           "name": "depositNoteMint",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "vault",
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "settlementTable",
@@ -292,6 +297,17 @@ export type Prog = {
         "kind": "struct",
         "fields": [
           {
+            "name": "variableDeposits",
+            "type": {
+              "array": [
+                {
+                  "defined": "VariableDeposit"
+                },
+                16
+              ]
+            }
+          },
+          {
             "name": "fixedDeposits",
             "type": {
               "array": [
@@ -310,17 +326,6 @@ export type Prog = {
                   "defined": "FixedBorrow"
                 },
                 32
-              ]
-            }
-          },
-          {
-            "name": "variableDeposits",
-            "type": {
-              "array": [
-                {
-                  "defined": "VariableDeposit"
-                },
-                16
               ]
             }
           }
@@ -542,10 +547,6 @@ export type Prog = {
           {
             "name": "collateralCoefficient",
             "type": "u64"
-          },
-          {
-            "name": "collateralVaultAccountBump",
-            "type": "u8"
           }
         ]
       }
@@ -702,7 +703,7 @@ export const IDL: Prog = {
         {
           "name": "collateralVaultAccount",
           "isMut": true,
-          "isSigner": false
+          "isSigner": true
         },
         {
           "name": "reserve",
@@ -710,7 +711,7 @@ export const IDL: Prog = {
           "isSigner": false
         },
         {
-          "name": "portfolio",
+          "name": "positions",
           "isMut": true,
           "isSigner": false
         },
@@ -751,6 +752,11 @@ export const IDL: Prog = {
           "isSigner": false
         },
         {
+          "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "portfolio",
           "isMut": true,
           "isSigner": false
@@ -772,11 +778,6 @@ export const IDL: Prog = {
         },
         {
           "name": "reserveSource",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "reserve",
           "isMut": true,
           "isSigner": false
         },
@@ -820,6 +821,11 @@ export const IDL: Prog = {
           "name": "depositNoteMint",
           "isMut": true,
           "isSigner": true
+        },
+        {
+          "name": "vault",
+          "isMut": true,
+          "isSigner": false
         },
         {
           "name": "settlementTable",
@@ -909,6 +915,17 @@ export const IDL: Prog = {
         "kind": "struct",
         "fields": [
           {
+            "name": "variableDeposits",
+            "type": {
+              "array": [
+                {
+                  "defined": "VariableDeposit"
+                },
+                16
+              ]
+            }
+          },
+          {
             "name": "fixedDeposits",
             "type": {
               "array": [
@@ -927,17 +944,6 @@ export const IDL: Prog = {
                   "defined": "FixedBorrow"
                 },
                 32
-              ]
-            }
-          },
-          {
-            "name": "variableDeposits",
-            "type": {
-              "array": [
-                {
-                  "defined": "VariableDeposit"
-                },
-                16
               ]
             }
           }
@@ -1159,10 +1165,6 @@ export const IDL: Prog = {
           {
             "name": "collateralCoefficient",
             "type": "u64"
-          },
-          {
-            "name": "collateralVaultAccountBump",
-            "type": "u8"
           }
         ]
       }

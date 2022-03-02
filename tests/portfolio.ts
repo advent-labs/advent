@@ -29,6 +29,5 @@ describe("portfolio", () => {
     await signAllAndSend(ixs, [admin, positions], admin.publicKey, connection)
     const portfolio = await market.portfolio(admin.publicKey)
     assert.equal(portfolio.authority.toBase58(), admin.publicKey.toBase58())
-    assert.equal(portfolio.variableDeposits.length, 16)
   })
 })

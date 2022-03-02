@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use anchor_spl::token::{Mint, Token};
+use anchor_spl::token::{Mint, Token, TokenAccount};
 
 use crate::state::*;
 
@@ -32,6 +32,20 @@ pub struct InitReserve<'info> {
     )]
     pub deposit_note_mint: Account<'info, Mint>,
 
+    #[account(
+        init,
+        seeds=[
+            b"vault".as_ref(),
+            market.key().as_ref(),
+            token.key().as_ref()
+        ],
+        token::mint=token,
+        token::authority=market,
+        payer=authority,
+        bump
+    )]
+    pub vault: Account<'info, TokenAccount>,
+
     #[account(zero)]
     pub settlement_table: AccountLoader<'info, SettlementTable>,
 
@@ -54,6 +68,7 @@ pub fn handler(ctx: Context<InitReserve>, policy: ReservePolicy) -> Result<()> {
     r.settlement_table = ctx.accounts.settlement_table.key();
     r.token = ctx.accounts.token.key();
     r.deposit_note_mint = ctx.accounts.deposit_note_mint.key();
+    r.vault = ctx.accounts.vault.key();
 
     Ok(())
 }
