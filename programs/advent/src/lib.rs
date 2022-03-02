@@ -30,6 +30,13 @@ pub mod prog {
         instructions::variable_deposit::handler(ctx, amount)
     }
 
+    pub fn withdraw_variable_deposit(
+        ctx: Context<WithdrawVariableDeposit>,
+        amount: u64,
+    ) -> Result<()> {
+        instructions::withdraw_variable_deposit::handler(ctx, amount)
+    }
+
     pub fn init_reserve(
         ctx: Context<InitReserve>,
         target_utilization: u64,

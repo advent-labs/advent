@@ -177,6 +177,62 @@ export type Prog = {
       ]
     },
     {
+      "name": "withdrawVariableDeposit",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "positions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userReserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
       "name": "initReserve",
       "accounts": [
         {
@@ -778,6 +834,62 @@ export const IDL: Prog = {
         },
         {
           "name": "reserveSource",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "withdrawVariableDeposit",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "positions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userReserve",
           "isMut": true,
           "isSigner": false
         },

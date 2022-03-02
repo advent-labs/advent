@@ -15,7 +15,7 @@ import { AdventMarket, AdventPortfolio } from "../sdk/src"
 import { Token } from "@solana/spl-token"
 import * as sab from "@saberhq/token-utils"
 
-describe.only("varable deposit", () => {
+describe("varable deposit", () => {
   const admin = Keypair.generate()
   const connection = new Connection("http://localhost:8899", {
     commitment: "confirmed",
@@ -98,5 +98,20 @@ describe.only("varable deposit", () => {
       tokenA.publicKey
     )
     await assertTokenBalance(collateralVault, 1, connection)
+  })
+
+  it("widthdraws", async () => {
+    const ix = await portfolio.withdrawVariableDepositIX(tokenA.publicKey, 1e6)
+    await signAllAndSend([ix], [admin], admin.publicKey, connection)
+
+    const reserveAddress = await sab.getATAAddress({
+      mint: tokenA.publicKey,
+      owner: admin.publicKey,
+    })
+    await assertTokenBalance(reserveAddress, 10, connection)
+    const collateralVault = await portfolio.collateralVaultByToken(
+      tokenA.publicKey
+    )
+    await assertTokenBalance(collateralVault, 0, connection)
   })
 })

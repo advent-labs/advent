@@ -378,9 +378,9 @@ export class AdventPortfolio {
   }
 
   async variableDepositIX(token: PublicKey, amount: number) {
-    const [reserve, _r] = await this.market.reservePDA(token)
-    const [reserveVault, _rv] = await this.market.reserveVaultPDA(token)
-    const [depositNoteVault, _d] = await this.market.collateralVaultPDA(
+    const [reserve] = await this.market.reservePDA(token)
+    const [reserveVault] = await this.market.reserveVaultPDA(token)
+    const [depositNoteVault] = await this.market.collateralVaultPDA(
       reserve,
       this.authority
     )
@@ -401,6 +401,35 @@ export class AdventPortfolio {
         depositNoteVault,
         reserveVault,
         reserveSource,
+        tokenProgram: TOKEN_PROGRAM_ID,
+      },
+    })
+  }
+
+  async withdrawVariableDepositIX(token: PublicKey, amount: number) {
+    const [reserve] = await this.market.reservePDA(token)
+    const [reserveVault] = await this.market.reserveVaultPDA(token)
+    const [depositNoteVault] = await this.market.collateralVaultPDA(
+      reserve,
+      this.authority
+    )
+    const r = this.market.reserves.find(
+      (r) => r.token.toBase58() === token.toBase58()
+    )
+    const userReserve = await sab.getATAAddress({
+      mint: r.token,
+      owner: this.authority,
+    })
+    return this.program.instruction.withdrawVariableDeposit(new BN(amount), {
+      accounts: {
+        authority: this.authority,
+        market: this.market.address,
+        reserve,
+        positions: this.positionsKey,
+        depositNoteMint: r.depositNoteMint,
+        depositNoteVault,
+        reserveVault,
+        userReserve,
         tokenProgram: TOKEN_PROGRAM_ID,
       },
     })
