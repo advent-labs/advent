@@ -100,7 +100,7 @@ impl Positions {
             return Ok(());
         }
 
-        Err(error!(ErrorCode::NoFreeVariableDeposits))
+        Err(error!(ErrorCode::NoFreeFixedBorrow))
     }
 
     pub fn add_variable_deposit(

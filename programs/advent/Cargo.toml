@@ -19,3 +19,4 @@ default = []
 anchor-lang = "0.22.1"
 anchor-spl = "0.22.1"
 spl-token = { version = "3.2.0", features = ["no-entrypoint"] }
+jet-math = { version = "1", package = "jet-proto-math" }
