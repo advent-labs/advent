@@ -85,7 +85,7 @@ export type Prog = {
         {
           "name": "collateralVaultAccount",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "reserve",
@@ -139,7 +139,7 @@ export type Prog = {
           "isSigner": false
         },
         {
-          "name": "portfolio",
+          "name": "positions",
           "isMut": true,
           "isSigner": false
         },
@@ -703,7 +703,7 @@ export const IDL: Prog = {
         {
           "name": "collateralVaultAccount",
           "isMut": true,
-          "isSigner": true
+          "isSigner": false
         },
         {
           "name": "reserve",
@@ -757,7 +757,7 @@ export const IDL: Prog = {
           "isSigner": false
         },
         {
-          "name": "portfolio",
+          "name": "positions",
           "isMut": true,
           "isSigner": false
         },

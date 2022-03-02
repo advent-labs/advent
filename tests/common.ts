@@ -1,7 +1,9 @@
-import { Keypair, Connection } from "@solana/web3.js"
+import { Keypair, Connection, PublicKey } from "@solana/web3.js"
 import { AdventMarket, AdventSDK } from "../sdk/src"
 import { signAllAndSend } from "../sdk/src/util"
 import * as spl from "@solana/spl-token"
+import * as sab from "@saberhq/token-utils"
+import * as assert from "assert"
 
 export async function initialize(admin: Keypair, con: Connection) {
   const sig = await con.requestAirdrop(admin.publicKey, 100e10)
@@ -33,7 +35,7 @@ export async function initMarket(
 
 export async function initReserve(
   admin: Keypair,
-  connection,
+  connection: Connection,
   market: AdventMarket
 ) {
   const table = Keypair.generate()
@@ -60,7 +62,7 @@ export async function initReserve(
   )
 
   const reserve = await market.reserve(token.publicKey)
-  return reserve
+  return { reserve, token }
 }
 
 export async function initPortfolio(
@@ -75,4 +77,29 @@ export async function initPortfolio(
   await signAllAndSend(ixs, [admin, positions], admin.publicKey, connection)
 
   return market.portfolio(admin.publicKey)
+}
+
+export async function createATA(
+  mint: PublicKey,
+  admin: Keypair,
+  connection: Connection
+) {
+  const address = await sab.getATAAddress({ mint, owner: admin.publicKey })
+  const ix = sab.createATAInstruction({
+    address,
+    mint,
+    owner: admin.publicKey,
+    payer: admin.publicKey,
+  })
+  await signAllAndSend([ix], [admin], admin.publicKey, connection)
+  return address
+}
+
+export async function assertTokenBalance(
+  address: PublicKey,
+  amount: number,
+  connection: Connection
+) {
+  const bal = await connection.getTokenAccountBalance(address)
+  assert.equal(bal.value.uiAmount, amount)
 }

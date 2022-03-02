@@ -12,9 +12,15 @@ pub struct InitVariableDeposit<'info> {
 
     #[account(
         init,
+        seeds=[
+          b"collateral",
+          reserve.key().as_ref(),
+          authority.key().as_ref()  
+        ],
         payer=authority,
         token::mint = deposit_note_mint,
-        token::authority = market
+        token::authority = market,
+        bump
     )]
     pub collateral_vault_account: Account<'info, TokenAccount>,
 

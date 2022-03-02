@@ -11,7 +11,9 @@ export function* fixedDeposit(a: ReturnType<typeof actions.depositRequested>) {
 
   if (!sdk) return
 
+  // Do the work
   yield sdk.fixedDeposit(a.payload.token, a.payload.amount, a.payload.duration)
+
   yield put(actions.depositSucceed())
   yield put(userPortfolioActions.loadRequested())
   yield put(reservesActions.loadRequested())

@@ -3,10 +3,19 @@ import * as assert from "assert"
 
 import { Connection, Keypair } from "@solana/web3.js"
 import { signAllAndSend } from "../sdk/src/util"
-import { initialize, initMarket, initPortfolio, initReserve } from "./common"
+import {
+  assertTokenBalance,
+  createATA,
+  initialize,
+  initMarket,
+  initPortfolio,
+  initReserve,
+} from "./common"
 import { AdventMarket, AdventPortfolio } from "../sdk/src"
+import { Token } from "@solana/spl-token"
+import * as sab from "@saberhq/token-utils"
 
-describe("varable deposit", () => {
+describe.only("varable deposit", () => {
   const admin = Keypair.generate()
   const connection = new Connection("http://localhost:8899", {
     commitment: "confirmed",
@@ -18,29 +27,28 @@ describe("varable deposit", () => {
   anchor.setProvider(provider)
   let market: AdventMarket
   let portfolio: AdventPortfolio
+  let tokenA: Token
+  let tokenB: Token
 
   it("inits variable deposit", async () => {
     const sdk = await initialize(admin, connection)
     market = await initMarket(admin, connection, sdk)
     portfolio = await initPortfolio(admin, connection, market)
-    const reserve = await initReserve(admin, connection, market)
-
-    const collateralVaultAccount = Keypair.generate()
+    const { reserve, token: _token } = await initReserve(
+      admin,
+      connection,
+      market
+    )
+    tokenA = _token
 
     const ix = await market.initVariableDepositIX(
       admin.publicKey,
       reserve.token,
       portfolio.positionsKey,
-      collateralVaultAccount.publicKey,
       reserve.depositNoteMint
     )
 
-    await signAllAndSend(
-      [ix],
-      [admin, collateralVaultAccount],
-      admin.publicKey,
-      connection
-    )
+    await signAllAndSend([ix], [admin], admin.publicKey, connection)
 
     await portfolio.refresh()
 
@@ -51,24 +59,16 @@ describe("varable deposit", () => {
   })
 
   it("can handle multiple reserves", async () => {
-    const reserve = await initReserve(admin, connection, market)
-
-    const collateralVaultAccount = Keypair.generate()
-
+    const { reserve, token } = await initReserve(admin, connection, market)
+    tokenB = token
     const ix = await market.initVariableDepositIX(
       admin.publicKey,
       reserve.token,
       portfolio.positionsKey,
-      collateralVaultAccount.publicKey,
       reserve.depositNoteMint
     )
 
-    await signAllAndSend(
-      [ix],
-      [admin, collateralVaultAccount],
-      admin.publicKey,
-      connection
-    )
+    await signAllAndSend([ix], [admin], admin.publicKey, connection)
 
     await portfolio.refresh()
 
@@ -78,5 +78,25 @@ describe("varable deposit", () => {
     )
 
     assert.equal(portfolio.variableDeposits.length, 2)
+  })
+
+  it("deposits", async () => {
+    await market.refresh()
+    const reserve = market.reserveByToken(tokenA.publicKey)
+    const depositNoteMint = reserve.depositNoteMint
+    const notesAddress = await createATA(depositNoteMint, admin, connection)
+    const reserveAddress = await createATA(tokenA.publicKey, admin, connection)
+    await tokenA.mintTo(reserveAddress, admin, [], 10e6)
+
+    const ix = await portfolio.variableDepositIX(tokenA.publicKey, 1e6)
+
+    await signAllAndSend([ix], [admin], admin.publicKey, connection)
+
+    await assertTokenBalance(reserveAddress, 9, connection)
+    await assertTokenBalance(notesAddress, 0, connection)
+    const collateralVault = await portfolio.collateralVaultByToken(
+      tokenA.publicKey
+    )
+    await assertTokenBalance(collateralVault, 1, connection)
   })
 })

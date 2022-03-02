@@ -10,6 +10,7 @@ export function* fetchUserPortfolio() {
 
   if (!sdk) return
 
+  // do the work
   const portfolio: Portfolio = yield sdk.fetchUserPortfolio()
 
   yield put(userPortfolioActions.loaded(portfolio))

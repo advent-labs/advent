@@ -37,6 +37,6 @@ impl Market {
     }
 
     pub fn authority_seeds(&self) -> [&[u8]; 3] {
-        [b"main", self.reward_token_mint.as_ref(), &self.bump]
+        [b"market", self.reward_token_mint.as_ref(), &self.bump]
     }
 }

@@ -27,12 +27,16 @@ export interface FixedBorrow {
 }
 
 export interface VariableBorrow {
+  // the mint
   token: string
+  // the amount
   notes: number
 }
 
 export interface VariableDeposit {
+  // the mint
   token: string
+  // the amount
   notes: number
 }
 

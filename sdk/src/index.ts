@@ -4,11 +4,11 @@ import {
   Connection,
   Keypair,
   PublicKey,
-  Signer,
   SystemProgram,
   SYSVAR_RENT_PUBKEY,
 } from "@solana/web3.js"
 import { Prog as AdventType, IDL } from "./program"
+import * as sab from "@saberhq/token-utils"
 
 const DEFAULT_PROGRAM_ID = "ke798ave2o7MMZkriRUPSCz1aLrrmPQY2zHdrikJ298"
 type ReadonlyProgram = Omit<Program<AdventType>, "rpc">
@@ -73,8 +73,6 @@ export class AdventMarket {
   ) {}
 
   async refresh() {
-    const m = this.program.account.market.fetch(this.address)
-    const rs = await this.fetchAllReserves()
     this.reserves = await this.allReserves()
   }
 
@@ -150,6 +148,10 @@ export class AdventMarket {
     )
   }
 
+  reserveByToken(token: PublicKey) {
+    return this.reserves.find((r) => r.token.equals(token))
+  }
+
   async initPositionsIX(authority: PublicKey, positions: PublicKey) {
     const space = 5640
     const lamports =
@@ -185,10 +187,14 @@ export class AdventMarket {
     authority: PublicKey,
     token: PublicKey,
     positions: PublicKey,
-    collateralVaultAccount: PublicKey,
     reserveDepositNoteMint: PublicKey
   ) {
-    const [reserve, _] = await this.reservePDA(token)
+    const [reserve] = await this.reservePDA(token)
+    const [collateralVaultAccount] = await this.collateralVaultPDA(
+      reserve,
+      authority
+    )
+
     return this.program.instruction.initVariableDeposit({
       accounts: {
         authority,
@@ -304,6 +310,17 @@ export class AdventMarket {
       this.program.programId
     )
   }
+
+  collateralVaultPDA(reserve: PublicKey, authority: PublicKey) {
+    return PublicKey.findProgramAddress(
+      [
+        utils.bytes.utf8.encode("collateral"),
+        reserve.toBuffer(),
+        authority.toBuffer(),
+      ],
+      this.program.programId
+    )
+  }
 }
 
 function reserveAccountToClass(
@@ -362,21 +379,40 @@ export class AdventPortfolio {
 
   async variableDepositIX(token: PublicKey, amount: number) {
     const [reserve, _r] = await this.market.reservePDA(token)
-    const [portfolio, _p] = await this.market.portfolioPDA(this.authority)
     const [reserveVault, _rv] = await this.market.reserveVaultPDA(token)
+    const [depositNoteVault, _d] = await this.market.collateralVaultPDA(
+      reserve,
+      this.authority
+    )
     const r = this.market.reserves.find(
       (r) => r.token.toBase58() === token.toBase58()
     )
-    this.program.instruction.variableDeposit(new BN(amount), {
+    const reserveSource = await sab.getATAAddress({
+      mint: r.token,
+      owner: this.authority,
+    })
+    return this.program.instruction.variableDeposit(new BN(amount), {
       accounts: {
         authority: this.authority,
         market: this.market.address,
         reserve,
-        portfolio,
+        positions: this.positionsKey,
         depositNoteMint: r.depositNoteMint,
-        depositNoteVault: reserveVault,
+        depositNoteVault,
+        reserveVault,
+        reserveSource,
+        tokenProgram: TOKEN_PROGRAM_ID,
       },
     })
+  }
+
+  async collateralVaultByToken(token: PublicKey) {
+    const [reserve] = await this.market.reservePDA(token)
+    const [collateral] = await this.market.collateralVaultPDA(
+      reserve,
+      this.authority
+    )
+    return collateral
   }
 }
 
