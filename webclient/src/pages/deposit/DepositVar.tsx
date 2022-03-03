@@ -93,6 +93,7 @@ function DepositVar() {
           type="primary"
           text={tab}
           handler={() => toast(<Toast props={toastData} />)}
+          xtra="is-full-width"
         />
         <p>Wallet balance: XXXXXXX</p>
       </Container>
