@@ -1,4 +1,6 @@
 import { RefObject, useRef } from 'react'
+import { useAppDispatch, useAppSelector } from '../redux'
+import Button from '../blocks/Button'
 
 export interface TextInputProps {
   value: string
@@ -8,6 +10,7 @@ export interface TextInputProps {
 }
 
 function TextInput({ value, handleInput, disabled }: TextInputProps) {
+  const dispatch = useAppDispatch()
   const inputElement = useRef(null) as RefObject<HTMLInputElement>
 
   return (
@@ -17,13 +20,14 @@ function TextInput({ value, handleInput, disabled }: TextInputProps) {
           <input
             className="input has-text-right"
             disabled={disabled}
-            onChange={(e) => handleInput(e.target.value, true)}
+            onChange={(e) => dispatch(handleInput(e.target.value))}
             value={value === 'NaN' ? '0' : value}
             type=""
             placeholder="0"
             autoComplete="off"
             ref={inputElement}
           />
+          <Button type="transparent" text="MAX" handler={() => null} />
         </div>
       </div>
     </div>
