@@ -1,7 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, *};
 
-use crate::state::*;
+use crate::{state::*, utils::epoch_now};
 
 #[derive(Accounts)]
 pub struct FixedBorrow<'info> {
@@ -11,6 +11,9 @@ pub struct FixedBorrow<'info> {
 
     #[account(mut)]
     pub reserve: AccountLoader<'info, Reserve>,
+
+    #[account(mut)]
+    pub settlement_table: AccountLoader<'info, SettlementTable>,
 
     pub portfolio: Account<'info, Portfolio>,
 
@@ -28,14 +31,16 @@ pub struct FixedBorrow<'info> {
     pub token_program: Program<'info, Token>,
 }
 
-pub fn handler(ctx: Context<WithdrawVariableDeposit>, amount: u64) -> Result<()> {
+pub fn handler(ctx: Context<FixedBorrow>, amount: u64, duration: u32) -> Result<()> {
     let mut positions = ctx.accounts.positions.load_mut()?;
     let mut reserve = ctx.accounts.reserve.load_mut()?;
+    let mut settlement_table = ctx.accounts.settlement_table.load_mut()?;
     let market = ctx.accounts.market.load()?;
 
-    positions.add_variable_deposit(reserve.token, amount, amount)?;
+    let fb = reserve.make_fixed_borrow(epoch_now(), duration, amount);
+    reserve.fixed_borrow(&mut settlement_table, duration as usize, amount);
 
-    reserve.deposit(amount);
+    positions.add_fixed_borrow(fb)?;
 
     token::transfer(
         ctx.accounts
@@ -44,35 +49,16 @@ pub fn handler(ctx: Context<WithdrawVariableDeposit>, amount: u64) -> Result<()>
         amount,
     )?;
 
-    // TODO - calc notes
-    token::burn(
-        ctx.accounts
-            .note_burn_context()
-            .with_signer(&[&market.authority_seeds()]),
-        amount,
-    )?;
-
     Ok(())
 }
 
-impl<'info> WithdrawVariableDeposit<'info> {
+impl<'info> FixedBorrow<'info> {
     fn transfer_context(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
         CpiContext::new(
             self.token_program.to_account_info(),
             Transfer {
-                from: self.reserve_vault.to_account_info(),
-                to: self.user_reserve.to_account_info(),
-                authority: self.market.to_account_info(),
-            },
-        )
-    }
-
-    fn note_burn_context(&self) -> CpiContext<'_, '_, '_, 'info, Burn<'info>> {
-        CpiContext::new(
-            self.token_program.to_account_info(),
-            Burn {
-                to: self.deposit_note_vault.to_account_info(),
-                mint: self.deposit_note_mint.to_account_info(),
+                from: self.user_reserve.to_account_info(),
+                to: self.reserve_vault.to_account_info(),
                 authority: self.market.to_account_info(),
             },
         )
