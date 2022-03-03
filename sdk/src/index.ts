@@ -7,11 +7,14 @@ import {
   SystemProgram,
   SYSVAR_RENT_PUBKEY,
 } from "@solana/web3.js"
-import { Prog as AdventType, IDL } from "./program"
-import * as sab from "@saberhq/token-utils"
+import { IDL } from "./program"
+import { ReadonlyProgram } from "./models"
+import { AdventPortfolio } from "./portfolio"
+import { Reserve } from "./reserve"
+
+export { AdventPortfolio, Reserve }
 
 const DEFAULT_PROGRAM_ID = "ke798ave2o7MMZkriRUPSCz1aLrrmPQY2zHdrikJ298"
-type ReadonlyProgram = Omit<Program<AdventType>, "rpc">
 
 export class AdventSDK {
   public program: ReadonlyProgram
@@ -352,119 +355,6 @@ interface SettlementTableAccount {
   periods: { deposited: BN; borrowed: BN; freeInterest: BN }[]
 }
 
-export class AdventPortfolio {
-  constructor(
-    private program: Omit<Program<AdventType>, "rpc">,
-    public address: PublicKey,
-    public authority: PublicKey,
-    public market: AdventMarket,
-    public positionsKey: PublicKey,
-    private _variableDeposits: VariableDepositAccount[]
-  ) {}
-  async refresh() {
-    const positions = await this.program.account.positions.fetch(
-      this.positionsKey
-    )
-
-    this._variableDeposits =
-      positions.variableDeposits as VariableDepositAccount[]
-  }
-
-  get variableDeposits() {
-    return this._variableDeposits.filter(
-      (x) => x.token.toBase58() !== PublicKey.default.toBase58()
-    )
-  }
-
-  async variableDepositTokensIX(token: PublicKey, amount: number) {
-    const [reserve] = await this.market.reservePDA(token)
-    const [reserveVault] = await this.market.reserveVaultPDA(token)
-
-    const r = this.market.reserves.find(
-      (r) => r.token.toBase58() === token.toBase58()
-    )
-
-    const reserveUser = await sab.getATAAddress({
-      mint: r.token,
-      owner: this.authority,
-    })
-
-    const depositNoteUser = await sab.getATAAddress({
-      mint: r.depositNoteMint,
-      owner: this.authority,
-    })
-
-    return this.program.instruction.variableDepositTokens(new BN(amount), {
-      accounts: {
-        authority: this.authority,
-        market: this.market.address,
-        reserve,
-        depositNoteMint: r.depositNoteMint,
-        reserveVault,
-        reserveUser,
-        depositNoteUser,
-        tokenProgram: TOKEN_PROGRAM_ID,
-      },
-    })
-  }
-
-  async variableDepositCollateralIX(token: PublicKey, amount: number) {
-    const [reserve] = await this.market.reservePDA(token)
-    const [depositNoteVault] = await this.market.collateralVaultPDA(
-      reserve,
-      this.authority
-    )
-    const r = this.market.reserves.find(
-      (r) => r.token.toBase58() === token.toBase58()
-    )
-    const depositNoteUser = await sab.getATAAddress({
-      mint: r.depositNoteMint,
-      owner: this.authority,
-    })
-    return this.program.instruction.variableDepositCollateral(new BN(amount), {
-      accounts: {
-        authority: this.authority,
-        market: this.market.address,
-        reserve,
-        positions: this.positionsKey,
-        depositNoteVault,
-        depositNoteUser,
-        tokenProgram: TOKEN_PROGRAM_ID,
-      },
-    })
-  }
-
-  async collateralVaultByToken(token: PublicKey) {
-    const [reserve] = await this.market.reservePDA(token)
-    const [collateral] = await this.market.collateralVaultPDA(
-      reserve,
-      this.authority
-    )
-    return collateral
-  }
-}
-
-export class Reserve {
-  constructor(
-    private program: Omit<Program<AdventType>, "rpc">,
-    public market: PublicKey,
-    public token: PublicKey,
-    public depositNoteMint: PublicKey,
-    public vault: PublicKey,
-    public settlementTableKey: PublicKey,
-    public settlementTable: SettlementTable
-  ) {}
-}
-
-export interface SettlementTable {
-  periods: SettlementPeriod[]
-}
-
-export interface SettlementPeriod {
-  deposited: BN
-  borrowed: BN
-  freeInterest: BN
-}
 export interface VariableDepositAccount {
   amount: BN
   token: PublicKey

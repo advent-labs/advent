@@ -251,11 +251,6 @@ export type Prog = {
           "isSigner": false
         },
         {
-          "name": "userReserve",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "tokenProgram",
           "isMut": false,
           "isSigner": false
@@ -1164,11 +1159,6 @@ export const IDL: Prog = {
         },
         {
           "name": "depositNoteUser",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "userReserve",
           "isMut": true,
           "isSigner": false
         },

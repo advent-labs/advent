@@ -86,32 +86,50 @@ describe.only("varable deposit", () => {
     const depositNoteMint = reserve.depositNoteMint
     const notesAddress = await createATA(depositNoteMint, admin, connection)
     const reserveAddress = await createATA(tokenA.publicKey, admin, connection)
+
     const collateralVault = await portfolio.collateralVaultByToken(
       tokenA.publicKey
     )
 
     await tokenA.mintTo(reserveAddress, admin, [], 10e6)
 
-    const ix = await portfolio.variableDepositTokensIX(tokenA.publicKey, 1e6)
-
-    await signAllAndSend([ix], [admin], admin.publicKey, connection)
-
+    {
+      const ix = await portfolio.variableDepositTokensIX(tokenA.publicKey, 1e6)
+      await signAllAndSend([ix], [admin], admin.publicKey, connection)
+    }
     await assertTokenBalance(reserveAddress, 9, connection)
     await assertTokenBalance(notesAddress, 1, connection)
     await assertTokenBalance(collateralVault, 0, connection)
+
+    {
+      const ix = await portfolio.variableDepositCollateralIX(
+        tokenA.publicKey,
+        1e6
+      )
+      await signAllAndSend([ix], [admin], admin.publicKey, connection)
+    }
+
+    await assertTokenBalance(reserveAddress, 9, connection)
+    await assertTokenBalance(notesAddress, 0, connection)
+    await assertTokenBalance(collateralVault, 1, connection)
   })
 
   it("widthdraws", async () => {
-    // const ix = await portfolio.withdrawVariableDepositIX(tokenA.publicKey, 1e6)
-    // await signAllAndSend([ix], [admin], admin.publicKey, connection)
-    // const reserveAddress = await sab.getATAAddress({
-    //   mint: tokenA.publicKey,
-    //   owner: admin.publicKey,
-    // })
-    // await assertTokenBalance(reserveAddress, 10, connection)
-    // const collateralVault = await portfolio.collateralVaultByToken(
-    //   tokenA.publicKey
-    // )
-    // await assertTokenBalance(collateralVault, 0, connection)
+    const reserve = market.reserveByToken(tokenA.publicKey)
+    const depositNoteMint = reserve.depositNoteMint
+    const userDepositNoteAccount = await sab.getATAAddress({
+      mint: depositNoteMint,
+      owner: admin.publicKey,
+    })
+    const vaultDepositNoteAccount = await portfolio.collateralVaultByToken(
+      tokenA.publicKey
+    )
+    const ix = await portfolio.variableWithdrawCollateralIX(
+      tokenA.publicKey,
+      1e6
+    )
+    await signAllAndSend([ix], [admin], admin.publicKey, connection)
+    await assertTokenBalance(vaultDepositNoteAccount, 0, connection)
+    await assertTokenBalance(userDepositNoteAccount, 1, connection)
   })
 })

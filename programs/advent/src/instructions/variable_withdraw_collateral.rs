@@ -22,10 +22,6 @@ pub struct VariableWithdrawCollateral<'info> {
     #[account(mut)]
     pub deposit_note_user: Account<'info, TokenAccount>,
 
-    /// User's reserve account
-    #[account(mut)]
-    pub user_reserve: Account<'info, TokenAccount>,
-
     pub token_program: Program<'info, Token>,
 }
 
