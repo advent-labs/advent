@@ -1,14 +1,22 @@
 import DataPoint, { Data } from './DataPoint'
 
-export interface AssetBarProps {
+export interface ReserveProps {
   icon: string
   uTokenName: string
   data?: Data[]
   slim?: boolean
   slimData?: number[]
+  action: any
 }
 
-function AssetBar({ uTokenName, icon, data, slim, slimData }: AssetBarProps) {
+function Reserve({
+  uTokenName,
+  icon,
+  data,
+  slim,
+  slimData,
+  action,
+}: ReserveProps) {
   let dataDisplay
   if (slim && slimData) {
     dataDisplay = slimData.map((e, i) => {
@@ -23,7 +31,7 @@ function AssetBar({ uTokenName, icon, data, slim, slimData }: AssetBarProps) {
   }
 
   return slim ? (
-    <div className="bar is-slim mb-4">
+    <div className="bar is-slim mb-4" onClick={action}>
       <div className="token ml-4">
         <img src={icon} alt={uTokenName} />
         <p className="ml-4">{uTokenName}</p>
@@ -31,7 +39,7 @@ function AssetBar({ uTokenName, icon, data, slim, slimData }: AssetBarProps) {
       <div className="data-horizontal">{dataDisplay}</div>
     </div>
   ) : (
-    <div className="bar mb-4">
+    <div className="bar mb-4" onClick={action}>
       <div className="token ml-4">
         <img src={icon} alt={uTokenName} />
         <p className="ml-4">{uTokenName}</p>
@@ -41,4 +49,4 @@ function AssetBar({ uTokenName, icon, data, slim, slimData }: AssetBarProps) {
   )
 }
 
-export default AssetBar
+export default Reserve
