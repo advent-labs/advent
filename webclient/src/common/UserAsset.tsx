@@ -92,7 +92,7 @@ function UserAsset({
           disabled={disabled}
         />
         <Button
-          xtraClass="ml-4"
+          xtra="ml-4"
           type="primary"
           text={isBorrowed ? 'Withdraw' : 'Repay'}
           handler={() => action}
