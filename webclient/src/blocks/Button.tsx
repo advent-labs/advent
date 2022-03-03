@@ -9,7 +9,7 @@ export interface ButtonProps {
 function Button({ type, handler, text, xtra, disabled, icon }: ButtonProps) {
   return (
     <button
-      className={`button is-${type} ${xtra}`}
+      className={`button is-${type} ${xtra ? xtra : ''}`}
       onClick={handler}
       disabled={disabled}
     >

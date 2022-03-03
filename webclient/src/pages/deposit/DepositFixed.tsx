@@ -96,9 +96,8 @@ function DepositFixed() {
           handler={tabHandler}
         />
         {isWithdraw ? (
-        <Warning message="Lent amount can be withdrawn at maturity where fixed rate lend will automatically transition to variable rate lend." />
-        )
-         : (
+          <Warning message="Lent amount can be withdrawn at maturity where fixed rate lend will automatically transition to variable rate lend." />
+        ) : (
           <>
             <TextInput
               value={inputVal}
@@ -124,6 +123,7 @@ function DepositFixed() {
           type="primary"
           text={tab}
           handler={() => toast(<Toast props={toastData} />)}
+          xtra="is-full-width"
         />
         <p>Wallet balance: XXXXXXX</p>
       </Container>
