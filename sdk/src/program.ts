@@ -121,7 +121,7 @@ export type Prog = {
       "args": []
     },
     {
-      "name": "variableDeposit",
+      "name": "variableDepositTokens",
       "accounts": [
         {
           "name": "authority",
@@ -139,17 +139,12 @@ export type Prog = {
           "isSigner": false
         },
         {
-          "name": "positions",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "depositNoteMint",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "depositNoteVault",
+          "name": "depositNoteUser",
           "isMut": true,
           "isSigner": false
         },
@@ -159,7 +154,7 @@ export type Prog = {
           "isSigner": false
         },
         {
-          "name": "reserveSource",
+          "name": "reserveUser",
           "isMut": true,
           "isSigner": false
         },
@@ -177,7 +172,104 @@ export type Prog = {
       ]
     },
     {
-      "name": "withdrawVariableDeposit",
+      "name": "variableDepositCollateral",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "positions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteUser",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "variableWithdrawCollateral",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "positions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteUser",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userReserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "variableWithdrawTokens",
       "accounts": [
         {
           "name": "authority",
@@ -205,7 +297,7 @@ export type Prog = {
           "isSigner": false
         },
         {
-          "name": "depositNoteVault",
+          "name": "depositNoteUser",
           "isMut": true,
           "isSigner": false
         },
@@ -229,6 +321,131 @@ export type Prog = {
         {
           "name": "amount",
           "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "fixedBorrow",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "settlementTable",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "portfolio",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "positions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userReserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "duration",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "fixedDeposit",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "portfolio",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "positions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userReserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "duration",
+          "type": "u32"
         }
       ]
     },
@@ -427,7 +644,7 @@ export type Prog = {
           },
           {
             "name": "decimals",
-            "type": "u8"
+            "type": "i16"
           },
           {
             "name": "cachedPriceQuote",
@@ -438,15 +655,23 @@ export type Prog = {
             "type": "u64"
           },
           {
+            "name": "fixedDebt",
+            "type": "u64"
+          },
+          {
             "name": "totalDeposits",
             "type": "u64"
           },
           {
-            "name": "totalLoanNotes",
+            "name": "fixedDeposits",
             "type": "u64"
           },
           {
-            "name": "totalDepositNotes",
+            "name": "loanNotes",
+            "type": "u64"
+          },
+          {
+            "name": "depositNotes",
             "type": "u64"
           },
           {
@@ -508,6 +733,18 @@ export type Prog = {
   ],
   "types": [
     {
+      "name": "Number",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "val",
+            "type": "i128"
+          }
+        ]
+      }
+    },
+    {
       "name": "ReserveInfo",
       "type": {
         "kind": "struct",
@@ -546,7 +783,13 @@ export type Prog = {
           },
           {
             "name": "interest",
-            "type": "u64"
+            "type": {
+              "defined": "Number"
+            }
+          },
+          {
+            "name": "depositNoteVault",
+            "type": "publicKey"
           }
         ]
       }
@@ -562,11 +805,11 @@ export type Prog = {
           },
           {
             "name": "start",
-            "type": "u64"
+            "type": "u32"
           },
           {
             "name": "duration",
-            "type": "u64"
+            "type": "u32"
           },
           {
             "name": "amount",
@@ -574,7 +817,9 @@ export type Prog = {
           },
           {
             "name": "interest",
-            "type": "u64"
+            "type": {
+              "defined": "Number"
+            }
           }
         ]
       }
@@ -593,11 +838,7 @@ export type Prog = {
             "type": "publicKey"
           },
           {
-            "name": "amount",
-            "type": "u64"
-          },
-          {
-            "name": "depositNotes",
+            "name": "collateralAmount",
             "type": "u64"
           },
           {
@@ -642,7 +883,9 @@ export type Prog = {
           },
           {
             "name": "freeInterest",
-            "type": "u64"
+            "type": {
+              "defined": "Number"
+            }
           }
         ]
       }
@@ -795,7 +1038,7 @@ export const IDL: Prog = {
       "args": []
     },
     {
-      "name": "variableDeposit",
+      "name": "variableDepositTokens",
       "accounts": [
         {
           "name": "authority",
@@ -813,17 +1056,12 @@ export const IDL: Prog = {
           "isSigner": false
         },
         {
-          "name": "positions",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
           "name": "depositNoteMint",
           "isMut": true,
           "isSigner": false
         },
         {
-          "name": "depositNoteVault",
+          "name": "depositNoteUser",
           "isMut": true,
           "isSigner": false
         },
@@ -833,7 +1071,7 @@ export const IDL: Prog = {
           "isSigner": false
         },
         {
-          "name": "reserveSource",
+          "name": "reserveUser",
           "isMut": true,
           "isSigner": false
         },
@@ -851,7 +1089,104 @@ export const IDL: Prog = {
       ]
     },
     {
-      "name": "withdrawVariableDeposit",
+      "name": "variableDepositCollateral",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "positions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteUser",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "variableWithdrawCollateral",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "positions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteUser",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userReserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "variableWithdrawTokens",
       "accounts": [
         {
           "name": "authority",
@@ -879,7 +1214,7 @@ export const IDL: Prog = {
           "isSigner": false
         },
         {
-          "name": "depositNoteVault",
+          "name": "depositNoteUser",
           "isMut": true,
           "isSigner": false
         },
@@ -903,6 +1238,131 @@ export const IDL: Prog = {
         {
           "name": "amount",
           "type": "u64"
+        }
+      ]
+    },
+    {
+      "name": "fixedBorrow",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "settlementTable",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "portfolio",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "positions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userReserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "duration",
+          "type": "u32"
+        }
+      ]
+    },
+    {
+      "name": "fixedDeposit",
+      "accounts": [
+        {
+          "name": "authority",
+          "isMut": false,
+          "isSigner": true
+        },
+        {
+          "name": "market",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "reserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "portfolio",
+          "isMut": false,
+          "isSigner": false
+        },
+        {
+          "name": "positions",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "reserveVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "userReserve",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteVault",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "depositNoteMint",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
+          "name": "tokenProgram",
+          "isMut": false,
+          "isSigner": false
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        },
+        {
+          "name": "duration",
+          "type": "u32"
         }
       ]
     },
@@ -1101,7 +1561,7 @@ export const IDL: Prog = {
           },
           {
             "name": "decimals",
-            "type": "u8"
+            "type": "i16"
           },
           {
             "name": "cachedPriceQuote",
@@ -1112,15 +1572,23 @@ export const IDL: Prog = {
             "type": "u64"
           },
           {
+            "name": "fixedDebt",
+            "type": "u64"
+          },
+          {
             "name": "totalDeposits",
             "type": "u64"
           },
           {
-            "name": "totalLoanNotes",
+            "name": "fixedDeposits",
             "type": "u64"
           },
           {
-            "name": "totalDepositNotes",
+            "name": "loanNotes",
+            "type": "u64"
+          },
+          {
+            "name": "depositNotes",
             "type": "u64"
           },
           {
@@ -1182,6 +1650,18 @@ export const IDL: Prog = {
   ],
   "types": [
     {
+      "name": "Number",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {
+            "name": "val",
+            "type": "i128"
+          }
+        ]
+      }
+    },
+    {
       "name": "ReserveInfo",
       "type": {
         "kind": "struct",
@@ -1220,7 +1700,13 @@ export const IDL: Prog = {
           },
           {
             "name": "interest",
-            "type": "u64"
+            "type": {
+              "defined": "Number"
+            }
+          },
+          {
+            "name": "depositNoteVault",
+            "type": "publicKey"
           }
         ]
       }
@@ -1236,11 +1722,11 @@ export const IDL: Prog = {
           },
           {
             "name": "start",
-            "type": "u64"
+            "type": "u32"
           },
           {
             "name": "duration",
-            "type": "u64"
+            "type": "u32"
           },
           {
             "name": "amount",
@@ -1248,7 +1734,9 @@ export const IDL: Prog = {
           },
           {
             "name": "interest",
-            "type": "u64"
+            "type": {
+              "defined": "Number"
+            }
           }
         ]
       }
@@ -1267,11 +1755,7 @@ export const IDL: Prog = {
             "type": "publicKey"
           },
           {
-            "name": "amount",
-            "type": "u64"
-          },
-          {
-            "name": "depositNotes",
+            "name": "collateralAmount",
             "type": "u64"
           },
           {
@@ -1316,7 +1800,9 @@ export const IDL: Prog = {
           },
           {
             "name": "freeInterest",
-            "type": "u64"
+            "type": {
+              "defined": "Number"
+            }
           }
         ]
       }

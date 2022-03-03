@@ -4,7 +4,7 @@ use anchor_spl::token::{self, *};
 use crate::state::*;
 
 #[derive(Accounts)]
-pub struct VariableDeposit<'info> {
+pub struct VariableWithdrawTokens<'info> {
     pub authority: Signer<'info>,
 
     pub market: AccountLoader<'info, Market>,
@@ -18,36 +18,40 @@ pub struct VariableDeposit<'info> {
     #[account(mut)]
     pub deposit_note_mint: Account<'info, Mint>,
 
-    /// Vault holding deposit notes as collateral
+    /// User account holding deposit notes as collateral
     #[account(mut)]
-    pub deposit_note_vault: Account<'info, TokenAccount>,
+    pub deposit_note_user: Account<'info, TokenAccount>,
 
     /// Vault holding stored tokens for reserve
     #[account(mut)]
     pub reserve_vault: Account<'info, TokenAccount>,
 
-    /// User's token account
+    /// User's reserve account
     #[account(mut)]
-    pub reserve_source: Account<'info, TokenAccount>,
+    pub user_reserve: Account<'info, TokenAccount>,
 
     pub token_program: Program<'info, Token>,
 }
 
-pub fn handler(ctx: Context<VariableDeposit>, amount: u64) -> Result<()> {
-    let mut positions = ctx.accounts.positions.load_mut()?;
+pub fn handler(ctx: Context<VariableWithdrawTokens>, amount: u64) -> Result<()> {
     let mut reserve = ctx.accounts.reserve.load_mut()?;
     let market = ctx.accounts.market.load()?;
 
-    positions.add_variable_deposit(reserve.token, amount, amount)?;
+    // todo calc notes
+    let note_amount = amount;
+    reserve.variable_withdraw(amount, note_amount);
 
-    reserve.deposit(amount);
-
-    token::transfer(ctx.accounts.transfer_context(), amount)?;
+    token::transfer(
+        ctx.accounts
+            .transfer_context()
+            .with_signer(&[&market.authority_seeds()]),
+        amount,
+    )?;
 
     // TODO - calc notes
-    token::mint_to(
+    token::burn(
         ctx.accounts
-            .note_mint_context()
+            .note_burn_context()
             .with_signer(&[&market.authority_seeds()]),
         amount,
     )?;
@@ -55,23 +59,23 @@ pub fn handler(ctx: Context<VariableDeposit>, amount: u64) -> Result<()> {
     Ok(())
 }
 
-impl<'info> VariableDeposit<'info> {
+impl<'info> VariableWithdrawTokens<'info> {
     fn transfer_context(&self) -> CpiContext<'_, '_, '_, 'info, Transfer<'info>> {
         CpiContext::new(
             self.token_program.to_account_info(),
             Transfer {
-                from: self.reserve_source.to_account_info(),
-                to: self.reserve_vault.to_account_info(),
-                authority: self.authority.to_account_info(),
+                from: self.reserve_vault.to_account_info(),
+                to: self.user_reserve.to_account_info(),
+                authority: self.market.to_account_info(),
             },
         )
     }
 
-    fn note_mint_context(&self) -> CpiContext<'_, '_, '_, 'info, MintTo<'info>> {
+    fn note_burn_context(&self) -> CpiContext<'_, '_, '_, 'info, Burn<'info>> {
         CpiContext::new(
             self.token_program.to_account_info(),
-            MintTo {
-                to: self.deposit_note_vault.to_account_info(),
+            Burn {
+                to: self.deposit_note_user.to_account_info(),
                 mint: self.deposit_note_mint.to_account_info(),
                 authority: self.market.to_account_info(),
             },

@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-use crate::errors::ErrorCode;
+use crate::{errors::ErrorCode, number::Number};
 
 #[zero_copy]
 #[derive(Default)]
@@ -9,17 +9,22 @@ pub struct FixedDeposit {
     pub start: u64,
     pub duration: u64,
     pub amount: u64,
-    pub interest: u64,
+    pub interest: Number,
+
+    /// Holds deposit notes
+    /// Purely for accounting purposes, as these are unusable by the user
+    /// Whet the fixed deposit is claimed, these notes will be burned
+    pub deposit_note_vault: Pubkey,
 }
 
 #[zero_copy]
 #[derive(Default)]
 pub struct FixedBorrow {
     pub token: Pubkey,
-    pub start: u64,
-    pub duration: u64,
+    pub start: u32,
+    pub duration: u32,
     pub amount: u64,
-    pub interest: u64,
+    pub interest: Number,
 }
 
 #[zero_copy]
@@ -27,8 +32,7 @@ pub struct FixedBorrow {
 pub struct VariableDeposit {
     pub token: Pubkey,
     pub collateral_vault_account: Pubkey,
-    pub amount: u64,
-    pub deposit_notes: u64,
+    pub collateral_amount: u64,
     pub collateral_coefficient: u64,
 }
 
@@ -103,14 +107,23 @@ impl Positions {
         Err(error!(ErrorCode::NoFreeFixedBorrow))
     }
 
-    pub fn add_variable_deposit(
+    pub fn add_variable_deposit_collateral(
         &mut self,
         token: Pubkey,
-        amount: u64,
         notes_amount: u64,
     ) -> Result<()> {
         let d = self.get_variable_deposit_mut(token)?;
-        d.add(amount, notes_amount);
+        d.add_collateral(notes_amount);
+        Ok(())
+    }
+
+    pub fn withdraw_variable_deposit_collateral(
+        &mut self,
+        token: Pubkey,
+        notes_amount: u64,
+    ) -> Result<()> {
+        let d = self.get_variable_deposit_mut(token)?;
+        d.subtract_collateral(notes_amount);
         Ok(())
     }
 
@@ -125,8 +138,11 @@ impl Positions {
 }
 
 impl VariableDeposit {
-    pub fn add(&mut self, amount: u64, notes_amount: u64) {
-        self.amount.checked_add(amount).unwrap();
-        self.deposit_notes.checked_add(notes_amount).unwrap();
+    pub fn add_collateral(&mut self, notes_amount: u64) {
+        self.collateral_amount.checked_add(notes_amount).unwrap();
+    }
+
+    pub fn subtract_collateral(&mut self, notes_amount: u64) {
+        self.collateral_amount.checked_sub(notes_amount).unwrap();
     }
 }

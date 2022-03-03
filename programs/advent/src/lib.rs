@@ -2,6 +2,7 @@ use anchor_lang::prelude::*;
 
 mod errors;
 mod instructions;
+mod number;
 mod state;
 mod utils;
 
@@ -26,15 +27,37 @@ pub mod prog {
         instructions::init_variable_deposit::handler(ctx)
     }
 
-    pub fn variable_deposit(ctx: Context<VariableDeposit>, amount: u64) -> Result<()> {
-        instructions::variable_deposit::handler(ctx, amount)
+    pub fn variable_deposit_tokens(ctx: Context<VariableDepositTokens>, amount: u64) -> Result<()> {
+        instructions::variable_deposit_tokens::handler(ctx, amount)
     }
 
-    pub fn withdraw_variable_deposit(
-        ctx: Context<WithdrawVariableDeposit>,
+    pub fn variable_deposit_collateral(
+        ctx: Context<VariableDepositCollateral>,
         amount: u64,
     ) -> Result<()> {
-        instructions::withdraw_variable_deposit::handler(ctx, amount)
+        instructions::variable_deposit_collateral::handler(ctx, amount)
+    }
+
+    pub fn variable_withdraw_collateral(
+        ctx: Context<VariableWithdrawCollateral>,
+        amount: u64,
+    ) -> Result<()> {
+        instructions::variable_withdraw_collateral::handler(ctx, amount)
+    }
+
+    pub fn variable_withdraw_tokens(
+        ctx: Context<VariableWithdrawTokens>,
+        amount: u64,
+    ) -> Result<()> {
+        instructions::variable_withdraw_tokens::handler(ctx, amount)
+    }
+
+    pub fn fixed_borrow(ctx: Context<FixedBorrow>, amount: u64, duration: u32) -> Result<()> {
+        instructions::fixed_borrow::handler(ctx, amount, duration)
+    }
+
+    pub fn fixed_deposit(ctx: Context<FixedDeposit>, amount: u64, duration: u32) -> Result<()> {
+        instructions::fixed_deposit::handler(ctx, amount, duration)
     }
 
     pub fn init_reserve(
