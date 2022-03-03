@@ -5,11 +5,13 @@ export type PortTab = 'Overview' | 'Supplied' | 'Borrowed'
 export type AppUI = {
   isFixed: boolean
   portfolioTab: PortTab
+  modalOpen: boolean
 }
 
 const initialState: AppUI = {
   isFixed: true,
   portfolioTab: 'Overview',
+  modalOpen: false,
 }
 
 export const appUI = createSlice({
@@ -25,6 +27,12 @@ export const appUI = createSlice({
     setPortfolioTab: (s: AppUI, action: PayloadAction<PortTab>) => {
       s.portfolioTab = action.payload
     },
+    setModalOpen: (s: AppUI) => {
+      s.modalOpen = true
+    },
+    closeModal: (s: AppUI) => {
+      s.modalOpen = false
+    },
   },
 })
 
@@ -34,4 +42,5 @@ export const actions = appUI.actions
 export const selectAppUIValues = (s: RootState) => ({
   isFixed: s.appui.isFixed,
   portfolioTab: s.appui.portfolioTab,
+  modalOpen: s.appui.modalOpen,
 })

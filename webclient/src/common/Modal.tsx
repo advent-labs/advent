@@ -1,7 +1,7 @@
-import { useEffect } from "react"
+import { ReactNode, useEffect } from 'react'
 
 export function Modal(props: {
-  children: JSX.Element
+  children: ReactNode
   open: boolean
   onClose: () => void
 }) {
@@ -9,16 +9,16 @@ export function Modal(props: {
 
   useEffect(() => {
     const close = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
+      if (e.key === 'Escape') {
         onClose()
       }
     }
-    window.addEventListener("keydown", close)
-    return () => window.removeEventListener("keydown", close)
+    window.addEventListener('keydown', close)
+    return () => window.removeEventListener('keydown', close)
   }, [onClose])
 
   return (
-    <div className={`modal ${open ? "is-active" : ""}`}>
+    <div className={`modal ${open ? 'is-active' : ''}`}>
       <div className="modal-background" onClick={onClose}></div>
       <div className="modal-content">
         <div className="box">{props.children}</div>

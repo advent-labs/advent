@@ -35,6 +35,8 @@ import Nav from './common/Nav'
 import { AdventMarket, AdventSDK } from './sdk'
 import { actions as userPortfolioActions } from './redux/reducer/userPortfolio'
 import { actions as reservesAction } from './redux/reducer/reserves'
+import { ToastContainer } from 'react-toastify'
+
 require('@solana/wallet-adapter-react-ui/styles.css')
 
 interface AppContext {
@@ -151,6 +153,18 @@ function App() {
         <Route path="/lend" element={<Lend />} />
         <Route path="/borrow" element={<Borrow />} />
       </Routes>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={5000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        className="toast"
+      />
     </div>
   )
 }
