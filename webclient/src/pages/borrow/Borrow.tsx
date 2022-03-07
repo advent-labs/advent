@@ -5,12 +5,10 @@ import {
   selectBorrowUIValues,
 } from '../../redux/ui/borrowui'
 import { Context } from '../../App'
-import { ReactNode, useContext } from 'react'
+import { useContext } from 'react'
 import Container from '../../blocks/Container'
 import RateTabs from '../../common/RateTabs'
 import Reserve from '../../common/Reserve'
-import usdcIcon from '../../assets/usdc.svg'
-import Portfolio from '../../common/Portfolio'
 import { Modal } from '../../common/Modal'
 import BorrowFixed from './BorrwFixed'
 import BorrowVar from './BorrowVar'
@@ -23,19 +21,17 @@ function Borrow() {
 
   const mockDataFixed = [
     {
-      label: 'Fixed borrow rate',
       value: 6.56,
       currency: '%',
       loadedOnce: true,
+      icon: 'icon',
     },
     {
-      label: 'Borrowed by me',
       value: 45000.32,
       currency: 'USDC',
       loadedOnce: true,
     },
     {
-      label: 'Max I can borrow',
       value: 10000000,
       currency: 'USDC',
       loadedOnce: true,
@@ -44,19 +40,17 @@ function Borrow() {
 
   const mockDataVar = [
     {
-      label: 'Variable borrow rate',
       value: 7.12,
       currency: '%',
       loadedOnce: true,
+      icon: 'icon',
     },
     {
-      label: 'Borrowed by me',
       value: 0,
       currency: 'USDC',
       loadedOnce: true,
     },
     {
-      label: 'Max I can borrow',
       value: 9999999,
       currency: 'USDC',
       loadedOnce: true,
@@ -90,6 +84,17 @@ function Borrow() {
     dispatch(appActions.setModalOpen())
   }
 
+  const rowLabels = (
+    <div className="columns is-mobile text-left">
+      <p className="column is-3 text__medium-m is-gray-1">Asset</p>
+      <p className="column is-3 text__medium-m is-gray-1">
+        {isFixed ? 'Fixed' : 'Variable'} borrow rate
+      </p>
+      <p className="column is-3 text__medium-m is-gray-1">Borrow balance</p>
+      <p className="column is-3 text__medium-m is-gray-1">Wallet balance</p>
+    </div>
+  )
+
   const reserveRows = isFixed
     ? fixedData.map((e, i) => {
         return <Reserve {...e} key={i} action={() => onReserveClick(e.mint)} />
@@ -100,16 +105,28 @@ function Borrow() {
 
   return (
     <>
-      <div className="columns">
-        <Container type="dark" id="reserve-list" xtra="column is-9">
-          <h1>Borrow Crypto</h1>
-          <RateTabs />
-          <div className="mt-5 is-full-width">{reserveRows}</div>
-        </Container>
-        <Container type="light" id="portfolio" xtra="column is-3">
-          <Portfolio />
-        </Container>
+      <div className="center-column title-block">
+        <h1 className="text__xl6-semi is-black">Borrow crypto</h1>
+        <p className="text__large-semi is-gray-1 width__65 mt-4">
+          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+          posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel,
+          ullamcorper sit amet.
+        </p>
       </div>
+      <Container
+        type="background"
+        xtra="center-column width__80 center has-shadow"
+      >
+        <RateTabs />
+        <div className="mt-4 is-full-width pl-2 pr-2">{rowLabels}</div>
+        <div className="mt-5 is-full-width pl-2 pr-2">
+          {reserveRows}
+          {reserveRows}
+          {reserveRows}
+          {reserveRows}
+          {reserveRows}
+        </div>
+      </Container>
       <Modal open={modalOpen} onClose={() => dispatch(appActions.closeModal())}>
         {isFixed ? <BorrowFixed /> : <BorrowVar />}
       </Modal>

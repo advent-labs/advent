@@ -6,20 +6,18 @@ function RateTabs() {
   const dispatch = useAppDispatch()
 
   return (
-    <div className="mt-4">
-      <div className="tabs is-filled">
-        <div
-          className={`${isFixed ? 'is-active' : ''} tab`}
-          onClick={() => dispatch(actions.setIsFixed())}
-        >
-          Fixed rates
-        </div>
-        <div
-          className={`${isFixed ? '' : 'is-active'} tab`}
-          onClick={() => dispatch(actions.setIsVariable())}
-        >
-          Variable rates
-        </div>
+    <div className="tabs is-filled p-1 mt-1">
+      <div
+        className={`${isFixed ? 'is-active' : ''} tab`}
+        onClick={() => dispatch(actions.setIsFixed())}
+      >
+        Fixed rates
+      </div>
+      <div
+        className={`${isFixed ? '' : 'is-active'} tab`}
+        onClick={() => dispatch(actions.setIsVariable())}
+      >
+        Variable rates
       </div>
     </div>
   )
