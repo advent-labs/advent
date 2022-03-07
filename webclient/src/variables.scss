@@ -1,14 +1,17 @@
 $navbar-background-color: transparent;
 
 @mixin TextColors {
+  &.is-black {
+    color: var(--true-black);
+  }
+  &.is-gray-1 {
+    color: var(--gray-1);
+  }
   &.is-primary {
-    color: var(--brand-primary);
+    color: var(--accent-1);
   }
   &.is-secondary {
-    color: var(--brand-primary);
-  }
-  &.is-action {
-    color: var(--brand-action);
+    color: var(--accent-2);
   }
 }
 
@@ -96,6 +99,13 @@ $column-gap: 0.5rem;
   line-height: 22px;
 }
 
+@mixin Large-Medium {
+  // @include Medium;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 22px;
+}
+
 @mixin Large-Semi {
   @include Semi;
   font-size: 16px;
@@ -176,6 +186,12 @@ $column-gap: 0.5rem;
 
 @mixin XL6 {
   @include Regular;
+  font-size: 32px;
+  line-height: 44px;
+}
+
+@mixin XL6-Semi {
+  @include Semi;
   font-size: 32px;
   line-height: 44px;
 }
