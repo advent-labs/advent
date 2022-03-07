@@ -114,9 +114,13 @@ describe.only("varable deposit", () => {
     await assertTokenBalance(collateralVault, 1, connection)
   })
 
-  it("widthdraws", async () => {
+  it("widthdraws collateral & tokens", async () => {
     const reserve = market.reserveByToken(tokenA.publicKey)
     const depositNoteMint = reserve.depositNoteMint
+    const userReserve = await sab.getATAAddress({
+      mint: tokenA.publicKey,
+      owner: admin.publicKey,
+    })
     const userDepositNoteAccount = await sab.getATAAddress({
       mint: depositNoteMint,
       owner: admin.publicKey,
@@ -127,12 +131,22 @@ describe.only("varable deposit", () => {
     await assertTokenBalance(vaultDepositNoteAccount, 1, connection)
     await assertTokenBalance(userDepositNoteAccount, 0, connection)
 
-    const ix = await portfolio.variableWithdrawCollateralIX(
-      tokenA.publicKey,
-      1e6
-    )
-    await signAllAndSend([ix], [admin], admin.publicKey, connection)
+    {
+      const ix = await portfolio.variableWithdrawCollateralIX(
+        tokenA.publicKey,
+        1e6
+      )
+      await signAllAndSend([ix], [admin], admin.publicKey, connection)
+    }
     await assertTokenBalance(vaultDepositNoteAccount, 0, connection)
     await assertTokenBalance(userDepositNoteAccount, 1, connection)
+
+    {
+      const ix = await portfolio.variableWithdrawTokensIX(tokenA.publicKey, 1e6)
+      await signAllAndSend([ix], [admin], admin.publicKey, connection)
+    }
+
+    await assertTokenBalance(userDepositNoteAccount, 0, connection)
+    await assertTokenBalance(userReserve, 10, connection)
   })
 })

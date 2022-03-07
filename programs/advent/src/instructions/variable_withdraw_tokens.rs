@@ -49,12 +49,7 @@ pub fn handler(ctx: Context<VariableWithdrawTokens>, amount: u64) -> Result<()> 
     )?;
 
     // TODO - calc notes
-    token::burn(
-        ctx.accounts
-            .note_burn_context()
-            .with_signer(&[&market.authority_seeds()]),
-        amount,
-    )?;
+    token::burn(ctx.accounts.note_burn_context(), amount)?;
 
     Ok(())
 }
@@ -77,7 +72,7 @@ impl<'info> VariableWithdrawTokens<'info> {
             Burn {
                 to: self.deposit_note_user.to_account_info(),
                 mint: self.deposit_note_mint.to_account_info(),
-                authority: self.market.to_account_info(),
+                authority: self.authority.to_account_info(),
             },
         )
     }

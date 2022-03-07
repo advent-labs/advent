@@ -29,7 +29,6 @@ pub fn handler(ctx: Context<VariableWithdrawCollateral>, amount: u64) -> Result<
     let mut positions = ctx.accounts.positions.load_mut()?;
     let reserve = ctx.accounts.reserve.load()?;
     let market = ctx.accounts.market.load()?;
-
     positions.withdraw_variable_deposit_collateral(reserve.token, amount)?;
 
     token::transfer(

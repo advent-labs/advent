@@ -123,6 +123,38 @@ export class AdventPortfolio {
     })
   }
 
+  async variableWithdrawTokensIX(token: PublicKey, amount: number) {
+    const [reserve] = await this.market.reservePDA(token)
+
+    const r = this.market.reserves.find(
+      (r) => r.token.toBase58() === token.toBase58()
+    )
+
+    const depositNoteUser = await sab.getATAAddress({
+      mint: r.depositNoteMint,
+      owner: this.authority,
+    })
+
+    const userReserve = await sab.getATAAddress({
+      mint: token,
+      owner: this.authority,
+    })
+
+    return this.program.instruction.variableWithdrawTokens(new BN(amount), {
+      accounts: {
+        authority: this.authority,
+        market: this.market.address,
+        reserve,
+        positions: this.positionsKey,
+        depositNoteMint: r.depositNoteMint,
+        reserveVault: r.vault,
+        userReserve,
+        depositNoteUser,
+        tokenProgram: sab.TOKEN_PROGRAM_ID,
+      },
+    })
+  }
+
   async collateralVaultByToken(token: PublicKey) {
     const [reserve] = await this.market.reservePDA(token)
     const [collateral] = await this.market.collateralVaultPDA(
