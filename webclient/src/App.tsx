@@ -27,6 +27,7 @@ import {
   userTokenBalancesStateRequested,
   resetTokenBalances,
 } from './redux/reducer/userTokenBalances'
+import Container from './blocks/Container'
 import Balances from './common/Balances'
 import { Dash } from './pages/dash/Dash'
 import Lend from './pages/deposit/Deposit'
@@ -36,6 +37,7 @@ import { AdventMarket, AdventSDK } from './sdk'
 import { actions as userPortfolioActions } from './redux/reducer/userPortfolio'
 import { actions as reservesAction } from './redux/reducer/reserves'
 import { ToastContainer } from 'react-toastify'
+import Portfolio from './common/Portfolio'
 
 require('@solana/wallet-adapter-react-ui/styles.css')
 
@@ -146,13 +148,20 @@ function App() {
 
   return (
     <div>
-      <Nav />
-      <Routes>
-        <Route path="/" element={<Balances />} />
-        <Route path="/dash" element={<Dash />} />
-        <Route path="/lend" element={<Lend />} />
-        <Route path="/borrow" element={<Borrow />} />
-      </Routes>
+      <div className="columns">
+        <div className="column is-9">
+          <Nav />
+          <Routes>
+            <Route path="/" element={<Balances />} />
+            <Route path="/dash" element={<Dash />} />
+            <Route path="/lend" element={<Lend />} />
+            <Route path="/borrow" element={<Borrow />} />
+          </Routes>
+        </div>
+        <Container type="background" id="portfolio" xtra="column is-3">
+          <Portfolio />
+        </Container>
+      </div>
       <ToastContainer
         position="bottom-left"
         autoClose={5000}
