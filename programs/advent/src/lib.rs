@@ -11,7 +11,7 @@ use instructions::*;
 declare_id!("ke798ave2o7MMZkriRUPSCz1aLrrmPQY2zHdrikJ298");
 
 #[program]
-pub mod prog {
+pub mod advent {
 
     use super::*;
 

@@ -139,10 +139,10 @@ impl Positions {
 
 impl VariableDeposit {
     pub fn add_collateral(&mut self, notes_amount: u64) {
-        self.collateral_amount.checked_add(notes_amount).unwrap();
+        self.collateral_amount = self.collateral_amount.checked_add(notes_amount).unwrap();
     }
 
     pub fn subtract_collateral(&mut self, notes_amount: u64) {
-        self.collateral_amount.checked_sub(notes_amount).unwrap();
+        self.collateral_amount = self.collateral_amount.checked_sub(notes_amount).unwrap();
     }
 }

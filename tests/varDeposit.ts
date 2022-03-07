@@ -124,6 +124,9 @@ describe.only("varable deposit", () => {
     const vaultDepositNoteAccount = await portfolio.collateralVaultByToken(
       tokenA.publicKey
     )
+    await assertTokenBalance(vaultDepositNoteAccount, 1, connection)
+    await assertTokenBalance(userDepositNoteAccount, 0, connection)
+
     const ix = await portfolio.variableWithdrawCollateralIX(
       tokenA.publicKey,
       1e6
