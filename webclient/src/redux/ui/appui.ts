@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { RootState } from '..'
 
-export type PortTab = 'Overview' | 'Supplied' | 'Borrowed'
+export type PortTab = 'Overview' | 'Lend' | 'Borrow'
 export type AppUI = {
   isFixed: boolean
   portfolioTab: PortTab
