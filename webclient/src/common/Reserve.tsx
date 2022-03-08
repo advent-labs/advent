@@ -1,50 +1,37 @@
-import DataPoint, { Data } from './DataPoint'
+export interface ReserveData {
+  value: number
+  currency: string
+  loadedOnce: boolean
+  icon?: string
+}
 
 export interface ReserveProps {
   icon: string
   uTokenName: string
-  data?: Data[]
+  data?: ReserveData[]
   slim?: boolean
   slimData?: number[]
   action: any
 }
 
-function Reserve({
-  uTokenName,
-  icon,
-  data,
-  slim,
-  slimData,
-  action,
-}: ReserveProps) {
-  let dataDisplay
-  if (slim && slimData) {
-    dataDisplay = slimData.map((e, i) => {
-      return <p key={i}>{e}</p>
-    })
-  }
-
-  if (!slim && data) {
-    dataDisplay = data.map((e, i) => {
-      return <DataPoint data={e} key={i} />
-    })
-  }
-
-  return slim ? (
-    <div className="bar is-slim mb-4" onClick={action}>
-      <div className="token ml-4">
-        <img src={icon} alt={uTokenName} />
-        <p className="ml-4">{uTokenName}</p>
+function Reserve({ uTokenName, icon, data, action }: ReserveProps) {
+  let dataDisplay = data?.map((e, i) => {
+    return (
+      <div className="reserve-data is-flex is-align-items-center column is-3">
+        {!!e.icon && <p>icon</p>}
+        <p className="text__large-m is-black">{e.value}</p>
+        <p className="text__large-m is-black ml-1">{e.currency}</p>
       </div>
-      <div className="data-horizontal">{dataDisplay}</div>
-    </div>
-  ) : (
-    <div className="bar mb-4" onClick={action}>
-      <div className="token ml-4">
+    )
+  })
+
+  return (
+    <div className="bar columns mb-0" onClick={action}>
+      <div className="token column is-3">
         <img src={icon} alt={uTokenName} />
-        <p className="ml-4">{uTokenName}</p>
+        <p className="ml-4 text__large-m is-black">{uTokenName}</p>
       </div>
-      <div className="data-horizontal">{dataDisplay}</div>
+      {dataDisplay}
     </div>
   )
 }
