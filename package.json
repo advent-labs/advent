@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "anchor build && cp ./target/types/prog.ts ./sdk/src/program.ts",
+    "build": "anchor build && cp ./target/types/advent.ts ./sdk/src/program.ts",
     "test": "anchor --version && anchor test"
   },
   "dependencies": {

@@ -15,7 +15,7 @@ import { AdventMarket, AdventPortfolio } from "../sdk/src"
 import { Token } from "@solana/spl-token"
 import * as sab from "@saberhq/token-utils"
 
-describe.only("varable deposit", () => {
+describe("varable deposit", () => {
   const admin = Keypair.generate()
   const connection = new Connection("http://localhost:8899", {
     commitment: "confirmed",

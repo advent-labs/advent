@@ -10,7 +10,7 @@ pub struct FixedBorrow<'info> {
     pub market: AccountLoader<'info, Market>,
 
     #[account(mut)]
-    pub reserve: AccountLoader<'info, Reserve>,
+    pub reserve: Box<Account<'info, Reserve>>,
 
     #[account(mut)]
     pub settlement_table: AccountLoader<'info, SettlementTable>,
@@ -33,15 +33,21 @@ pub struct FixedBorrow<'info> {
 
 pub fn handler(ctx: Context<FixedBorrow>, amount: u64, duration: u32) -> Result<()> {
     let mut positions = ctx.accounts.positions.load_mut()?;
-    let mut reserve = ctx.accounts.reserve.load_mut()?;
     let mut settlement_table = ctx.accounts.settlement_table.load_mut()?;
+    let reserve = &mut ctx.accounts.reserve;
     let market = ctx.accounts.market.load()?;
 
     let fb = reserve.make_fixed_borrow(epoch_now(), duration, amount);
-    reserve.fixed_borrow(&mut settlement_table, duration as usize, amount);
+
+    reserve.fixed_borrow(
+        &mut settlement_table,
+        duration as usize,
+        amount,
+        fb.interest_amount,
+    );
 
     positions.add_fixed_borrow(fb)?;
-
+    msg!("{}", positions.fixed_borrows[0].token);
     token::transfer(
         ctx.accounts
             .transfer_context()
@@ -57,8 +63,8 @@ impl<'info> FixedBorrow<'info> {
         CpiContext::new(
             self.token_program.to_account_info(),
             Transfer {
-                from: self.user_reserve.to_account_info(),
-                to: self.reserve_vault.to_account_info(),
+                from: self.reserve_vault.to_account_info(),
+                to: self.user_reserve.to_account_info(),
                 authority: self.market.to_account_info(),
             },
         )

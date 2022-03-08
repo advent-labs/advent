@@ -5,11 +5,16 @@ use crate::{errors::ErrorCode, number::Number};
 #[zero_copy]
 #[derive(Default)]
 pub struct FixedDeposit {
+    /// Mint
     pub token: Pubkey,
+    /// Start epoch (day)
     pub start: u64,
+    /// Duration in epochs (days)
     pub duration: u64,
+    /// Amount borrowed
     pub amount: u64,
-    pub interest: Number,
+    /// Amount of interest
+    pub interest_amount: u64,
 
     /// Holds deposit notes
     /// Purely for accounting purposes, as these are unusable by the user
@@ -20,11 +25,16 @@ pub struct FixedDeposit {
 #[zero_copy]
 #[derive(Default)]
 pub struct FixedBorrow {
+    /// Mint
     pub token: Pubkey,
+    /// Start epoch (day)
     pub start: u32,
+    /// Duration in epochs (days)
     pub duration: u32,
+    /// Amount borrowed
     pub amount: u64,
-    pub interest: Number,
+    /// Amount of interest
+    pub interest_amount: u64,
 }
 
 #[zero_copy]
@@ -98,7 +108,6 @@ impl Positions {
             if x.token != Pubkey::default() {
                 continue;
             }
-
             *x = new;
 
             return Ok(());

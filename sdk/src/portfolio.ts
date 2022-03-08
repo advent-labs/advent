@@ -5,7 +5,22 @@ import { ReadonlyProgram } from "./models"
 import * as sab from "@saberhq/token-utils"
 import { BN } from "@project-serum/anchor"
 import { getATAAddress } from "@saberhq/token-utils"
+import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
+export interface FixedBorrow {
+  token: PublicKey
+  start: number
+  duration: number
+  amount: number
+  interestAmount: number
+}
+export interface FixedBorrowRaw {
+  token: PublicKey
+  start: BN
+  duration: BN
+  amount: BN
+  interestAmount: BN
+}
 export class AdventPortfolio {
   constructor(
     private program: ReadonlyProgram,
@@ -13,7 +28,8 @@ export class AdventPortfolio {
     public authority: PublicKey,
     public market: AdventMarket,
     public positionsKey: PublicKey,
-    private _variableDeposits: VariableDepositAccount[]
+    private _variableDeposits: VariableDepositAccount[],
+    private _fixedBorrows: FixedBorrowRaw[]
   ) {}
 
   async refresh() {
@@ -23,6 +39,8 @@ export class AdventPortfolio {
 
     this._variableDeposits =
       positions.variableDeposits as VariableDepositAccount[]
+
+    this._fixedBorrows = positions.fixedBorrows as FixedBorrowRaw[]
   }
 
   get variableDeposits() {
@@ -31,11 +49,9 @@ export class AdventPortfolio {
     )
   }
 
-  async getVariableDeposits() {
-    const vds = this.variableDeposits
-    const collateralVaultAccounts = vds.map((v) => v.collateralVaultAccount)
-    const tokenAccounts = await Promise.all(
-      vds.map((v) => getATAAddress({ mint: v.token, owner: this.authority }))
+  get fixedBorrows() {
+    return this._fixedBorrows.filter(
+      (x) => x.token.toBase58() !== PublicKey.default.toBase58()
     )
   }
 
@@ -57,17 +73,18 @@ export class AdventPortfolio {
       owner: this.authority,
     })
 
+    const accounts = {
+      authority: this.authority,
+      market: this.market.address,
+      reserve,
+      depositNoteMint: r.depositNoteMint,
+      reserveVault,
+      reserveUser,
+      depositNoteUser,
+      tokenProgram: sab.TOKEN_PROGRAM_ID,
+    }
     return this.program.instruction.variableDepositTokens(new BN(amount), {
-      accounts: {
-        authority: this.authority,
-        market: this.market.address,
-        reserve,
-        depositNoteMint: r.depositNoteMint,
-        reserveVault,
-        reserveUser,
-        depositNoteUser,
-        tokenProgram: sab.TOKEN_PROGRAM_ID,
-      },
+      accounts,
     })
   }
 
@@ -153,6 +170,37 @@ export class AdventPortfolio {
         tokenProgram: sab.TOKEN_PROGRAM_ID,
       },
     })
+  }
+
+  async fixedBorrowIX(token: PublicKey, amount: number, duration: number) {
+    const [reserve] = await this.market.reservePDA(token)
+
+    const r = this.market.reserves.find(
+      (r) => r.token.toBase58() === token.toBase58()
+    )
+
+    const userReserve = await sab.getATAAddress({
+      mint: token,
+      owner: this.authority,
+    })
+
+    return this.program.instruction.fixedBorrow(
+      new BN(amount),
+      new BN(duration),
+      {
+        accounts: {
+          authority: this.authority,
+          market: this.market.address,
+          reserve,
+          settlementTable: r.settlementTableKey,
+          portfolio: this.address,
+          positions: this.positionsKey,
+          reserveVault: r.vault,
+          userReserve,
+          tokenProgram: TOKEN_PROGRAM_ID,
+        },
+      }
+    )
   }
 
   async collateralVaultByToken(token: PublicKey) {

@@ -9,7 +9,7 @@ pub struct VariableDepositCollateral<'info> {
 
     pub market: AccountLoader<'info, Market>,
 
-    pub reserve: AccountLoader<'info, Reserve>,
+    pub reserve: Account<'info, Reserve>,
 
     #[account(mut)]
     pub positions: AccountLoader<'info, Positions>,
@@ -27,7 +27,7 @@ pub struct VariableDepositCollateral<'info> {
 
 pub fn handler(ctx: Context<VariableDepositCollateral>, amount: u64) -> Result<()> {
     let mut positions = ctx.accounts.positions.load_mut()?;
-    let reserve = ctx.accounts.reserve.load()?;
+    let reserve = &ctx.accounts.reserve;
 
     positions.add_variable_deposit_collateral(reserve.token, amount)?;
 

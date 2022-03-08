@@ -9,7 +9,7 @@ import {
 } from "@solana/web3.js"
 import { IDL } from "./program"
 import { ReadonlyProgram } from "./models"
-import { AdventPortfolio } from "./portfolio"
+import { AdventPortfolio, FixedBorrowRaw } from "./portfolio"
 import { Reserve } from "./reserve"
 
 export { AdventPortfolio, Reserve }
@@ -110,7 +110,8 @@ export class AdventMarket {
       authority,
       this,
       portfolio.positions,
-      positions.variableDeposits as VariableDepositAccount[]
+      positions.variableDeposits as VariableDepositAccount[],
+      positions.fixedBorrows as FixedBorrowRaw[]
     )
   }
 

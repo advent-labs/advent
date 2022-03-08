@@ -1,5 +1,5 @@
 import { Keypair, Connection, PublicKey } from "@solana/web3.js"
-import { AdventMarket, AdventSDK } from "../sdk/src"
+import { AdventMarket, AdventPortfolio, AdventSDK, Reserve } from "../sdk/src"
 import { signAllAndSend } from "../sdk/src/util"
 import * as spl from "@solana/spl-token"
 import * as sab from "@saberhq/token-utils"
@@ -63,6 +63,45 @@ export async function initReserve(
 
   const reserve = await market.reserve(token.publicKey)
   return { reserve, token }
+}
+
+export async function addCollateralFromScratch(
+  admin: Keypair,
+  connection: Connection,
+  token: spl.Token,
+  market: AdventMarket,
+  portfolio: AdventPortfolio,
+  reserve: Reserve,
+  amount = 10e6
+) {
+  {
+    const ix = await market.initVariableDepositIX(
+      admin.publicKey,
+      reserve.token,
+      portfolio.positionsKey,
+      reserve.depositNoteMint
+    )
+
+    await signAllAndSend([ix], [admin], admin.publicKey, connection)
+  }
+  await portfolio.refresh()
+  const depositNoteMint = reserve.depositNoteMint
+  const userToken = await createATA(token.publicKey, admin, connection)
+  await createATA(depositNoteMint, admin, connection)
+  await token.mintTo(userToken, admin, [], amount)
+
+  {
+    const ix = await portfolio.variableDepositTokensIX(token.publicKey, 10e6)
+    await signAllAndSend([ix], [admin], admin.publicKey, connection)
+  }
+
+  {
+    const ix = await portfolio.variableDepositCollateralIX(
+      token.publicKey,
+      amount
+    )
+    await signAllAndSend([ix], [admin], admin.publicKey, connection)
+  }
 }
 
 export async function initPortfolio(

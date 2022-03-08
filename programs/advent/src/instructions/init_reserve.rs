@@ -22,7 +22,7 @@ pub struct InitReserve<'info> {
         bump,
         payer=authority
     )]
-    pub reserve: AccountLoader<'info, Reserve>,
+    pub reserve: Account<'info, Reserve>,
 
     #[account(
         init,
@@ -56,9 +56,9 @@ pub struct InitReserve<'info> {
 
 pub fn handler(ctx: Context<InitReserve>, policy: ReservePolicy) -> Result<()> {
     let mut t = ctx.accounts.settlement_table.load_init()?;
-    let mut r = ctx.accounts.reserve.load_init()?;
+    let r = &mut ctx.accounts.reserve;
     msg!("{}", ctx.accounts.settlement_table.key());
-    t.reserve = ctx.accounts.reserve.key();
+    t.reserve = r.key();
     t.market = ctx.accounts.market.key();
 
     let bump = *ctx.bumps.get("reserve").unwrap();

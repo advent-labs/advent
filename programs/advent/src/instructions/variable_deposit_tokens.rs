@@ -10,7 +10,7 @@ pub struct VariableDepositTokens<'info> {
     pub market: AccountLoader<'info, Market>,
 
     #[account(mut)]
-    pub reserve: AccountLoader<'info, Reserve>,
+    pub reserve: Box<Account<'info, Reserve>>,
 
     #[account(mut)]
     pub deposit_note_mint: Account<'info, Mint>,
@@ -31,7 +31,7 @@ pub struct VariableDepositTokens<'info> {
 }
 
 pub fn handler(ctx: Context<VariableDepositTokens>, amount: u64) -> Result<()> {
-    let mut reserve = ctx.accounts.reserve.load_mut()?;
+    let reserve = &mut ctx.accounts.reserve;
     let market = ctx.accounts.market.load()?;
 
     // TODO - calc notes

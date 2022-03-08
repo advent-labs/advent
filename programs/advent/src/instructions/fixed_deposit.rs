@@ -10,7 +10,7 @@ pub struct FixedDeposit<'info> {
     pub market: AccountLoader<'info, Market>,
 
     #[account(mut)]
-    pub reserve: AccountLoader<'info, Reserve>,
+    pub reserve: Box<Account<'info, Reserve>>,
 
     pub portfolio: Account<'info, Portfolio>,
 
@@ -36,7 +36,7 @@ pub struct FixedDeposit<'info> {
 
 pub fn handler(ctx: Context<FixedDeposit>, amount: u64, duration: u32) -> Result<()> {
     let mut positions = ctx.accounts.positions.load_mut()?;
-    let mut reserve = ctx.accounts.reserve.load_mut()?;
+    let reserve = &mut ctx.accounts.reserve;
     let market = ctx.accounts.market.load()?;
 
     token::transfer(ctx.accounts.transfer_context(), amount)?;

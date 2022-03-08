@@ -1,6 +1,6 @@
-export type Prog = {
+export type Advent = {
   "version": "0.1.0",
-  "name": "prog",
+  "name": "advent",
   "instructions": [
     {
       "name": "initMarket",
@@ -777,10 +777,8 @@ export type Prog = {
             "type": "u64"
           },
           {
-            "name": "interest",
-            "type": {
-              "defined": "Number"
-            }
+            "name": "interestAmount",
+            "type": "u64"
           },
           {
             "name": "depositNoteVault",
@@ -811,10 +809,8 @@ export type Prog = {
             "type": "u64"
           },
           {
-            "name": "interest",
-            "type": {
-              "defined": "Number"
-            }
+            "name": "interestAmount",
+            "type": "u64"
           }
         ]
       }
@@ -878,9 +874,7 @@ export type Prog = {
           },
           {
             "name": "freeInterest",
-            "type": {
-              "defined": "Number"
-            }
+            "type": "u64"
           }
         ]
       }
@@ -910,9 +904,9 @@ export type Prog = {
   ]
 };
 
-export const IDL: Prog = {
+export const IDL: Advent = {
   "version": "0.1.0",
-  "name": "prog",
+  "name": "advent",
   "instructions": [
     {
       "name": "initMarket",
@@ -1689,10 +1683,8 @@ export const IDL: Prog = {
             "type": "u64"
           },
           {
-            "name": "interest",
-            "type": {
-              "defined": "Number"
-            }
+            "name": "interestAmount",
+            "type": "u64"
           },
           {
             "name": "depositNoteVault",
@@ -1723,10 +1715,8 @@ export const IDL: Prog = {
             "type": "u64"
           },
           {
-            "name": "interest",
-            "type": {
-              "defined": "Number"
-            }
+            "name": "interestAmount",
+            "type": "u64"
           }
         ]
       }
@@ -1790,9 +1780,7 @@ export const IDL: Prog = {
           },
           {
             "name": "freeInterest",
-            "type": {
-              "defined": "Number"
-            }
+            "type": "u64"
           }
         ]
       }

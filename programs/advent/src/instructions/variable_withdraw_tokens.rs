@@ -10,7 +10,7 @@ pub struct VariableWithdrawTokens<'info> {
     pub market: AccountLoader<'info, Market>,
 
     #[account(mut)]
-    pub reserve: AccountLoader<'info, Reserve>,
+    pub reserve: Box<Account<'info, Reserve>>,
 
     #[account(mut)]
     pub positions: AccountLoader<'info, Positions>,
@@ -34,7 +34,7 @@ pub struct VariableWithdrawTokens<'info> {
 }
 
 pub fn handler(ctx: Context<VariableWithdrawTokens>, amount: u64) -> Result<()> {
-    let mut reserve = ctx.accounts.reserve.load_mut()?;
+    let reserve = &mut ctx.accounts.reserve;
     let market = ctx.accounts.market.load()?;
 
     // todo calc notes

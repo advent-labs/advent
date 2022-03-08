@@ -9,7 +9,7 @@ pub struct VariableWithdrawCollateral<'info> {
 
     pub market: AccountLoader<'info, Market>,
 
-    pub reserve: AccountLoader<'info, Reserve>,
+    pub reserve: Account<'info, Reserve>,
 
     #[account(mut)]
     pub positions: AccountLoader<'info, Positions>,
@@ -27,7 +27,7 @@ pub struct VariableWithdrawCollateral<'info> {
 
 pub fn handler(ctx: Context<VariableWithdrawCollateral>, amount: u64) -> Result<()> {
     let mut positions = ctx.accounts.positions.load_mut()?;
-    let reserve = ctx.accounts.reserve.load()?;
+    let reserve = &ctx.accounts.reserve;
     let market = ctx.accounts.market.load()?;
     positions.withdraw_variable_deposit_collateral(reserve.token, amount)?;
 

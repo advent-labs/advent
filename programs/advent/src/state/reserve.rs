@@ -4,8 +4,7 @@ use crate::number::Number;
 
 use super::FixedBorrow;
 
-#[account(zero_copy)]
-#[repr(packed)]
+#[account]
 #[derive(Default)]
 pub struct Reserve {
     pub market: Pubkey,
@@ -36,6 +35,13 @@ pub struct Reserve {
     pub bump: u8,
 }
 
+#[derive(Default, Clone, AnchorDeserialize, AnchorSerialize)]
+pub struct ReservePolicy {
+    pub target_utilization: u64,
+    pub borrow_rate_0: u64,
+    pub borrow_rate_1: u64,
+}
+
 #[account(zero_copy)]
 #[repr(packed)]
 pub struct SettlementTable {
@@ -45,19 +51,11 @@ pub struct SettlementTable {
 }
 
 #[zero_copy]
-#[derive(Default, AnchorDeserialize, AnchorSerialize)]
-pub struct ReservePolicy {
-    pub target_utilization: u64,
-    pub borrow_rate_0: u64,
-    pub borrow_rate_1: u64,
-}
-
-#[zero_copy]
 #[derive(Default)]
 pub struct SettlementPeriod {
     pub deposited: u64,
     pub borrowed: u64,
-    pub free_interest: Number,
+    pub free_interest: u64,
 }
 
 impl Reserve {
@@ -77,23 +75,29 @@ impl Reserve {
     }
 
     /// TODO - calculate notes
-    pub fn fixed_borrow(&mut self, st: &mut SettlementTable, duration: usize, amount: u64) {
-        let interest_rate = self.interest_rate();
-        st.apply_fixed_borrow(duration, amount, self.decimals, interest_rate);
+    pub fn fixed_borrow(
+        &mut self,
+        st: &mut SettlementTable,
+        duration: usize,
+        amount: u64,
+        interest_paid: u64,
+    ) {
+        st.apply_fixed_borrow(duration, amount, interest_paid);
         self.fixed_debt += amount;
         self.total_debt += amount;
         self.total_deposits -= amount;
     }
 
     pub fn make_fixed_borrow(&self, start: u32, duration: u32, amount: u64) -> FixedBorrow {
-        let interest = Number::ONE;
+        // TODO - calc interest
+        let interest_amount = amount * 6 / 100;
         let token = self.token;
         FixedBorrow {
             token,
             start,
             duration,
             amount,
-            interest,
+            interest_amount,
         }
     }
 }
@@ -107,34 +111,31 @@ impl Default for SettlementTable {
             periods: [SettlementPeriod {
                 deposited: 0,
                 borrowed: 0,
-                free_interest: Number::ZERO,
+                free_interest: 0,
             }; 365],
         }
     }
 }
 
 impl SettlementTable {
-    pub fn apply_fixed_borrow(
-        &mut self,
-        duration: usize,
-        amount: u64,
-        decimals: i16,
-        interest_rate: Number,
-    ) {
-        let interest_paid = interest_rate * Number::from_decimal(amount, decimals) / 365;
+    pub fn apply_fixed_borrow(&mut self, duration: usize, amount: u64, interest_paid: u64) {
+        if duration == 0 {
+            return;
+        }
+        let interest_paid_per_period = interest_paid / duration as u64;
         for n in 0..duration {
-            self.periods[n].free_interest += interest_paid;
+            self.periods[n].free_interest += interest_paid_per_period;
             self.periods[n].borrowed += amount;
         }
     }
 
     /// Apply a fixed deposit to the settlment table, returning the total interest paid
-    pub fn apply_fixed_deposit(&mut self, duration: usize, amount: u64, decimals: i16) -> Number {
-        let mut total = Number::ZERO;
+    pub fn apply_fixed_deposit(&mut self, duration: usize, amount: u64) -> u64 {
+        let mut total = 0;
 
         self.periods[0..duration]
             .iter_mut()
-            .for_each(|p| total += p.apply_fixed_deposit(amount, decimals));
+            .for_each(|p| total += p.apply_fixed_deposit(amount));
 
         total
     }
@@ -149,7 +150,7 @@ impl SettlementPeriod {
         Number::from_decimal(5, -2)
     }
 
-    pub fn apply_fixed_deposit(&mut self, amount: u64, decimals: i16) -> Number {
+    pub fn apply_fixed_deposit(&mut self, amount: u64) -> u64 {
         self.deposited += amount;
         let interest_earned = self.allocated_interest_amount_for_period();
         self.free_interest -= interest_earned;
@@ -160,7 +161,7 @@ impl SettlementPeriod {
     pub fn apply_fixed_borrow(&mut self, amount: u64, interest_paid: Number) {}
 
     /// How much interest will be collected, in absolute token units
-    pub fn allocated_interest_amount_for_period(&self) -> Number {
+    pub fn allocated_interest_amount_for_period(&self) -> u64 {
         // TODO
         self.free_interest / 2
     }
@@ -188,11 +189,11 @@ mod tests {
     fn apply_fixed_borrow_zero() {
         let mut st = SettlementTable::default();
 
-        st.apply_fixed_borrow(0, 0, 0, Number::ZERO);
+        st.apply_fixed_borrow(0, 0, 0);
 
         assert_eq!(st.periods[0].borrowed, 0);
 
-        st.apply_fixed_borrow(365, 0, 0, Number::ZERO);
+        st.apply_fixed_borrow(365, 0, 0);
         assert_eq!(st.periods[0].borrowed, 0);
         assert_eq!(st.periods[1].borrowed, 0);
     }
@@ -201,18 +202,18 @@ mod tests {
     fn apply_fixed_borrow() {
         let mut st = SettlementTable::default();
 
-        st.apply_fixed_borrow(8, 1_000_000, -6, Number::from_decimal(365u64, 0));
+        st.apply_fixed_borrow(8, 1_000_000, 800);
 
         assert_eq!(st.periods[0].borrowed, 1_000_000);
         assert_eq!(st.periods[7].borrowed, 1_000_000);
 
-        assert_eq!(st.periods[0].free_interest, Number::ONE);
+        assert_eq!(st.periods[0].free_interest, 100);
 
-        st.apply_fixed_borrow(8, 1_000_000, -6, Number::from_decimal(1825u64, -1));
+        st.apply_fixed_borrow(8, 1_000_000, 1600);
 
         assert_eq!(st.periods[0].borrowed, 2_000_000);
         assert_eq!(st.periods[7].borrowed, 2_000_000);
 
-        assert_eq!(st.periods[0].free_interest, Number::from_decimal(15, -1));
+        assert_eq!(st.periods[0].free_interest, 300);
     }
 }
