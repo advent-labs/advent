@@ -53,14 +53,12 @@ export function allocatedInterestAmountsForDeposit(
   amount: number,
   periods: number
 ): number[] {
-  return reserve.settlementPeriods
-    .slice(0, periods)
-    .map((p) =>
-      allocatedInterestAmountForPeriod({
-        ...p,
-        deposited: p.deposited + amount,
-      })
-    )
+  return reserve.settlementPeriods.slice(0, periods).map((p) =>
+    allocatedInterestAmountForPeriod({
+      ...p,
+      deposited: p.deposited + amount,
+    })
+  )
 }
 
 /** Calculate overall interest earned for a given deposit */

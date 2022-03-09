@@ -23,8 +23,14 @@ export class Reserve {
   availableInterestForDuration(amount: number, duration: number) {
     return this.settlementTable.periods
       .slice(0, duration)
-      .reduce((a, x) => x.freeInterest.add(a), new BN(0))
-      .toNumber()
+      .map((p) =>
+        // Calculate interest amount factoring in deposit
+        Reserve.allocatedInterestAmountForPeriod({
+          ...p,
+          deposited: p.deposited.add(new BN(amount)),
+        })
+      )
+      .reduce((a, x) => x + a, 0)
   }
 
   static allocatedInterestRateForPeriod(p: SettlementPeriod) {
