@@ -17,7 +17,7 @@ function BalanceBox({ leftData, rightData, label, value }: BalanceBoxProps) {
         <DataPoint data={leftData} />
         <DataPoint data={rightData} />
       </div>
-      <hr className="is-bg-light" />
+      <hr className="is-grey" />
       <div className="spread">
         <p>{label}</p>
         <p>{value}</p>

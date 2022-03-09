@@ -6,7 +6,7 @@ body {
   font-family: 'Inter', 'Helvetica Neue', sans-serif;
 
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  -moz-osx-font-smoothing: greyscale;
 }
 
 code {
@@ -18,15 +18,16 @@ code {
   --true-black: #000000;
   --accent-1: #5070d9;
   --accent-2: #26c679;
-  --gray-10: #f1f2f3;
-  --gray-1: #75808a;
+  --grey-10: #f1f2f3;
+  --grey-1: #75808a;
   --utility-red: #ff560e;
   --background: #ffffff;
 }
 
 hr {
-  &.is-primary {
-    border: 1px solid var(--true-black);
+  margin: 0;
+  &.is-grey {
+    border: 1px solid var(--grey-10);
   }
 }
 
@@ -269,7 +270,7 @@ hr {
       // margin: 0 0.5rem;
       line-height: 2.5rem;
       &.is-active {
-        background-color: var(--gray-10);
+        background-color: var(--grey-10);
         color: var(--accent-1);
       }
     }
@@ -503,7 +504,7 @@ input[disabled] {
   cursor: pointer;
   &.is-filled {
     border-radius: 14px;
-    background: var(--gray-10);
+    background: var(--grey-10);
     min-height: 3rem;
     .tab {
       line-height: 2.5rem !important;
@@ -521,9 +522,17 @@ input[disabled] {
 
   &.is-underline {
     background: transparent;
+    justify-content: flex-start;
     .tab {
+      height: 2.5rem;
+      border-bottom: 2px solid transparent;
+      margin-right: 2rem;
+      @include XL-Medium;
+      line-height: 2.5rem;
+      font-weight: 500;
       &.is-active {
-        text-decoration: underline;
+        border-bottom: 2px solid var(--accent-1);
+        color: var(--accent-1);
       }
     }
   }
@@ -612,14 +621,14 @@ input[disabled] {
   background: var(--background);
   cursor: pointer;
   height: 5rem;
-  border-top: 1px solid var(--gray-10);
+  border-top: 1px solid var(--grey-10);
   margin-left: -1.5rem;
   margin-right: -1.5rem;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
 
   &:hover {
-    background-color: var(--gray-10);
+    background-color: var(--grey-10);
   }
 
   .token {
@@ -636,24 +645,28 @@ input[disabled] {
 }
 
 .square {
-  height: 12px;
-  width: 12px;
+  height: 0.5rem;
+  width: 0.5rem;
 
   &.primary {
-    background-color: var(--true-black);
+    background-color: var(--accent-1);
   }
 
   &.secondary {
-    background-color: var(--brand-secondary);
+    background-color: var(--accent-2);
   }
 
-  &.accent {
-    background-color: var(--brand-accent);
+  &.red {
+    background-color: var(--utility-red);
+  }
+
+  &.black {
+    background-color: var(--true-black);
   }
 }
 
 .token-size {
-  height: 3rem;
+  height: 2.5rem;
 }
 
 .preview {
@@ -727,4 +740,29 @@ input:checked + .slider:before {
 .title-block {
   margin-top: 2rem;
   margin-bottom: 3rem;
+}
+
+.connect-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 3.5rem;
+}
+
+.wallet-adapter-button {
+  background-color: var(--accent-2) !important;
+  height: 2.5rem;
+  border-radius: 12px !important;
+}
+
+.portfolio {
+  .port-tabs {
+    margin-top: 2rem;
+  }
+}
+
+.small-data {
+  &.is-right {
+    text-align: right;
+  }
 }

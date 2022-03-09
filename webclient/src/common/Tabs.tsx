@@ -7,15 +7,16 @@ export interface TabsProps {
   current: string
   type: TabType
   handler: any
+  xtra?: string
 }
 
-function Tabs({ options, current, type, handler }: TabsProps) {
+function Tabs({ options, current, type, handler, xtra }: TabsProps) {
   const displayTabs = options.map((e, i) => {
     const isActive = e === current
     return <Tab text={e} key={i} isActive={isActive} handler={handler} />
   })
 
-  return <div className={`tabs is-${type}`}>{displayTabs}</div>
+  return <div className={`tabs is-${type} ${xtra && xtra}`}>{displayTabs}</div>
 }
 
 export default Tabs

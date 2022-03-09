@@ -86,12 +86,12 @@ function Borrow() {
 
   const rowLabels = (
     <div className="columns is-mobile text-left">
-      <p className="column is-3 text__medium-m is-gray-1">Asset</p>
-      <p className="column is-3 text__medium-m is-gray-1">
+      <p className="column is-3 text__medium-m is-grey-1">Asset</p>
+      <p className="column is-3 text__medium-m is-grey-1">
         {isFixed ? 'Fixed' : 'Variable'} borrow rate
       </p>
-      <p className="column is-3 text__medium-m is-gray-1">Borrow balance</p>
-      <p className="column is-3 text__medium-m is-gray-1">Wallet balance</p>
+      <p className="column is-3 text__medium-m is-grey-1">Borrow balance</p>
+      <p className="column is-3 text__medium-m is-grey-1">Wallet balance</p>
     </div>
   )
 
@@ -107,7 +107,7 @@ function Borrow() {
     <>
       <div className="center-column title-block">
         <h1 className="text__xl6-semi is-black">Borrow crypto</h1>
-        <p className="text__large-semi is-gray-1 width__65 mt-4">
+        <p className="text__large-semi is-grey-1 width__65 mt-4">
           Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
           posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel,
           ullamcorper sit amet.
