@@ -198,7 +198,7 @@ function Portfolio() {
             <SmallData {...ovData[2]} />
             <SmallData {...ovData[3]} right />
           </div>
-          <hr className="is-grey" />
+          <hr className="is-grey mt-3 mb-3" />
           <p className="text__medium-m is-grey-1">Borrow limit used</p>
           <p>SLIDER</p>
           {displayPortMetrics}
@@ -217,9 +217,6 @@ function Portfolio() {
 
   return (
     <div className="portfolio">
-      <div className="connect-wrapper">
-        <WalletMultiButton startIcon={undefined} />
-      </div>
       <h1 className="text__xl3-semi">My Portfolio</h1>
       <Tabs
         type="underline"

@@ -1,6 +1,6 @@
 import Tab from '../blocks/Tab'
 
-export type TabType = 'filled' | 'underline' | 'plain'
+export type TabType = 'filled' | 'underline' | 'plain' | 'filled-dark'
 
 export interface TabsProps {
   options: string[]

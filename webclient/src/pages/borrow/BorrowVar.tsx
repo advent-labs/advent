@@ -18,6 +18,8 @@ import Toast, { ToastData } from "../../common/Toast"
 import Switch from "../../blocks/Switch"
 import DataPoint from "../../common/DataPoint"
 import Warning from "../../blocks/Warning"
+import TimeInput from "../../blocks/TimeInput"
+import Collateral from "../../common/Collateral"
 
 function BorrowFixed() {
   const dispatch = useAppDispatch()
@@ -58,35 +60,78 @@ function BorrowFixed() {
   ]
 
   const displayDataPoints = dataPoints.map((e, i) => {
-    return <DataPoint data={e} key={i} />
+    return (
+      <div className="center-column" key={i}>
+        <p className="text__medium-m is-grey-1">{e.label}</p>
+        <p className="text__xl-m is-black mt-2">
+          {e.value}&nbsp;{e.currency}
+        </p>
+      </div>
+    )
   })
+
   return (
-    <div className="borrow-fixed columns is-mobile">
-      <Container type="dark" xtra="column is-3">
+    <div className="borrow-var columns is-mobile">
+      <Container type="gradient" xtra="column is-4">
         <Preview reserve={reserve} apr={apr}>
-          <Container type="light">{displayDataPoints}</Container>
+          <Warning
+            message="APR changes based on lend amount and maturity chosen"
+            xtra="mt__2"
+          />
+          <Collateral />
+          <Container type="background" xtra="mt-2 br__8 is-full-width">
+            {displayDataPoints}
+          </Container>
         </Preview>
       </Container>
-      <Container type="background" xtra="column is-9">
+      <div className="column is-8 p-0">
         <Tabs
           type="plain"
           options={tabOptions}
           current={tab}
           handler={tabHandler}
+          xtra="mb-0"
         />
-
-        <TextInput value={inputVal} handleInput={uiActions.inputHasChanged} />
-        <p>~$0</p>
-
-        <Parameters params={parameters} />
-        <Button
-          type="primary"
-          text={tab}
-          handler={() => toast(<Toast props={toastData} />)}
-          xtra="is-full-width"
-        />
-        <p>Wallet balance: XXXXX</p>
-      </Container>
+        <Container type="background">
+          {isRepay ? (
+            <Warning message="Borrowed amount can be repayed at maturity where fixed rate borrow will automatically transition to variable rate borrow." />
+          ) : (
+            <div className="center-column">
+              <TextInput
+                value={inputVal}
+                handleInput={uiActions.inputHasChanged}
+                large
+              />
+              <p className="text__medium is-black-30">~$0</p>
+              <p className="text__medium-m is-grey-1 is-align-self-baseline ml-4 mb-2">
+                Label
+              </p>
+              <div className="is-flex is-full-width">
+                <TimeInput
+                  value={inputTime}
+                  handleInput={uiActions.inputTimeHasChanged}
+                />
+                <Container type="light" xtra="br__4 p-2 ml-4">
+                  <p className="text__small is-grey-1">APR fixed</p>
+                  <p className="text__xl-m is-grey-1">{apr}%</p>
+                </Container>
+              </div>
+              <div>SLIDER</div>
+            </div>
+          )}
+          <Parameters params={parameters} />
+          <Button
+            type="secondary"
+            text={tab}
+            handler={() => toast(<Toast props={toastData} />)}
+            xtra="is-full-width mt-4"
+          />
+          <div className="is-flex is-align-items-center mt-4">
+            <p className="text__medium-m is-grey-1">Wallet balance</p>
+            <p className="text__medium-m is-black ml-2">XXXXXXXX</p>
+          </div>
+        </Container>
+      </div>
     </div>
   )
 }

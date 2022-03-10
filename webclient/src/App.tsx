@@ -160,33 +160,14 @@ function App() {
   }, [context.sdk])
 
   return (
-    <div>
-      <div className="columns">
-        <div className="column is-9">
-          <Nav />
-          <Routes>
-            <Route path="/" element={<Balances />} />
-            <Route path="/dash" element={<Dash />} />
-            <Route path="/lend" element={<Lend />} />
-            <Route path="/borrow" element={<Borrow />} />
-          </Routes>
-        </div>
-        <Container type="background" id="portfolio" xtra="column is-3">
-          <Portfolio />
-        </Container>
-      </div>
-      <ToastContainer
-        position="bottom-left"
-        autoClose={5000}
-        hideProgressBar={true}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        className="toast"
-      />
+    <div className="is-bg-gradient">
+      <Nav />
+      <Routes>
+        <Route path="/" element={<Balances />} />
+        <Route path="/dash" element={<Dash />} />
+        <Route path="/lend" element={<Lend />} />
+        <Route path="/borrow" element={<Borrow />} />
+      </Routes>
     </div>
   )
 }

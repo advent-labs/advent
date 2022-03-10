@@ -11,13 +11,13 @@ import { totalInterestEarnedForDeposit } from "../../sdk/eqs"
 import { selectors } from "../../redux/reducer/reserves"
 import Tabs from "../../common/Tabs"
 import TextInput from "../../blocks/TextInput"
+import TimeInput from "../../blocks/TimeInput"
 import Parameters from "../../common/Parameters"
 import Button from "../../blocks/Button"
 import { toast } from "react-toastify"
 import Toast, { ToastData } from "../../common/Toast"
-import Switch from "../../blocks/Switch"
-import DataPoint from "../../common/DataPoint"
 import Warning from "../../blocks/Warning"
+import Collateral from "../../common/Collateral"
 import { Reserve } from "@advent/sdk"
 
 function DepositFixed() {
@@ -71,63 +71,78 @@ function DepositFixed() {
   ]
 
   const displayDataPoints = dataPoints.map((e, i) => {
-    return <DataPoint data={e} key={i} />
+    return (
+      <div className="center-column" key={i}>
+        <p className="text__medium-m is-grey-1">{e.label}</p>
+        <p className="text__xl-m is-black mt-2">
+          {e.value}&nbsp;{e.currency}
+        </p>
+      </div>
+    )
   })
 
   return (
     <div className="deposit-fixed columns is-mobile">
-      <Container type="dark" xtra="column is-3">
+      <Container type="gradient" xtra="column is-4">
         <Preview reserve={reserve} apr={apr}>
-          <Container type="light">
-            <p>Use as collateral</p>
-            <div className="is-flex">
-              <p>100%</p>
-              <Switch />
-            </div>
+          <Warning
+            message="APR changes based on lend amount and maturity chosen"
+            xtra="mt__2"
+          />
+          <Collateral />
+          <Container type="background" xtra="mt-2 br__8 is-full-width">
+            {displayDataPoints}
           </Container>
-          <Container type="light">{displayDataPoints}</Container>
-          <Warning message="APR changes based on lend amount and maturity chosen" />
         </Preview>
       </Container>
-      <Container type="background" xtra="column is-9">
+      <div className="column is-8 p-0">
         <Tabs
           type="plain"
           options={tabOptions}
           current={tab}
           handler={tabHandler}
+          xtra="mb-0"
         />
-        {isWithdraw ? (
-          <Warning message="Lent amount can be withdrawn at maturity where fixed rate lend will automatically transition to variable rate lend." />
-        ) : (
-          <>
-            <TextInput
-              value={inputVal}
-              handleInput={uiActions.inputHasChanged}
-            />
-            <p>~$0</p>
-            <p>Loan term (max. 1 year)</p>
-            <div className="is-flex">
+        <Container type="background">
+          {isWithdraw ? (
+            <Warning message="Lent amount can be withdrawn at maturity where fixed rate lend will automatically transition to variable rate lend." />
+          ) : (
+            <div className="center-column">
               <TextInput
-                value={inputTime}
-                handleInput={uiActions.inputTimeHasChanged}
+                value={inputVal}
+                handleInput={uiActions.inputHasChanged}
+                large
               />
-              <div>
-                <p>APR fixed</p>
-                <p>{apr}</p>
+              <p className="text__medium is-black-30">~$0</p>
+              <p className="text__medium-m is-grey-1 is-align-self-baseline ml-4 mb-2">
+                Label
+              </p>
+              <div className="is-flex is-full-width">
+                <TimeInput
+                  value={inputTime}
+                  handleInput={uiActions.inputTimeHasChanged}
+                />
+                <Container type="light" xtra="br__4 p-2 ml-4">
+                  <p className="text__small is-grey-1">APR fixed</p>
+                  <p className="text__xl-m is-grey-1">{apr}%</p>
+                </Container>
               </div>
+              <div>SLIDER</div>
             </div>
-            <div>SLIDER</div>
-          </>
-        )}
-        <Parameters params={parameters} />
-        <Button
-          type="primary"
-          text={tab}
-          handler={() => toast(<Toast props={toastData} />)}
-          xtra="is-full-width"
-        />
-        <p>Wallet balance: XXXXXXX</p>
-      </Container>
+          )}
+          <Parameters params={parameters} />
+          <Button
+            type="secondary"
+            text={tab}
+            handler={() => toast(<Toast props={toastData} />)}
+            xtra="is-full-width mt-4"
+          />
+          <div className="is-flex is-align-items-center mt-4">
+            <p className="text__medium-m is-grey-1">Wallet balance</p>
+            <p className="text__medium-m is-black ml-2">XXXXXXXX</p>
+          </div>
+        </Container>
+      </div>
     </div>
   )
 }

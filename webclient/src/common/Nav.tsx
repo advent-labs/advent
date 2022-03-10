@@ -1,10 +1,14 @@
 import { useLocation, Link } from 'react-router-dom'
+import logo from '../assets/logo.svg'
+import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
 
 function Nav() {
   const location = useLocation()
   return (
     <div className="topnav">
-      <h1 className="text__xl3-semi">Advent</h1>
+      <Link to="/">
+        <img src={logo} alt="Advent" />
+      </Link>
       <div className="links">
         <Link
           to="/dash"
@@ -30,6 +34,9 @@ function Nav() {
         >
           Borrow
         </Link>
+      </div>
+      <div className="connect-wrapper">
+        <WalletMultiButton startIcon={undefined} />
       </div>
     </div>
   )

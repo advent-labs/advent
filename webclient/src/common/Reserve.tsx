@@ -17,11 +17,8 @@ export interface ReserveProps {
 function Reserve({ uTokenName, icon, data, action }: ReserveProps) {
   let dataDisplay = data?.map((e, i) => {
     return (
-      <div
-        key={i}
-        className="reserve-data is-flex is-align-items-center column is-3"
-      >
-        {!!e.icon && <p>icon</p>}
+      <div className="reserve-data is-flex is-align-items-center column is-3">
+        {!!e.icon && <img src={e.icon} alt="rate" />}
         <p className="text__large-m is-black">{e.value}</p>
         <p className="text__large-m is-black ml-1">{e.currency}</p>
       </div>
