@@ -54,7 +54,13 @@ pub struct InitReserve<'info> {
     pub rent: Sysvar<'info, Rent>,
 }
 
-pub fn handler(ctx: Context<InitReserve>, policy: ReservePolicy) -> Result<()> {
+pub fn handler(
+    ctx: Context<InitReserve>,
+    min_borrow_rate: u64,
+    max_borrow_rate: u64,
+    pivot_borrow_rate: u64,
+    target_utilization: u64,
+) -> Result<()> {
     let mut t = ctx.accounts.settlement_table.load_init()?;
     let r = &mut ctx.accounts.reserve;
     msg!("{}", ctx.accounts.settlement_table.key());
@@ -64,7 +70,14 @@ pub fn handler(ctx: Context<InitReserve>, policy: ReservePolicy) -> Result<()> {
     let bump = *ctx.bumps.get("reserve").unwrap();
     r.market = ctx.accounts.market.key();
     r.bump = bump;
-    r.policy = policy;
+    r.min_borrow_rate = min_borrow_rate;
+    r.max_borrow_rate = max_borrow_rate;
+    r.pivot_borrow_rate = pivot_borrow_rate;
+    r.target_utilization = target_utilization;
+
+    r.variable_pool_subsidy = 0;
+    r.duration_fee = 0;
+
     r.settlement_table = ctx.accounts.settlement_table.key();
     r.token = ctx.accounts.token.key();
     r.deposit_note_mint = ctx.accounts.deposit_note_mint.key();

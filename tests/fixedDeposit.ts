@@ -6,7 +6,6 @@ import { signAllAndSend } from "../sdk/src/util"
 import {
   addCollateralFromScratch,
   assertTokenBalance,
-  createATA,
   initialize,
   initMarket,
   initPortfolio,
@@ -15,7 +14,7 @@ import {
 import { AdventMarket, AdventPortfolio, Reserve } from "../sdk/src"
 import { Token } from "@solana/spl-token"
 import * as sab from "@saberhq/token-utils"
-describe.only("fixed deposit", () => {
+describe("fixed deposit", () => {
   const admin = Keypair.generate()
   const connection = new Connection("http://localhost:8899", {
     commitment: "confirmed",

@@ -6,7 +6,6 @@ mod number;
 mod state;
 mod utils;
 
-use crate::state::ReservePolicy;
 use instructions::*;
 declare_id!("ke798ave2o7MMZkriRUPSCz1aLrrmPQY2zHdrikJ298");
 
@@ -62,17 +61,17 @@ pub mod advent {
 
     pub fn init_reserve(
         ctx: Context<InitReserve>,
+        min_borrow_rate: u64,
+        max_borrow_rate: u64,
+        pivot_borrow_rate: u64,
         target_utilization: u64,
-        borrow_rate_0: u64,
-        borrow_rate_1: u64,
     ) -> Result<()> {
         instructions::init_reserve::handler(
             ctx,
-            ReservePolicy {
-                target_utilization,
-                borrow_rate_0,
-                borrow_rate_1,
-            },
+            min_borrow_rate,
+            max_borrow_rate,
+            pivot_borrow_rate,
+            target_utilization,
         )
     }
 }

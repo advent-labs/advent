@@ -8,7 +8,7 @@ import {
   SYSVAR_RENT_PUBKEY,
 } from "@solana/web3.js"
 import { IDL } from "./program"
-import { ReadonlyProgram } from "./models"
+import { ReadonlyProgram, ReserveAccount } from "./models"
 import { AdventPortfolio, FixedBorrowRaw } from "./portfolio"
 import { Reserve } from "./reserve"
 
@@ -147,7 +147,11 @@ export class AdventMarket {
         .account as SettlementTableAccount
 
     return rs.map((r) =>
-      reserveAccountToClass(r.account, this.program, findTable(r.publicKey))
+      reserveAccountToClass(
+        r.account as ReserveAccount,
+        this.program,
+        findTable(r.publicKey)
+      )
     )
   }
 
@@ -229,6 +233,7 @@ export class AdventMarket {
     return [
       settlementTableIX,
       this.program.instruction.initReserve(
+        new BN(0),
         new BN(0),
         new BN(0),
         new BN(0),
@@ -331,24 +336,7 @@ function reserveAccountToClass(
   p: ReadonlyProgram,
   t: SettlementTableAccount
 ) {
-  return new Reserve(
-    p,
-    r.market,
-    r.token,
-    r.depositNoteMint,
-    r.vault,
-    r.settlementTable,
-    t
-  )
-}
-
-interface ReserveAccount {
-  market: PublicKey
-  token: PublicKey
-  decimals: number
-  vault: PublicKey
-  settlementTable: PublicKey
-  depositNoteMint: PublicKey
+  return new Reserve(p, t, r)
 }
 
 interface SettlementTableAccount {

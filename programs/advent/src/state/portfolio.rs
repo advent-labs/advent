@@ -1,6 +1,6 @@
 use anchor_lang::prelude::*;
 
-use crate::{errors::ErrorCode, number::Number};
+use crate::errors::ErrorCode;
 
 #[zero_copy]
 #[derive(Default)]

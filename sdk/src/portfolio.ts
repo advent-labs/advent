@@ -192,7 +192,7 @@ export class AdventPortfolio {
           authority: this.authority,
           market: this.market.address,
           reserve,
-          settlementTable: r.settlementTableKey,
+          settlementTable: r.settlementTableAddress,
           portfolio: this.address,
           positions: this.positionsKey,
           reserveVault: r.vault,

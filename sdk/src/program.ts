@@ -500,15 +500,19 @@ export type Advent = {
       ],
       "args": [
         {
+          "name": "minBorrowRate",
+          "type": "u64"
+        },
+        {
+          "name": "maxBorrowRate",
+          "type": "u64"
+        },
+        {
+          "name": "pivotBorrowRate",
+          "type": "u64"
+        },
+        {
           "name": "targetUtilization",
-          "type": "u64"
-        },
-        {
-          "name": "borrowRate0",
-          "type": "u64"
-        },
-        {
-          "name": "borrowRate1",
           "type": "u64"
         }
       ]
@@ -646,6 +650,10 @@ export type Advent = {
             "type": "u64"
           },
           {
+            "name": "depositNoteMint",
+            "type": "publicKey"
+          },
+          {
             "name": "totalDebt",
             "type": "u64"
           },
@@ -654,19 +662,15 @@ export type Advent = {
             "type": "u64"
           },
           {
-            "name": "totalDeposits",
-            "type": "u64"
-          },
-          {
             "name": "fixedDeposits",
             "type": "u64"
           },
           {
-            "name": "loanNotes",
+            "name": "totalDepositNotes",
             "type": "u64"
           },
           {
-            "name": "depositNotes",
+            "name": "totalDepositTokens",
             "type": "u64"
           },
           {
@@ -678,18 +682,32 @@ export type Advent = {
             "type": "publicKey"
           },
           {
-            "name": "depositNoteMint",
-            "type": "publicKey"
-          },
-          {
             "name": "settlementTable",
             "type": "publicKey"
           },
           {
-            "name": "policy",
-            "type": {
-              "defined": "ReservePolicy"
-            }
+            "name": "minBorrowRate",
+            "type": "u64"
+          },
+          {
+            "name": "maxBorrowRate",
+            "type": "u64"
+          },
+          {
+            "name": "pivotBorrowRate",
+            "type": "u64"
+          },
+          {
+            "name": "targetUtilization",
+            "type": "u64"
+          },
+          {
+            "name": "variablePoolSubsidy",
+            "type": "u64"
+          },
+          {
+            "name": "durationFee",
+            "type": "u64"
           },
           {
             "name": "bump",
@@ -834,26 +852,6 @@ export type Advent = {
           },
           {
             "name": "collateralCoefficient",
-            "type": "u64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "ReservePolicy",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "targetUtilization",
-            "type": "u64"
-          },
-          {
-            "name": "borrowRate0",
-            "type": "u64"
-          },
-          {
-            "name": "borrowRate1",
             "type": "u64"
           }
         ]
@@ -1406,15 +1404,19 @@ export const IDL: Advent = {
       ],
       "args": [
         {
+          "name": "minBorrowRate",
+          "type": "u64"
+        },
+        {
+          "name": "maxBorrowRate",
+          "type": "u64"
+        },
+        {
+          "name": "pivotBorrowRate",
+          "type": "u64"
+        },
+        {
           "name": "targetUtilization",
-          "type": "u64"
-        },
-        {
-          "name": "borrowRate0",
-          "type": "u64"
-        },
-        {
-          "name": "borrowRate1",
           "type": "u64"
         }
       ]
@@ -1552,6 +1554,10 @@ export const IDL: Advent = {
             "type": "u64"
           },
           {
+            "name": "depositNoteMint",
+            "type": "publicKey"
+          },
+          {
             "name": "totalDebt",
             "type": "u64"
           },
@@ -1560,19 +1566,15 @@ export const IDL: Advent = {
             "type": "u64"
           },
           {
-            "name": "totalDeposits",
-            "type": "u64"
-          },
-          {
             "name": "fixedDeposits",
             "type": "u64"
           },
           {
-            "name": "loanNotes",
+            "name": "totalDepositNotes",
             "type": "u64"
           },
           {
-            "name": "depositNotes",
+            "name": "totalDepositTokens",
             "type": "u64"
           },
           {
@@ -1584,18 +1586,32 @@ export const IDL: Advent = {
             "type": "publicKey"
           },
           {
-            "name": "depositNoteMint",
-            "type": "publicKey"
-          },
-          {
             "name": "settlementTable",
             "type": "publicKey"
           },
           {
-            "name": "policy",
-            "type": {
-              "defined": "ReservePolicy"
-            }
+            "name": "minBorrowRate",
+            "type": "u64"
+          },
+          {
+            "name": "maxBorrowRate",
+            "type": "u64"
+          },
+          {
+            "name": "pivotBorrowRate",
+            "type": "u64"
+          },
+          {
+            "name": "targetUtilization",
+            "type": "u64"
+          },
+          {
+            "name": "variablePoolSubsidy",
+            "type": "u64"
+          },
+          {
+            "name": "durationFee",
+            "type": "u64"
           },
           {
             "name": "bump",
@@ -1740,26 +1756,6 @@ export const IDL: Advent = {
           },
           {
             "name": "collateralCoefficient",
-            "type": "u64"
-          }
-        ]
-      }
-    },
-    {
-      "name": "ReservePolicy",
-      "type": {
-        "kind": "struct",
-        "fields": [
-          {
-            "name": "targetUtilization",
-            "type": "u64"
-          },
-          {
-            "name": "borrowRate0",
-            "type": "u64"
-          },
-          {
-            "name": "borrowRate1",
             "type": "u64"
           }
         ]

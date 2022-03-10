@@ -12,34 +12,44 @@ pub struct Reserve {
     pub decimals: i16,
     pub cached_price_quote: u64,
 
+    pub deposit_note_mint: Pubkey,
+
     /// Total amount of debt
     pub total_debt: u64,
 
     /// Amount of debt owed by fixed loans
     pub fixed_debt: u64,
 
-    /// Total deposited tokens in the reserve
-    pub total_deposits: u64,
-
     /// Independently track fixed deposits, as they are not used to compute note-to-token exchange rate
     pub fixed_deposits: u64,
 
-    pub loan_notes: u64,
-    pub deposit_notes: u64,
+    /// How many deposit notes have been given out?
+    /// Used for tracking variable rate deposits
+    /// NOTE: this info is stored in the deposit_note_mint
+    pub total_deposit_notes: u64,
 
+    /// How many tokens are currently deposited in the vault?
+    /// NOTE: this info is stored in the vault token account amount
+    pub total_deposit_tokens: u64,
+
+    /// The vault token account that holds everything
     pub vault: Pubkey,
-    pub pyth_oracle_price: Pubkey,
-    pub deposit_note_mint: Pubkey,
-    pub settlement_table: Pubkey,
-    pub policy: ReservePolicy,
-    pub bump: u8,
-}
 
-#[derive(Default, Clone, AnchorDeserialize, AnchorSerialize)]
-pub struct ReservePolicy {
+    pub pyth_oracle_price: Pubkey,
+    pub settlement_table: Pubkey,
+
+    // The minimum interest rate, when the vault has 0 utilization
+    pub min_borrow_rate: u64,
+    // The minimum interest rate, when the vault has 0 utilization
+    pub max_borrow_rate: u64,
+    // rate at the point between the first and second interest regimes
+    pub pivot_borrow_rate: u64,
+    // ratio for target utilization
     pub target_utilization: u64,
-    pub borrow_rate_0: u64,
-    pub borrow_rate_1: u64,
+
+    pub variable_pool_subsidy: u64,
+    pub duration_fee: u64,
+    pub bump: u8,
 }
 
 #[account(zero_copy)]
@@ -60,14 +70,14 @@ pub struct SettlementPeriod {
 
 impl Reserve {
     pub fn variable_deposit(&mut self, token_amount: u64, note_amount: u64) {
-        self.total_deposits += token_amount;
+        self.total_deposit_tokens += token_amount;
         // TODO - compute notes
-        self.deposit_notes += note_amount;
+        self.total_deposit_notes += note_amount;
     }
 
     pub fn variable_withdraw(&mut self, token_amount: u64, note_amount: u64) {
-        self.total_deposits -= token_amount;
-        self.deposit_notes -= note_amount;
+        self.total_deposit_tokens -= token_amount;
+        self.total_deposit_notes -= note_amount;
     }
 
     pub fn interest_rate(&self) -> Number {
@@ -85,7 +95,7 @@ impl Reserve {
         st.apply_fixed_borrow(duration, amount, interest_paid);
         self.fixed_debt += amount;
         self.total_debt += amount;
-        self.total_deposits -= amount;
+        self.total_deposit_tokens -= amount;
     }
 
     pub fn make_fixed_borrow(&self, start: u32, duration: u32, amount: u64) -> FixedBorrow {
