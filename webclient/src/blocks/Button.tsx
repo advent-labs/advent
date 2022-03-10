@@ -14,7 +14,7 @@ function Button({ type, handler, text, xtra, disabled, icon }: ButtonProps) {
       disabled={disabled}
     >
       {text}
-      {!!icon && <img src={icon} alt="icon" />}
+      {!!icon && <img src={icon} alt="icon" className="mt-1 ml-1" />}
     </button>
   )
 }

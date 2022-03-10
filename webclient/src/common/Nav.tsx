@@ -1,10 +1,11 @@
 import { useLocation, Link } from 'react-router-dom'
+import logo from '../assets/logo.svg'
 
 function Nav() {
   const location = useLocation()
   return (
     <div className="topnav">
-      <h1 className="text__xl3-semi">Advent</h1>
+      <img src={logo} alt="Advent" />
       <div className="links">
         <Link
           to="/dash"

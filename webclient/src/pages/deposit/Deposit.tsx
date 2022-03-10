@@ -9,6 +9,7 @@ import Reserve from '../../common/Reserve'
 import { Modal } from '../../common/Modal'
 import DepositFixed from './DepositFixed'
 import DepositVar from './DepositVar'
+import rate from '../../assets/rate.svg'
 
 function Deposit() {
   const { addresses } = useContext(Context)
@@ -21,7 +22,7 @@ function Deposit() {
       value: 4.56,
       currency: '%',
       loadedOnce: true,
-      icon: 'icon',
+      icon: rate,
     },
     {
       value: 45000.32,
@@ -40,7 +41,7 @@ function Deposit() {
       value: 8.36,
       currency: '%',
       loadedOnce: true,
-      icon: 'icon',
+      icon: rate,
     },
     {
       value: 0,
