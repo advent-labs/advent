@@ -10,6 +10,7 @@ import { Modal } from '../../common/Modal'
 import DepositFixed from './DepositFixed'
 import DepositVar from './DepositVar'
 import rate from '../../assets/rate.svg'
+import Portfolio from '../../common/Portfolio'
 
 function Deposit() {
   const { addresses } = useContext(Context)
@@ -103,31 +104,47 @@ function Deposit() {
 
   return (
     <>
-      <div className="center-column title-block">
-        <h1 className="text__xl6-semi is-black">Lend crypto and get yield</h1>
-        <p className="text__large-semi is-grey-1 width__65 mt-4">
-          Build a stable portfolio with fixed rate income on your assets. Lock
-          in your yield for up to one year or exit early without penalty at the
-          market rate.
-        </p>
+      <div className="is-flex">
+        <div className="buffer" />
+        <div className="buffer white" />
       </div>
-      <Container
-        type="background"
-        xtra="center-column width__80 center has-shadow"
-      >
-        <RateTabs />
-        <div className="is-full-width mt-4 pl-2 pr-2">{rowLabels}</div>
-        <div className="mt-5 is-full-width pl-2 pr-2">
-          {reserveRows}
-          {reserveRows}
-          {reserveRows}
-          {reserveRows}
-          {reserveRows}
+      <div className="columns">
+        <div className="column is-9">
+          <div className="center-column title-block">
+            <h1 className="text__xl6-semi is-white">
+              Lend crypto and get yield
+            </h1>
+            <p className="text__large-semi is-alpha-60 width__65 mt-4">
+              Build a stable portfolio with fixed rate income on your assets.
+              Lock in your yield for up to one year or exit early without
+              penalty at the market rate.
+            </p>
+          </div>
+          <Container
+            type="background"
+            xtra="center-column width__80 center has-shadow"
+          >
+            <RateTabs />
+            <div className="is-full-width mt-4 pl-2 pr-2">{rowLabels}</div>
+            <div className="mt-5 is-full-width pl-2 pr-2">
+              {reserveRows}
+              {reserveRows}
+              {reserveRows}
+              {reserveRows}
+              {reserveRows}
+            </div>
+          </Container>
         </div>
-      </Container>
-      <Modal open={modalOpen} onClose={() => dispatch(appActions.closeModal())}>
-        {isFixed ? <DepositFixed /> : <DepositVar />}
-      </Modal>
+        <Container type="background" id="portfolio" xtra="column is-3">
+          <Portfolio />
+        </Container>
+        <Modal
+          open={modalOpen}
+          onClose={() => dispatch(appActions.closeModal())}
+        >
+          {isFixed ? <DepositFixed /> : <DepositVar />}
+        </Modal>
+      </div>
     </>
   )
 }

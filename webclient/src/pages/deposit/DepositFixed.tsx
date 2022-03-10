@@ -16,8 +16,6 @@ import Parameters from '../../common/Parameters'
 import Button from '../../blocks/Button'
 import { toast } from 'react-toastify'
 import Toast, { ToastData } from '../../common/Toast'
-import Switch from '../../blocks/Switch'
-import DataPoint from '../../common/DataPoint'
 import Warning from '../../blocks/Warning'
 import Collateral from '../../common/Collateral'
 
@@ -72,7 +70,14 @@ function DepositFixed() {
   ]
 
   const displayDataPoints = dataPoints.map((e, i) => {
-    return <DataPoint data={e} key={i} />
+    return (
+      <div className="center-column" key={i}>
+        <p className="text__medium-m is-grey-1">{e.label}</p>
+        <p className="text__xl-m is-black mt-2">
+          {e.value}&nbsp;{e.currency}
+        </p>
+      </div>
+    )
   })
 
   return (

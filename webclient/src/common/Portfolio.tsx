@@ -217,9 +217,6 @@ function Portfolio() {
 
   return (
     <div className="portfolio">
-      <div className="connect-wrapper">
-        <WalletMultiButton startIcon={undefined} />
-      </div>
       <h1 className="text__xl3-semi">My Portfolio</h1>
       <Tabs
         type="underline"

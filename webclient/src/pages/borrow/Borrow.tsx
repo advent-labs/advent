@@ -13,6 +13,7 @@ import { Modal } from '../../common/Modal'
 import BorrowFixed from './BorrowFixed'
 import BorrowVar from './BorrowVar'
 import rate from '../../assets/rate.svg'
+import Portfolio from '../../common/Portfolio'
 
 function Borrow() {
   const { addresses } = useContext(Context)
@@ -106,31 +107,45 @@ function Borrow() {
 
   return (
     <>
-      <div className="center-column title-block">
-        <h1 className="text__xl6-semi is-black">Borrow crypto</h1>
-        <p className="text__large-semi is-grey-1 width__65 mt-4">
-          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-          posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam vel,
-          ullamcorper sit amet.
-        </p>
+      <div className="is-flex">
+        <div className="buffer" />
+        <div className="buffer white" />
       </div>
-      <Container
-        type="background"
-        xtra="center-column width__80 center has-shadow"
-      >
-        <RateTabs />
-        <div className="mt-4 is-full-width pl-2 pr-2">{rowLabels}</div>
-        <div className="mt-5 is-full-width pl-2 pr-2">
-          {reserveRows}
-          {reserveRows}
-          {reserveRows}
-          {reserveRows}
-          {reserveRows}
+      <div className="columns">
+        <div className="column is-9">
+          <div className="center-column title-block">
+            <h1 className="text__xl6-semi is-white">Borrow crypto</h1>
+            <p className="text__large-semi is-alpha-60 width__65 mt-4">
+              Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
+              posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam
+              vel, ullamcorper sit amet.
+            </p>
+          </div>
+          <Container
+            type="background"
+            xtra="center-column width__80 center has-shadow"
+          >
+            <RateTabs />
+            <div className="mt-4 is-full-width pl-2 pr-2">{rowLabels}</div>
+            <div className="mt-5 is-full-width pl-2 pr-2">
+              {reserveRows}
+              {reserveRows}
+              {reserveRows}
+              {reserveRows}
+              {reserveRows}
+            </div>
+          </Container>
         </div>
-      </Container>
-      <Modal open={modalOpen} onClose={() => dispatch(appActions.closeModal())}>
-        {isFixed ? <BorrowFixed /> : <BorrowVar />}
-      </Modal>
+        <Container type="background" id="portfolio" xtra="column is-3">
+          <Portfolio />
+        </Container>
+        <Modal
+          open={modalOpen}
+          onClose={() => dispatch(appActions.closeModal())}
+        >
+          {isFixed ? <BorrowFixed /> : <BorrowVar />}
+        </Modal>
+      </div>
     </>
   )
 }
