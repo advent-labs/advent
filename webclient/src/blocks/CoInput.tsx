@@ -1,25 +1,26 @@
 import { RefObject, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '../redux'
 import Button from '../blocks/Button'
+import Tabs from '../common/Tabs'
+import { selectAppUIValues, actions } from '../redux/ui/appui'
 
-export interface TextInputProps {
+export interface CoInputProps {
   value: string
   handleInput: any
   setMax?: any
   disabled?: boolean
-  large?: boolean
 }
 
-function TextInput({ value, handleInput, disabled, large }: TextInputProps) {
+function CoInput({ value, handleInput, disabled }: CoInputProps) {
   const dispatch = useAppDispatch()
   const inputElement = useRef(null) as RefObject<HTMLInputElement>
 
   return (
-    <div className="input-container mb-2">
-      <div className="field mt-2 mb-0">
-        <div className="control is-flex is-align-items-center">
+    <div className="co-input-container">
+      <div className="field mb-0">
+        <div className="control has-icons-right is-flex is-align-items-center">
           <input
-            className={`input ${large ? 'has-text-center is-large-text' : ''}`}
+            className={`input has-text-left`}
             disabled={disabled}
             onChange={(e) => dispatch(handleInput(e.target.value))}
             value={value === 'NaN' ? '0' : value}
@@ -28,16 +29,11 @@ function TextInput({ value, handleInput, disabled, large }: TextInputProps) {
             autoComplete="off"
             ref={inputElement}
           />
-          <Button
-            type="transparent"
-            text="MAX"
-            handler={() => null}
-            xtra="ml-2"
-          />
+          <span className="text__xl-m is-grey-1 icon is-right">%</span>
         </div>
       </div>
     </div>
   )
 }
 
-export default TextInput
+export default CoInput

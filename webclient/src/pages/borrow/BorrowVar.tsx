@@ -65,8 +65,16 @@ function BorrowFixed() {
   ]
 
   const displayDataPoints = dataPoints.map((e, i) => {
-    return <DataPoint data={e} key={i} />
+    return (
+      <div className="center-column" key={i}>
+        <p className="text__medium-m is-grey-1">{e.label}</p>
+        <p className="text__xl-m is-black mt-2">
+          {e.value}&nbsp;{e.currency}
+        </p>
+      </div>
+    )
   })
+
   return (
     <div className="borrow-var columns is-mobile">
       <Container type="gradient" xtra="column is-4">

@@ -26,7 +26,7 @@ function AssetDataPoint({
         <p className="text__medium-m is-black">{value}</p>
         <p className="text__medium-m is-black ml-1">{currency}</p>
         {!!tooltip && <Tooltip text={tooltip} left />}
-        {!!switchData && <Switch />}
+        {/* {!!switchData && <Switch />} */}
       </div>
     </div>
   )
