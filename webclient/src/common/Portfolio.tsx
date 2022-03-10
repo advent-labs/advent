@@ -198,7 +198,7 @@ function Portfolio() {
             <SmallData {...ovData[2]} />
             <SmallData {...ovData[3]} right />
           </div>
-          <hr className="is-grey" />
+          <hr className="is-grey mt-3 mb-3" />
           <p className="text__medium-m is-grey-1">Borrow limit used</p>
           <p>SLIDER</p>
           {displayPortMetrics}

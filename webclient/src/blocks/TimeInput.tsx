@@ -2,24 +2,22 @@ import { RefObject, useRef } from 'react'
 import { useAppDispatch, useAppSelector } from '../redux'
 import Button from '../blocks/Button'
 
-export interface TextInputProps {
+export interface TimeInputProps {
   value: string
   handleInput: any
   setMax?: any
   disabled?: boolean
-  large?: boolean
 }
 
-function TextInput({ value, handleInput, disabled, large }: TextInputProps) {
+function TimeInput({ value, handleInput, disabled }: TimeInputProps) {
   const dispatch = useAppDispatch()
   const inputElement = useRef(null) as RefObject<HTMLInputElement>
-
   return (
-    <div className="input-container mb-2">
-      <div className="field mt-2 mb-0">
-        <div className="control has-icons-left has-icons-right is-flex is-align-items-center">
+    <div className="time-input-container ml-4">
+      <div className="field mb-0">
+        <div className="control has-icons-left is-flex is-align-items-center">
           <input
-            className={`input ${large ? 'has-text-center is-large-text' : ''}`}
+            className={`input has-text-right`}
             disabled={disabled}
             onChange={(e) => dispatch(handleInput(e.target.value))}
             value={value === 'NaN' ? '0' : value}
@@ -28,16 +26,10 @@ function TextInput({ value, handleInput, disabled, large }: TextInputProps) {
             autoComplete="off"
             ref={inputElement}
           />
-          <Button
-            type="transparent"
-            text="MAX"
-            handler={() => null}
-            xtra="ml-2"
-          />
         </div>
       </div>
     </div>
   )
 }
 
-export default TextInput
+export default TimeInput

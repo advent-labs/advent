@@ -10,8 +10,9 @@ import Container from '../../blocks/Container'
 import RateTabs from '../../common/RateTabs'
 import Reserve from '../../common/Reserve'
 import { Modal } from '../../common/Modal'
-import BorrowFixed from './BorrwFixed'
+import BorrowFixed from './BorrowFixed'
 import BorrowVar from './BorrowVar'
+import rate from '../../assets/rate.svg'
 
 function Borrow() {
   const { addresses } = useContext(Context)
@@ -24,7 +25,7 @@ function Borrow() {
       value: 6.56,
       currency: '%',
       loadedOnce: true,
-      icon: 'icon',
+      icon: rate,
     },
     {
       value: 45000.32,
@@ -43,7 +44,7 @@ function Borrow() {
       value: 7.12,
       currency: '%',
       loadedOnce: true,
-      icon: 'icon',
+      icon: rate,
     },
     {
       value: 0,

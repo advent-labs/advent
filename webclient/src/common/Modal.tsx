@@ -20,9 +20,7 @@ export function Modal(props: {
   return (
     <div className={`modal ${open ? 'is-active' : ''}`}>
       <div className="modal-background" onClick={onClose}></div>
-      <div className="modal-content">
-        <div className="box">{props.children}</div>
-      </div>
+      <div className="modal-content">{props.children}</div>
       <button
         className="modal-close is-large"
         aria-label="close"

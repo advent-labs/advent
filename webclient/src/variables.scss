@@ -4,6 +4,12 @@ $navbar-background-color: transparent;
   &.is-black {
     color: var(--true-black);
   }
+  &.is-white {
+    color: #ffffff;
+  }
+  &.is-alpha-60 {
+    color: var(--alpha-60);
+  }
   &.is-grey-1 {
     color: var(--grey-1);
   }
@@ -12,6 +18,9 @@ $navbar-background-color: transparent;
   }
   &.is-secondary {
     color: var(--accent-2);
+  }
+  &.is-black-30 {
+    color: var(--black-alpha-30);
   }
 }
 
@@ -69,7 +78,7 @@ $column-gap: 0.5rem;
   line-height: 16.94px;
 }
 
-@mixin Medium {
+@mixin Medium-Regular {
   @include Regular;
   font-size: 14px;
   line-height: 20px;
@@ -77,6 +86,7 @@ $column-gap: 0.5rem;
 
 @mixin Medium-Medium {
   @include Medium;
+  font-weight: 500;
   font-size: 14px;
   line-height: 20px;
 }
@@ -200,4 +210,16 @@ $column-gap: 0.5rem;
   @include Bold;
   font-size: 32px;
   line-height: 44px;
+}
+
+@mixin XL7-Medium {
+  @include Medium;
+  font-size: 48px;
+  line-height: 54px;
+}
+
+@mixin XL8-Medium {
+  font-weight: 500 !important;
+  font-size: 56px !important;
+  line-height: 62px !important;
 }

@@ -8,6 +8,7 @@ export interface ContainerProps {
     | 'light'
     | 'dark'
     | 'transparent'
+    | 'gradient'
   children: ReactNode
   id?: string
   xtra?: string

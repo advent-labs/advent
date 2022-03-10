@@ -18,6 +18,8 @@ import Toast, { ToastData } from '../../common/Toast'
 import Switch from '../../blocks/Switch'
 import DataPoint from '../../common/DataPoint'
 import Warning from '../../blocks/Warning'
+import TimeInput from '../../blocks/TimeInput'
+import Collateral from '../../common/Collateral'
 
 function DepositVar() {
   const dispatch = useAppDispatch()
@@ -63,40 +65,67 @@ function DepositVar() {
   })
 
   return (
-    <div className="deposit-var columns is-mobile">
-      <Container type="dark" xtra="column is-3">
+    <div className="deposit-fixed columns is-mobile">
+      <Container type="gradient" xtra="column is-4">
         <Preview reserve={reserve} apr={apr}>
-          <Container type="light">
-            <p>Use as collateral</p>
-            <div className="is-flex">
-              <p>100%</p>
-              <Switch />
-            </div>
+          <Warning
+            message="APR changes based on lend amount and maturity chosen"
+            xtra="mt__2"
+          />
+          <Collateral />
+          <Container type="background" xtra="mt-2 br__8 is-full-width">
+            {displayDataPoints}
           </Container>
-          <Container type="light">{displayDataPoints}</Container>
-          <Warning message="APR changes based on lend amount and maturity chosen" />
         </Preview>
       </Container>
-      <Container type="background" xtra="column is-9">
+      <div className="column is-8 p-0">
         <Tabs
           type="plain"
           options={tabOptions}
           current={tab}
           handler={tabHandler}
+          xtra="mb-0"
         />
-
-        <TextInput value={inputVal} handleInput={uiActions.inputHasChanged} />
-        <p>~$0</p>
-
-        <Parameters params={parameters} />
-        <Button
-          type="primary"
-          text={tab}
-          handler={() => toast(<Toast props={toastData} />)}
-          xtra="is-full-width"
-        />
-        <p>Wallet balance: XXXXXXX</p>
-      </Container>
+        <Container type="background">
+          {isWithdraw ? (
+            <Warning message="Lent amount can be withdrawn at maturity where fixed rate lend will automatically transition to variable rate lend." />
+          ) : (
+            <div className="center-column">
+              <TextInput
+                value={inputVal}
+                handleInput={uiActions.inputHasChanged}
+                large
+              />
+              <p className="text__medium is-black-30">~$0</p>
+              <p className="text__medium-m is-grey-1 is-align-self-baseline ml-4 mb-2">
+                Label
+              </p>
+              <div className="is-flex is-full-width">
+                <TimeInput
+                  value={inputTime}
+                  handleInput={uiActions.inputTimeHasChanged}
+                />
+                <Container type="light" xtra="br__4 p-2 ml-4">
+                  <p className="text__small is-grey-1">APR fixed</p>
+                  <p className="text__xl-m is-grey-1">{apr}%</p>
+                </Container>
+              </div>
+              <div>SLIDER</div>
+            </div>
+          )}
+          <Parameters params={parameters} />
+          <Button
+            type="secondary"
+            text={tab}
+            handler={() => toast(<Toast props={toastData} />)}
+            xtra="is-full-width mt-4"
+          />
+          <div className="is-flex is-align-items-center mt-4">
+            <p className="text__medium-m is-grey-1">Wallet balance</p>
+            <p className="text__medium-m is-black ml-2">XXXXXXXX</p>
+          </div>
+        </Container>
+      </div>
     </div>
   )
 }

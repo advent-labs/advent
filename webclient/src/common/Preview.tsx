@@ -22,11 +22,13 @@ function Preview({ reserve, apr, children }: PreviewProps) {
   const { name, icon } = mintMeta
   return (
     <div className="preview">
-      <img src={icon} alt={name} />
-      <h1>{isLend ? 'Lend' : 'Borrow'}</h1>
-      <h1>{name}</h1>
-      <p>APR {isFixed ? 'Fixed' : 'Variable'}</p>
-      <p>{isNaN(apr) ? 0 : apr}</p>
+      <img src={icon} alt={name} className="token-size is-xl" />
+      <h1 className="text__xl6 is-white">{isLend ? 'Lend' : 'Borrow'}</h1>
+      <h1 className="text__xl6 is-white">{name}</h1>
+      <p className="text__medium-m is-alpha-60 mt__2">
+        APR {isFixed ? 'Fixed' : 'Variable'}
+      </p>
+      <p className="text__xl7-m is-white">{isNaN(apr) ? 0 : apr}%</p>
       {children}
     </div>
   )
