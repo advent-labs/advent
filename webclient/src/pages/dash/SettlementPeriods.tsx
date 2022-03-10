@@ -8,7 +8,7 @@ export function SettlementPeriods() {
   const token = useAppSelector((s) => s.dashboardUI.settlementPeriodToken)
   const periods = useAppSelector(
     selectors.selectSettlementPeriodsForToken(token)
-  )
+  )?.periods
   if (!periods) return <></>
   const rows = periods.map((x, i) => {
     const depositRatio =
@@ -18,7 +18,7 @@ export function SettlementPeriods() {
         <td>{i + 1}</td>
         <td>{x.borrowed}</td>
         <td>{x.deposited}</td>
-        <td>{x.distributableInterest}</td>
+        <td>{x.freeInterest}</td>
         <td>{depositRatio}</td>
       </tr>
     )

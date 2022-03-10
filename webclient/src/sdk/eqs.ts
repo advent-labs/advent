@@ -1,6 +1,5 @@
 import * as R from "ramda"
-import { SettlmentPeriod } from "../redux/reducer/reserves"
-import { Reserve } from "./models"
+import { Reserve, SettlmentPeriod } from "./models"
 
 export function totalLiquidity(r: Reserve): number {
   return r.totalDeposits + r.totalOutstandingDebt

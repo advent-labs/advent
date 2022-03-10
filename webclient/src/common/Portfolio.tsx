@@ -1,77 +1,77 @@
-import { selectAppUIValues, actions } from '../redux/ui/appui'
-import { useAppSelector } from '../redux'
-import Tabs from '../common/Tabs'
-import UserAsset from './UserAsset'
-import usdcIcon from '../assets/usdc.svg'
-import { WalletMultiButton } from '@solana/wallet-adapter-react-ui'
-import SmallData from './SmallData'
-import PortMetric from './PortMetric'
-import fixed from '../assets/fixed.svg'
-import variable from '../assets/variable.svg'
+import { selectAppUIValues, actions } from "../redux/ui/appui"
+import { useAppSelector } from "../redux"
+import Tabs from "../common/Tabs"
+import UserAsset from "./UserAsset"
+import usdcIcon from "../assets/usdc.svg"
+import { WalletMultiButton } from "@solana/wallet-adapter-react-ui"
+import SmallData from "./SmallData"
+import PortMetric from "./PortMetric"
+import fixed from "../assets/fixed.svg"
+import variable from "../assets/variable.svg"
 
 function Portfolio() {
-  const tabOptions = ['Overview', 'Lend', 'Borrow']
+  const tabOptions = ["Overview", "Lend", "Borrow"]
   const { portfolioTab } = useAppSelector(selectAppUIValues)
 
   const userLendData = [
     {
       icon: usdcIcon,
-      uTokenName: 'USDC',
+      uTokenName: "USDC",
       assetDataPoints: [
         {
-          label: 'Fixed lending rate',
+          label: "Fixed lending rate",
           value: 0,
-          currency: '%',
+          currency: "%",
           frontIcon: fixed,
         },
         {
-          label: 'Supply balance',
+          label: "Supply balance",
           value: 0,
-          currency: 'Token',
+          currency: "Token",
         },
         {
-          label: 'Interest at maturity',
+          label: "Interest at maturity",
           value: 0,
-          currency: 'Token',
+          currency: "Token",
         },
         {
-          label: 'Term left',
+          label: "Term left",
           value: 0,
-          currency: 'days',
-          tooltip: 'Term left tooltip',
+          currency: "days",
+          tooltip: "Term left tooltip",
         },
         {
-          label: 'Collateral',
+          label: "Collateral",
           value: 0,
-          currency: '%',
+          currency: "%",
           switchData: { status: true, callback: () => null },
         },
       ],
     },
     {
       icon: usdcIcon,
-      uTokenName: 'USDC',
+      uTokenName: "USDC",
       assetDataPoints: [
         {
-          label: 'Variable lending rate',
+          label: "Variable lending rate",
           value: 0,
-          currency: '%',
+          currency: "%",
           frontIcon: variable,
         },
         {
-          label: 'Supply balance',
+          label: "Supply balance",
           value: 0,
-          currency: 'Token',
+          currency: "Token",
         },
         {
-          label: 'APY earned',
+          label: "APY earned",
           value: 0,
-          currency: 'Token',
+          currency: "Token",
         },
         {
-          label: 'Collateral',
+          label: "Collateral",
           value: 0,
-          currency: '%',
+          currency: "%",
           switchData: { status: false, callback: () => null },
         },
       ],
@@ -81,62 +81,62 @@ function Portfolio() {
   const userBorrowData = [
     {
       icon: usdcIcon,
-      uTokenName: 'USDC',
+      uTokenName: "USDC",
       assetDataPoints: [
         {
-          label: 'Fixed borrowing rate',
+          label: "Fixed borrowing rate",
           value: 0,
-          currency: '%',
+          currency: "%",
           frontIcon: fixed,
         },
         {
-          label: 'Supply balance',
+          label: "Supply balance",
           value: 0,
-          currency: 'Token',
+          currency: "Token",
         },
         {
-          label: 'Interest at maturity',
+          label: "Interest at maturity",
           value: 0,
-          currency: 'Token',
+          currency: "Token",
         },
         {
-          label: 'Term left',
+          label: "Term left",
           value: 0,
-          currency: 'days',
-          tooltip: 'Term left tooltip',
+          currency: "days",
+          tooltip: "Term left tooltip",
         },
         {
-          label: 'Collateral',
+          label: "Collateral",
           value: 0,
-          currency: '%',
+          currency: "%",
           switchData: { status: true, callback: () => null },
         },
       ],
     },
     {
       icon: usdcIcon,
-      uTokenName: 'USDC',
+      uTokenName: "USDC",
       assetDataPoints: [
         {
-          label: 'Variable borrowing rate',
+          label: "Variable borrowing rate",
           value: 0,
-          currency: '%',
+          currency: "%",
           frontIcon: variable,
         },
         {
-          label: 'Supply balance',
+          label: "Supply balance",
           value: 0,
-          currency: 'Token',
+          currency: "Token",
         },
         {
-          label: 'APY earned',
+          label: "APY earned",
           value: 0,
-          currency: 'Token',
+          currency: "Token",
         },
         {
-          label: 'Collateral',
+          label: "Collateral",
           value: 0,
-          currency: '%',
+          currency: "%",
           switchData: { status: false, callback: () => null },
         },
       ],
@@ -145,49 +145,49 @@ function Portfolio() {
 
   const ovData = [
     {
-      label: 'Total borrow',
+      label: "Total borrow",
       value: 0,
     },
     {
-      label: 'Total lend',
+      label: "Total lend",
       value: 0,
     },
     {
-      label: 'Net APY borrow',
+      label: "Net APY borrow",
       value: 0,
     },
     {
-      label: 'Net APY lend',
+      label: "Net APY lend",
       value: 0,
     },
   ]
 
   const portMetrics = [
     {
-      label: 'Borrow limit',
+      label: "Borrow limit",
       value: 80,
-      square: 'red',
-      mt: 'mt-6',
+      square: "red",
+      mt: "mt-6",
     },
     {
-      label: 'Liquidation threshold',
+      label: "Liquidation threshold",
       value: 85,
-      square: 'black',
-      mt: 'mt-3',
+      square: "black",
+      mt: "mt-3",
     },
     {
-      label: 'Borrow limit',
+      label: "Borrow limit",
       value: 85,
-      mt: 'mt-3',
+      mt: "mt-3",
     },
   ]
 
   const displayPortMetrics = portMetrics.map((e, i) => {
-    return <PortMetric {...e} />
+    return <PortMetric key={i} {...e} />
   })
 
   const displayInnerPortfolio = () => {
-    if (portfolioTab === 'Overview') {
+    if (portfolioTab === "Overview") {
       return (
         <>
           <div className="spread mt-6">
@@ -204,11 +204,11 @@ function Portfolio() {
           {displayPortMetrics}
         </>
       )
-    } else if (portfolioTab === 'Lend') {
+    } else if (portfolioTab === "Lend") {
       return userLendData.map((e, i) => {
         return <UserAsset {...e} />
       })
-    } else if (portfolioTab === 'Borrow') {
+    } else if (portfolioTab === "Borrow") {
       return userBorrowData.map((e, i) => {
         return <UserAsset {...e} />
       })
@@ -223,7 +223,7 @@ function Portfolio() {
         options={tabOptions}
         current={portfolioTab}
         handler={actions.setPortfolioTab}
-        xtra={'port-tabs'}
+        xtra={"port-tabs"}
       />
       {displayInnerPortfolio()}
     </div>

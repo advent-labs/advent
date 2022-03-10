@@ -13,8 +13,8 @@ function Row(
   return (
     <tr key={r.token}>
       <td>{addresses.mintMetaMap[r.token].name}</td>
-      <td>{r.totalDeposits}</td>
-      <td>{r.totalOutstandingDebt}</td>
+      <td>{r.totalDepositTokens}</td>
+      <td>{r.totalDebt}</td>
       <td>
         <button onClick={() => showSettlementPeriods(r.token)}>
           Sett Periods

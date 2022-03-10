@@ -1,15 +1,29 @@
+import { IReserve } from "@advent/sdk"
 import { getContext, put } from "redux-saga/effects"
-import { Reserve } from "../../sdk/models"
 import { SolanaConnectionContext } from "../../solanaConnectionContext"
-import { actions } from "../reducer/reserves"
+import { actions, Reserve } from "../reducer/reserves"
+
+function sdkReserveToState(r: IReserve): Reserve {
+  return {
+    ...r,
+    market: r.market.toBase58(),
+    token: r.token.toBase58(),
+    vault: r.vault.toBase58(),
+    depositNoteMint: r.depositNoteMint.toBase58(),
+    settlementTable: r.settlementTable,
+  }
+}
 
 export function* fetchReserves() {
-  const { sdk } = (yield getContext(
+  const { adventMarketSDK } = (yield getContext(
     "solanaConnectionContext"
   )) as SolanaConnectionContext
 
-  if (!sdk) return
-  const reserves: Reserve[] = yield sdk.fetchReserves()
-
-  yield put(actions.loaded(reserves))
+  if (!adventMarketSDK) return
+  yield adventMarketSDK.refresh()
+  yield put(
+    actions.loaded(
+      adventMarketSDK.reserves.map((r) => r.serialize()).map(sdkReserveToState)
+    )
+  )
 }

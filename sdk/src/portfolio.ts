@@ -1,10 +1,9 @@
 import { PublicKey } from "@solana/web3.js"
-import { AdventMarket, VariableDepositAccount } from "."
-import { ReadonlyProgram } from "./models"
+import { AdventMarket } from "./market"
+import { ReadonlyProgram, VariableDepositAccount } from "./models"
 
 import * as sab from "@saberhq/token-utils"
 import { BN } from "@project-serum/anchor"
-import { getATAAddress } from "@saberhq/token-utils"
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
 export interface FixedBorrow {
@@ -59,9 +58,7 @@ export class AdventPortfolio {
     const [reserve] = await this.market.reservePDA(token)
     const [reserveVault] = await this.market.reserveVaultPDA(token)
 
-    const r = this.market.reserves.find(
-      (r) => r.token.toBase58() === token.toBase58()
-    )
+    const r = this.reserveByToken(token)
 
     const reserveUser = await sab.getATAAddress({
       mint: r.token,
@@ -88,15 +85,23 @@ export class AdventPortfolio {
     })
   }
 
+  reserveByToken(token: PublicKey) {
+    const r = this.market.reserves.find(
+      (r) => r.token.toBase58() === token.toBase58()
+    )
+    if (!r) {
+      throw new Error(`No reserve for token ${token.toBase58()}`)
+    }
+    return r
+  }
+
   async variableDepositCollateralIX(token: PublicKey, amount: number) {
     const [reserve] = await this.market.reservePDA(token)
     const [depositNoteVault] = await this.market.collateralVaultPDA(
       reserve,
       this.authority
     )
-    const r = this.market.reserves.find(
-      (r) => r.token.toBase58() === token.toBase58()
-    )
+    const r = this.reserveByToken(token)
     const depositNoteUser = await sab.getATAAddress({
       mint: r.depositNoteMint,
       owner: this.authority,
@@ -120,9 +125,7 @@ export class AdventPortfolio {
       reserve,
       this.authority
     )
-    const r = this.market.reserves.find(
-      (r) => r.token.toBase58() === token.toBase58()
-    )
+    const r = this.reserveByToken(token)
     const depositNoteUser = await sab.getATAAddress({
       mint: r.depositNoteMint,
       owner: this.authority,
@@ -143,9 +146,7 @@ export class AdventPortfolio {
   async variableWithdrawTokensIX(token: PublicKey, amount: number) {
     const [reserve] = await this.market.reservePDA(token)
 
-    const r = this.market.reserves.find(
-      (r) => r.token.toBase58() === token.toBase58()
-    )
+    const r = this.reserveByToken(token)
 
     const depositNoteUser = await sab.getATAAddress({
       mint: r.depositNoteMint,
@@ -175,9 +176,7 @@ export class AdventPortfolio {
   async fixedBorrowIX(token: PublicKey, amount: number, duration: number) {
     const [reserve] = await this.market.reservePDA(token)
 
-    const r = this.market.reserves.find(
-      (r) => r.token.toBase58() === token.toBase58()
-    )
+    const r = this.reserveByToken(token)
 
     const userReserve = await sab.getATAAddress({
       mint: token,

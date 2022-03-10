@@ -1,16 +1,16 @@
-import { selectAppUIValues, actions as appActions } from '../../redux/ui/appui'
-import { useAppDispatch, useAppSelector } from '../../redux'
-import { actions as uiActions } from '../../redux/ui/depositui'
-import { Context } from '../../App'
-import { useContext } from 'react'
-import Container from '../../blocks/Container'
-import RateTabs from '../../common/RateTabs'
-import Reserve from '../../common/Reserve'
-import { Modal } from '../../common/Modal'
-import DepositFixed from './DepositFixed'
-import DepositVar from './DepositVar'
-import rate from '../../assets/rate.svg'
-import Portfolio from '../../common/Portfolio'
+import { selectAppUIValues, actions as appActions } from "../../redux/ui/appui"
+import { useAppDispatch, useAppSelector } from "../../redux"
+import { actions as uiActions } from "../../redux/ui/depositui"
+import { Context } from "../../App"
+import { useContext } from "react"
+import Container from "../../blocks/Container"
+import RateTabs from "../../common/RateTabs"
+import Reserve from "../../common/Reserve"
+import { Modal } from "../../common/Modal"
+import DepositFixed from "./DepositFixed"
+import DepositVar from "./DepositVar"
+import rate from "../../assets/rate.svg"
+import Portfolio from "../../common/Portfolio"
 
 function Deposit() {
   const { addresses } = useContext(Context)
@@ -21,18 +21,18 @@ function Deposit() {
   const mockDataFixed = [
     {
       value: 4.56,
-      currency: '%',
+      currency: "%",
       loadedOnce: true,
       icon: rate,
     },
     {
       value: 45000.32,
-      currency: 'USDC',
+      currency: "USDC",
       loadedOnce: true,
     },
     {
       value: 10453000,
-      currency: 'USDC',
+      currency: "USDC",
       loadedOnce: true,
     },
   ]
@@ -40,18 +40,18 @@ function Deposit() {
   const mockDataVar = [
     {
       value: 8.36,
-      currency: '%',
+      currency: "%",
       loadedOnce: true,
       icon: rate,
     },
     {
       value: 0,
-      currency: 'USDC',
+      currency: "USDC",
       loadedOnce: true,
     },
     {
       value: 10453000,
-      currency: 'USDC',
+      currency: "USDC",
       loadedOnce: true,
     },
   ]
@@ -87,7 +87,7 @@ function Deposit() {
     <div className="columns is-mobile text-left">
       <p className="column is-3 text__medium-m is-grey-1">Asset</p>
       <p className="column is-3 text__medium-m is-grey-1">
-        {isFixed ? 'Fixed' : 'Variable'} lending rate
+        {isFixed ? "Fixed" : "Variable"} lending rate
       </p>
       <p className="column is-3 text__medium-m is-grey-1">Supply balance</p>
       <p className="column is-3 text__medium-m is-grey-1">Wallet balance</p>
@@ -126,13 +126,7 @@ function Deposit() {
           >
             <RateTabs />
             <div className="is-full-width mt-4 pl-2 pr-2">{rowLabels}</div>
-            <div className="mt-5 is-full-width pl-2 pr-2">
-              {reserveRows}
-              {reserveRows}
-              {reserveRows}
-              {reserveRows}
-              {reserveRows}
-            </div>
+            <div className="mt-5 is-full-width pl-2 pr-2">{reserveRows}</div>
           </Container>
         </div>
         <Container type="background" id="portfolio" xtra="column is-3">

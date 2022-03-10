@@ -7,6 +7,7 @@ import { useContext } from "react"
 import { Context } from "../../App"
 import { totalInterestEarnedForDeposit } from "../../sdk/eqs"
 import { selectors } from "../../redux/reducer/reserves"
+import { Reserve } from "@advent/sdk"
 
 export function FixedDeposit() {
   return (
@@ -30,8 +31,8 @@ export function DepositInfo() {
   const reserve = useAppSelector(selectors.selectReserveByToken(token))
   if (!reserve) return <></>
 
-  const totalInterestEarned = totalInterestEarnedForDeposit(
-    reserve,
+  const totalInterestEarned = Reserve.math.availableInterestForDuration(
+    reserve.settlementTable,
     amount,
     duration
   )
