@@ -126,13 +126,7 @@ function Deposit() {
           >
             <RateTabs />
             <div className="is-full-width mt-4 pl-2 pr-2">{rowLabels}</div>
-            <div className="mt-5 is-full-width pl-2 pr-2">
-              {reserveRows}
-              {reserveRows}
-              {reserveRows}
-              {reserveRows}
-              {reserveRows}
-            </div>
+            <div className="mt-5 is-full-width pl-2 pr-2">{reserveRows}</div>
           </Container>
         </div>
         <Container type="background" id="portfolio" xtra="column is-3">
