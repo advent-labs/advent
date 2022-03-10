@@ -1,14 +1,14 @@
-import { BN, Program, Provider, utils, Wallet } from "@project-serum/anchor"
+import { BN, Program } from "@project-serum/anchor"
 import { PublicKey } from "@solana/web3.js"
-import { Advent as AdventType, IDL } from "./program"
+import { Advent as AdventType } from "./program"
 
 export type ReadonlyProgram = Omit<Program<AdventType>, "rpc">
 
-export interface SettlementTable {
-  periods: SettlementPeriod[]
+export interface SettlementTableAccount {
+  periods: SettlementPeriodAccount[]
 }
 
-export interface SettlementPeriod {
+export interface SettlementPeriodAccount {
   deposited: BN
   borrowed: BN
   freeInterest: BN
@@ -32,4 +32,15 @@ export interface ReserveAccount {
   targetUtilization: BN
   variablePoolSubsidy: BN
   durationFee: BN
+}
+
+export interface SettlementTableAccount {
+  reserve: PublicKey
+  periods: { deposited: BN; borrowed: BN; freeInterest: BN }[]
+}
+
+export interface VariableDepositAccount {
+  amount: BN
+  token: PublicKey
+  collateralVaultAccount: PublicKey
 }

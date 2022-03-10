@@ -10,7 +10,6 @@ const USDT_DEV = "39pF3Ror7MY8NZRM724LSskCLVFBb8ytqeNRk2cuY4YN"
 const USDC_DEV = "FAW3w68Vx9Ps2R5nU8mG6q8gGwj75a3h6YZchgqhJ852"
 const FRAX_DEV = "5mLBvi1mPB5ZNyVWCFynMZepHeyDncL3qdedKLggh1h"
 const UST_DEV = "A7hFeZJwQuSrwgQPscN2mVG7ZUu951VRGGBcAGZdQD1N"
-const XUSD_DEV = "DtT5V69SgJRcvfZmpYmd9LRJVhMLmvMresUABCpEmfRf"
 
 const endpoint = "https://api.devnet.solana.com"
 const connection = new Connection(endpoint, "confirmed")

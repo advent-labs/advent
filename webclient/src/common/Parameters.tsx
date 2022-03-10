@@ -1,6 +1,6 @@
-import { useState } from 'react'
-import Container from '../blocks/Container'
-import Button from '../blocks/Button'
+import { useState } from "react"
+import Container from "../blocks/Container"
+import Button from "../blocks/Button"
 
 export interface Parameter {
   label: string
@@ -18,7 +18,7 @@ function Parameters({ params }: ParameterProps) {
 
   const displayParams = firstChunk.map((e, i) => {
     return (
-      <div className="spread">
+      <div key={i} className="spread">
         <p>{e.label}</p>
         <p>{e.value}</p>
       </div>
@@ -27,14 +27,14 @@ function Parameters({ params }: ParameterProps) {
 
   const displayFull = secondChunk.map((e, i) => {
     return (
-      <div className="spread">
+      <div key={i} className="spread">
         <p>{e.label}</p>
         <p>{e.value}</p>
       </div>
     )
   })
   return (
-    <Container type="dark" xtra={`params ${open ? 'is-open' : ''}`}>
+    <Container type="dark" xtra={`params ${open ? "is-open" : ""}`}>
       <div>SLIDER</div>
       {displayParams}
       {open && displayFull}

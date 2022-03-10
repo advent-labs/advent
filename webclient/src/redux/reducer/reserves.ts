@@ -1,37 +1,32 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from ".."
 import { Loadable } from "./util"
+
 export interface Reserve {
-  // mint for token
+  market: string
   token: string
-
-  // the interest rate slope for utilizations before the target
-  baseRate: number
-
-  // the interest rate slope for utilizations before the target
-  borrowRatePreTarget: number
-
-  // The interest rate slope for utilizations after the target
-  borrowRatePostTarget: number
-
-  // the crossover point for the interest rate
-  targetUtilization: number
-
-  // percentage of bonus for liquidating
-  liquidationBonus: number
-
-  totalOutstandingDebt: number
-  // how many deposits, in token units
-  totalDeposits: number
-  // how many deposit shares are out there
+  vault: string
+  depositNoteMint: string
+  decimals: number
+  settlementTable: SettlementTable
   totalDepositNotes: number
-  // how many loan shares are out there
-  totalLoanNotes: number
-
-  settlementPeriods: SettlmentPeriod[]
+  totalDepositTokens: number
+  totalDebt: number
+  fixedDebt: number
+  fixedDeposits: number
+  minBorrowRate: number
+  maxBorrowRate: number
+  pivotBorrowRate: number
+  targetUtilization: number
+  variablePoolSubsidy: number
+  durationFee: number
 }
 
-export interface SettlmentPeriod {
+interface SettlementTable {
+  periods: SettlementPeriod[]
+}
+
+export interface SettlementPeriod {
   // how much fixed borrowed
   borrowed: number
 
@@ -39,7 +34,7 @@ export interface SettlmentPeriod {
   deposited: number
 
   // how much interest can be distributed
-  distributableInterest: number
+  freeInterest: number
 }
 
 type Reserves = Loadable<Reserve[]>
@@ -63,36 +58,9 @@ export const reserves = createSlice({
   },
 })
 
-const selectUtilization = (s: Reserves) => (mint: string) => {
-  const reserve = s.state.find((x) => x.token === mint)
-  if (!reserve) return
-
-  return (
-    reserve.totalOutstandingDebt /
-    (reserve.totalDeposits + reserve.totalOutstandingDebt)
-  )
-}
-
-function interestRateFormula(r: Reserve, u: number): number {
-  if (u < r.targetUtilization) {
-    return r.baseRate + (r.borrowRatePreTarget * u) / r.targetUtilization
-  } else {
-    return (
-      r.baseRate +
-      r.borrowRatePreTarget +
-      ((u - r.targetUtilization) / (1 - r.targetUtilization)) *
-        r.borrowRatePostTarget
-    )
-  }
-}
-
-const selectInterestRate = (s: Reserves) => (mint: string) => {
-  const reserve = s.state.find((x) => x.token === mint)
-  if (!reserve) return
-}
-
 const selectSettlementPeriodsForToken = (t: string) => (s: RootState) =>
-  selectReserveByToken(t)(s)?.settlementPeriods
+  selectReserveByToken(t)(s)?.settlementTable
+
 const selectReserveByToken = (t: string) => (s: RootState) =>
   s.reserves.state.find((r) => r.token === t)
 
