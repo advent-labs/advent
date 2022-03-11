@@ -170,6 +170,12 @@ $column-gap: 0.5rem;
   line-height: 32px;
 }
 
+@mixin XL3-Medium {
+  @include Medium;
+  font-size: 23px;
+  line-height: 32px;
+}
+
 @mixin XL3-Semi {
   @include Semi;
   font-size: 23px;
