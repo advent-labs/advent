@@ -1,24 +1,86 @@
 import { PublicKey } from "@solana/web3.js"
 import { AdventMarket } from "./market"
-import { ReadonlyProgram, VariableDepositAccount } from "./models"
+import {
+  FixedBorrowAccount,
+  FixedDepositAccount,
+  ReadonlyProgram,
+  VariableBorrowAccount,
+  VariableDepositAccount,
+} from "./models"
 
 import * as sab from "@saberhq/token-utils"
 import { BN } from "@project-serum/anchor"
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 
-export interface FixedBorrow {
+export interface IFixedBorrow {
   token: PublicKey
   start: number
   duration: number
   amount: number
   interestAmount: number
 }
-export interface FixedBorrowRaw {
+
+export interface IFixedDeposit {
   token: PublicKey
-  start: BN
-  duration: BN
-  amount: BN
-  interestAmount: BN
+  start: number
+  duration: number
+  amount: number
+  interestAmount: number
+}
+
+export interface IVariableDeposit {
+  amount: number
+  token: PublicKey
+  collateralVaultAccount: PublicKey
+}
+export interface IVariableBorrow {
+  amount: number
+  token: PublicKey
+}
+
+export interface IPortfolio {
+  variableDeposits: IVariableDeposit[]
+  variableBorrows: IVariableBorrow[]
+  fixedBorrows: IFixedBorrow[]
+  fixedDeposits: IFixedDeposit[]
+}
+
+function serializeVariableDepositAccount(
+  v: VariableDepositAccount
+): IVariableDeposit {
+  return {
+    ...v,
+    amount: v.amount.toNumber(),
+  }
+}
+
+function serializeVariableBorrowAccount(
+  x: VariableBorrowAccount
+): IVariableBorrow {
+  return {
+    ...x,
+    amount: x.amount.toNumber(),
+  }
+}
+
+function serializeFixedBorrowAccount(x: FixedBorrowAccount): IFixedBorrow {
+  return {
+    ...x,
+    start: x.start.toNumber(),
+    duration: x.duration.toNumber(),
+    amount: x.amount.toNumber(),
+    interestAmount: x.amount.toNumber(),
+  }
+}
+
+function serializeFixedDepositAccount(x: FixedDepositAccount): IFixedDeposit {
+  return {
+    ...x,
+    start: x.start.toNumber(),
+    duration: x.duration.toNumber(),
+    amount: x.amount.toNumber(),
+    interestAmount: x.amount.toNumber(),
+  }
 }
 export class AdventPortfolio {
   constructor(
@@ -28,7 +90,9 @@ export class AdventPortfolio {
     public market: AdventMarket,
     public positionsKey: PublicKey,
     private _variableDeposits: VariableDepositAccount[],
-    private _fixedBorrows: FixedBorrowRaw[]
+    private _variableBorrows: VariableBorrowAccount[],
+    private _fixedDeposits: FixedDepositAccount[],
+    private _fixedBorrows: FixedBorrowAccount[]
   ) {}
 
   async refresh() {
@@ -38,20 +102,42 @@ export class AdventPortfolio {
 
     this._variableDeposits =
       positions.variableDeposits as VariableDepositAccount[]
+    this._fixedBorrows = positions.fixedBorrows as FixedBorrowAccount[]
+    this._variableBorrows = positions.variableBorrows as VariableBorrowAccount[]
+    this._fixedDeposits = positions.fixedDeposits as FixedDepositAccount[]
+  }
 
-    this._fixedBorrows = positions.fixedBorrows as FixedBorrowRaw[]
+  serialize(): IPortfolio {
+    return {
+      variableDeposits: this.variableDeposits,
+      variableBorrows: this.variableBorrows,
+      fixedBorrows: this.fixedBorrows,
+      fixedDeposits: this.fixedDeposits,
+    }
   }
 
   get variableDeposits() {
-    return this._variableDeposits.filter(
-      (x) => x.token.toBase58() !== PublicKey.default.toBase58()
-    )
+    return this._variableDeposits
+      .filter((x) => x.token.toBase58() !== PublicKey.default.toBase58())
+      .map(serializeVariableDepositAccount)
+  }
+
+  get variableBorrows() {
+    return this._variableBorrows
+      .filter((x) => x.token.toBase58() !== PublicKey.default.toBase58())
+      .map(serializeVariableBorrowAccount)
   }
 
   get fixedBorrows() {
-    return this._fixedBorrows.filter(
-      (x) => x.token.toBase58() !== PublicKey.default.toBase58()
-    )
+    return this._fixedBorrows
+      .filter((x) => x.token.toBase58() !== PublicKey.default.toBase58())
+      .map(serializeFixedBorrowAccount)
+  }
+
+  get fixedDeposits() {
+    return this._fixedDeposits
+      .filter((x) => x.token.toBase58() !== PublicKey.default.toBase58())
+      .map(serializeFixedDepositAccount)
   }
 
   async variableDepositTokensIX(token: PublicKey, amount: number) {

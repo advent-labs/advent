@@ -98,7 +98,7 @@ impl Reserve {
         self.total_deposit_tokens -= amount;
     }
 
-    pub fn make_fixed_borrow(&self, start: u32, duration: u32, amount: u64) -> FixedBorrow {
+    pub fn make_fixed_borrow(&self, start: u64, duration: u64, amount: u64) -> FixedBorrow {
         // TODO - calc interest
         let interest_amount = amount * 6 / 100;
         let token = self.token;

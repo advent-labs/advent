@@ -43,3 +43,22 @@ export interface VariableDepositAccount {
     token: PublicKey;
     collateralVaultAccount: PublicKey;
 }
+export interface VariableBorrowAccount {
+    amount: BN;
+    token: PublicKey;
+}
+export interface FixedBorrowAccount {
+    token: PublicKey;
+    start: BN;
+    duration: BN;
+    amount: BN;
+    interestAmount: BN;
+}
+export interface FixedDepositAccount {
+    token: PublicKey;
+    start: BN;
+    duration: BN;
+    amount: BN;
+    interestAmount: BN;
+    depositNoteVault: PublicKey;
+}

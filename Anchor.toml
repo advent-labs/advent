@@ -5,7 +5,7 @@ advent = "ke798ave2o7MMZkriRUPSCz1aLrrmPQY2zHdrikJ298"
 url = "https://anchor.projectserum.com"
 
 [provider]
-cluster = "devnet"
+cluster = "localnet"
 wallet = "/Users/truble/.config/solana/id.json"
 
 [scripts]

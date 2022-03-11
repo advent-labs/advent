@@ -64,6 +64,10 @@ export async function main() {
     market: marketAddress,
   }
   fs.writeFileSync("../adventAddresses.json", JSON.stringify(addresses))
+  fs.writeFileSync(
+    "../webclient/src/adventAddresses.json",
+    JSON.stringify(addresses)
+  )
   console.log("Done")
 }
 

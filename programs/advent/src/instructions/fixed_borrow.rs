@@ -31,7 +31,7 @@ pub struct FixedBorrow<'info> {
     pub token_program: Program<'info, Token>,
 }
 
-pub fn handler(ctx: Context<FixedBorrow>, amount: u64, duration: u32) -> Result<()> {
+pub fn handler(ctx: Context<FixedBorrow>, amount: u64, duration: u64) -> Result<()> {
     let mut positions = ctx.accounts.positions.load_mut()?;
     let mut settlement_table = ctx.accounts.settlement_table.load_mut()?;
     let reserve = &mut ctx.accounts.reserve;

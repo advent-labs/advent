@@ -53,6 +53,13 @@ export declare class AdventMarket {
                     }, 16];
                 };
             }, {
+                name: "variableBorrows";
+                type: {
+                    array: [{
+                        defined: "VariableBorrow";
+                    }, 16];
+                };
+            }, {
                 name: "fixedDeposits";
                 type: {
                     array: [{
@@ -211,6 +218,13 @@ export declare class AdventMarket {
                 type: {
                     array: [{
                         defined: "VariableDeposit";
+                    }, 16];
+                };
+            }, {
+                name: "variableBorrows";
+                type: {
+                    array: [{
+                        defined: "VariableBorrow";
                     }, 16];
                 };
             }, {
@@ -373,6 +387,13 @@ export declare class AdventMarket {
                 type: {
                     array: [{
                         defined: "VariableDeposit";
+                    }, 16];
+                };
+            }, {
+                name: "variableBorrows";
+                type: {
+                    array: [{
+                        defined: "VariableBorrow";
                     }, 16];
                 };
             }, {

@@ -375,7 +375,7 @@ export declare type Advent = {
                 },
                 {
                     "name": "duration";
-                    "type": "u32";
+                    "type": "u64";
                 }
             ];
         },
@@ -440,7 +440,7 @@ export declare type Advent = {
                 },
                 {
                     "name": "duration";
-                    "type": "u32";
+                    "type": "u64";
                 }
             ];
         },
@@ -574,6 +574,17 @@ export declare type Advent = {
                             "array": [
                                 {
                                     "defined": "VariableDeposit";
+                                },
+                                16
+                            ];
+                        };
+                    },
+                    {
+                        "name": "variableBorrows";
+                        "type": {
+                            "array": [
+                                {
+                                    "defined": "VariableBorrow";
                                 },
                                 16
                             ];
@@ -816,11 +827,11 @@ export declare type Advent = {
                     },
                     {
                         "name": "start";
-                        "type": "u32";
+                        "type": "u64";
                     },
                     {
                         "name": "duration";
-                        "type": "u32";
+                        "type": "u64";
                     },
                     {
                         "name": "amount";
@@ -852,6 +863,22 @@ export declare type Advent = {
                     },
                     {
                         "name": "collateralCoefficient";
+                        "type": "u64";
+                    }
+                ];
+            };
+        },
+        {
+            "name": "VariableBorrow";
+            "type": {
+                "kind": "struct";
+                "fields": [
+                    {
+                        "name": "token";
+                        "type": "publicKey";
+                    },
+                    {
+                        "name": "amount";
                         "type": "u64";
                     }
                 ];
