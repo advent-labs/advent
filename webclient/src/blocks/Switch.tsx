@@ -19,7 +19,7 @@ function Switch({ useColl, toggle, xtra }: SwitchProps) {
       <input
         type="checkbox"
         checked={useColl}
-        onClick={() => dispatch(toggle())}
+        onChange={() => dispatch(toggle())}
       />
       <span className="slider round">{text}</span>
     </label>

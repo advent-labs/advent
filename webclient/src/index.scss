@@ -287,6 +287,11 @@ hr {
     @include Medium-Regular;
     border-radius: 32px;
   }
+
+  &.big-action {
+    height: 3rem;
+    width: 100%;
+  }
 }
 
 .icon {
@@ -339,7 +344,7 @@ hr {
   }
   .modal-content {
     max-height: 100vh !important;
-    width: 60%;
+    max-width: 60%;
     border-radius: 12px;
     background-color: var(--background);
     @include mobile {
@@ -636,6 +641,8 @@ input[disabled] {
     border-radius: 14px;
     background: var(--grey-10);
     min-height: 3rem;
+    padding: 0.25rem;
+
     .tab {
       line-height: 2.5rem !important;
       @include Large-Medium;
@@ -720,12 +727,12 @@ input[disabled] {
     align-items: center;
   }
   &__label {
-    @include Medium;
-    color: var(--brand-grey);
+    @include Medium-Medium;
+    color: var(--grey-1);
   }
 
   &__value {
-    @include XL3-Semi;
+    @include XL3-Medium;
     // color: var(--brand-white);
     // animation: createBox 0.35s;
     height: 100%;
@@ -793,6 +800,33 @@ input[disabled] {
   }
 }
 
+.user-bar {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--background);
+  cursor: pointer;
+  height: 5rem;
+  border-top: 1px solid var(--grey-10);
+  // margin-left: -1.5rem;
+  // margin-right: -1.5rem;
+  // padding-left: 1.5rem;
+  // padding-right: 1.5rem;
+
+  &:hover {
+    background-color: var(--grey-10);
+  }
+
+  .token {
+    display: flex;
+    align-items: center;
+    img {
+      height: 2.5rem;
+    }
+  }
+}
+
 .is-full-width {
   width: 100%;
 }
@@ -820,6 +854,10 @@ input[disabled] {
 
 .token-size {
   height: 2.5rem;
+
+  &.is-large {
+    height: 4rem;
+  }
 
   &.is-xl {
     height: 6rem;
@@ -928,6 +966,10 @@ input:checked + .slider:before {
   }
 }
 
+.is-right {
+  text-align: right;
+}
+
 .warning {
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
@@ -948,9 +990,18 @@ input:checked + .slider:before {
   &__8 {
     border-radius: 8px;
   }
+
+  &__12 {
+    border-radius: 12px;
+  }
 }
 
 .params {
+  border: 1px solid var(--true-black);
+  border-radius: 12px;
+}
+
+.change-params {
   border: 1px solid var(--true-black);
   border-radius: 12px;
 }
@@ -971,4 +1022,26 @@ input:checked + .slider:before {
     height: 4.5rem;
     background-color: var(--background);
   }
+}
+
+.user-supply {
+  width: 100%;
+}
+
+.balance-box {
+  width: 100%;
+  box-shadow: 0px 20px 60px rgba(0, 0, 0, 0.18);
+  border-radius: 12px;
+  min-height: 15rem;
+}
+
+.user-rows {
+  .tab-container {
+    width: 50%;
+  }
+}
+
+.collateral-switch {
+  width: 30rem;
+  margin: 0 auto;
 }

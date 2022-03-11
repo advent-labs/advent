@@ -9,9 +9,10 @@ export interface CoInputProps {
   handleInput: any
   setMax?: any
   disabled?: boolean
+  placeholder?: string
 }
 
-function CoInput({ value, handleInput, disabled }: CoInputProps) {
+function CoInput({ value, handleInput, disabled, placeholder }: CoInputProps) {
   const dispatch = useAppDispatch()
   const inputElement = useRef(null) as RefObject<HTMLInputElement>
 
@@ -25,7 +26,7 @@ function CoInput({ value, handleInput, disabled }: CoInputProps) {
             onChange={(e) => dispatch(handleInput(e.target.value))}
             value={value === 'NaN' ? '0' : value}
             type=""
-            placeholder="0"
+            placeholder={placeholder ? placeholder : '0'}
             autoComplete="off"
             ref={inputElement}
           />

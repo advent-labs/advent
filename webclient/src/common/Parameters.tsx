@@ -1,7 +1,7 @@
-import { useState } from "react"
-import Container from "../blocks/Container"
-import Button from "../blocks/Button"
-import chevron from "../assets/chevron.svg"
+import { useState } from 'react'
+import Container from '../blocks/Container'
+import Button from '../blocks/Button'
+import chevron from '../assets/chevron.svg'
 
 export interface Parameter {
   label: string
@@ -36,7 +36,7 @@ function Parameters({ params }: ParameterProps) {
   })
 
   return (
-    <Container type="background" xtra={`params ${open ? "is-open" : ""}`}>
+    <Container type="background" xtra={`params ${open ? 'is-open' : ''}`}>
       <div>SLIDER</div>
       {displayParams}
       {open && displayFull}

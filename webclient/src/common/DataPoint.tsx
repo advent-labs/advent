@@ -18,6 +18,7 @@ export type Data = {
   count?: boolean
   id?: string
   extraClasses?: string
+  right?: boolean
 }
 
 export type DataProps = {
@@ -38,6 +39,7 @@ function DataPoint({ data }: DataProps) {
     tooltip,
     loadedOnce,
     extraClasses,
+    right,
   } = data
 
   const displayValueRow = () => {
@@ -77,7 +79,9 @@ function DataPoint({ data }: DataProps) {
           {!!tooltip && <Tooltip text={`${tooltip}`} />}
         </span>
       </div>
-      <div className="is-flex is-align-items-center">{displayValueRow()}</div>
+      <div className={`is-flex is-align-items-center ${right && 'is-right'}`}>
+        {displayValueRow()}
+      </div>
     </div>
   )
 }
