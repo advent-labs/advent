@@ -29,8 +29,9 @@ export interface IFixedDeposit {
 }
 
 export interface IVariableDeposit {
-  amount: number
   token: PublicKey
+  collateralAmount: number
+  collateralCoefficient: number
   collateralVaultAccount: PublicKey
 }
 export interface IVariableBorrow {
@@ -49,8 +50,10 @@ function serializeVariableDepositAccount(
   v: VariableDepositAccount
 ): IVariableDeposit {
   return {
-    ...v,
-    amount: v.amount.toNumber(),
+    token: v.token,
+    collateralVaultAccount: v.collateralVaultAccount,
+    collateralAmount: v.collateralAmount.toNumber(),
+    collateralCoefficient: v.collateralCoefficient.toNumber(),
   }
 }
 

@@ -148,9 +148,12 @@ function App() {
   }, [wallet.connected, dispatch, tokenStatus])
 
   useEffect(() => {
+    // user login required
     if (!wallet.connected) return
+    // advent market sdk required
+    if (!solanaConnectionContext.adventMarketSDK) return
     dispatch(userPortfolioActions.loadRequested())
-  }, [wallet.connected, dispatch])
+  }, [wallet.connected, solanaConnectionContext.adventMarketSDK, dispatch])
 
   useEffect(() => {
     if (!solanaConnectionContext.sdk) {

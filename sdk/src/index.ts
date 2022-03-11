@@ -9,7 +9,14 @@ import {
 } from "@solana/web3.js"
 import { IDL } from "./program"
 import { ReadonlyProgram } from "./models"
-import { AdventPortfolio } from "./portfolio"
+import {
+  AdventPortfolio,
+  IPortfolio,
+  IFixedBorrow,
+  IFixedDeposit,
+  IVariableBorrow,
+  IVariableDeposit,
+} from "./portfolio"
 import {
   IReserve,
   Reserve,
@@ -25,6 +32,11 @@ export {
   IReserve,
   ISettlementPeriod,
   ISettlementTable,
+  IPortfolio,
+  IFixedBorrow,
+  IFixedDeposit,
+  IVariableBorrow,
+  IVariableDeposit,
 }
 
 const DEFAULT_PROGRAM_ID = "ke798ave2o7MMZkriRUPSCz1aLrrmPQY2zHdrikJ298"

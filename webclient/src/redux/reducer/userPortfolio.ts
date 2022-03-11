@@ -36,8 +36,10 @@ export interface VariableBorrow {
 export interface VariableDeposit {
   // the mint
   token: string
-  // the amount
-  notes: number
+  // the amount of tokens in collateral
+  collateralAmount: number
+  // the account holding the collateral
+  collateralVaultAccount: string
 }
 
 export interface UserPortfolio {
@@ -47,13 +49,17 @@ export interface UserPortfolio {
   variableDeposits: VariableDeposit[]
 }
 
+export const defaultPortfolio: UserPortfolio = {
+  fixedBorrows: [],
+  fixedDeposits: [],
+  variableBorrows: [],
+  variableDeposits: [],
+}
+
 const initialState: Loadable<UserPortfolio> = {
   status: "init",
   state: {
-    fixedBorrows: [],
-    fixedDeposits: [],
-    variableBorrows: [],
-    variableDeposits: [],
+    ...defaultPortfolio,
   },
 }
 

@@ -39,8 +39,9 @@ export interface SettlementTableAccount {
     }[];
 }
 export interface VariableDepositAccount {
-    amount: BN;
     token: PublicKey;
+    collateralAmount: BN;
+    collateralCoefficient: BN;
     collateralVaultAccount: PublicKey;
 }
 export interface VariableBorrowAccount {

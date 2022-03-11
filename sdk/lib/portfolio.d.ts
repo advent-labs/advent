@@ -16,8 +16,9 @@ export interface IFixedDeposit {
     interestAmount: number;
 }
 export interface IVariableDeposit {
-    amount: number;
     token: PublicKey;
+    collateralAmount: number;
+    collateralCoefficient: number;
     collateralVaultAccount: PublicKey;
 }
 export interface IVariableBorrow {

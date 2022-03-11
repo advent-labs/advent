@@ -34,7 +34,12 @@ const sab = __importStar(require("@saberhq/token-utils"));
 const anchor_1 = require("@project-serum/anchor");
 const spl_token_1 = require("@solana/spl-token");
 function serializeVariableDepositAccount(v) {
-    return Object.assign(Object.assign({}, v), { amount: v.amount.toNumber() });
+    return {
+        token: v.token,
+        collateralVaultAccount: v.collateralVaultAccount,
+        collateralAmount: v.collateralAmount.toNumber(),
+        collateralCoefficient: v.collateralCoefficient.toNumber(),
+    };
 }
 function serializeVariableBorrowAccount(x) {
     return Object.assign(Object.assign({}, x), { amount: x.amount.toNumber() });
