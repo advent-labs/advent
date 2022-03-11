@@ -2,12 +2,15 @@ import { BN, utils } from "@project-serum/anchor"
 import { TOKEN_PROGRAM_ID } from "@solana/spl-token"
 import { PublicKey, SystemProgram, SYSVAR_RENT_PUBKEY } from "@solana/web3.js"
 import {
+  FixedBorrowAccount,
+  FixedDepositAccount,
   ReadonlyProgram,
   ReserveAccount,
   SettlementTableAccount,
+  VariableBorrowAccount,
   VariableDepositAccount,
 } from "./models"
-import { AdventPortfolio, FixedBorrowRaw } from "./portfolio"
+import { AdventPortfolio } from "./portfolio"
 import { Reserve } from "./reserve"
 
 function reserveAccountToClass(
@@ -54,9 +57,10 @@ export class AdventMarket {
   }
 
   async portfolio(authority: PublicKey) {
-    const [a, _] = await this.portfolioPDA(authority)
+    const [a] = await this.portfolioPDA(authority)
     const portfolio = await this.program.account.portfolio.fetch(a)
     const positions = await this.fetchPositions(portfolio.positions)
+
     return new AdventPortfolio(
       this.program,
       a,
@@ -64,7 +68,9 @@ export class AdventMarket {
       this,
       portfolio.positions,
       positions.variableDeposits as VariableDepositAccount[],
-      positions.fixedBorrows as FixedBorrowRaw[]
+      positions.variableBorrows as VariableBorrowAccount[],
+      positions.fixedDeposits as FixedDepositAccount[],
+      positions.fixedBorrows as FixedBorrowAccount[]
     )
   }
 
@@ -113,7 +119,7 @@ export class AdventMarket {
   }
 
   async initPositionsIX(authority: PublicKey, positions: PublicKey) {
-    const space = 6664
+    const space = 7048
     const lamports =
       await this.program.provider.connection.getMinimumBalanceForRentExemption(
         space

@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import Container from '../blocks/Container'
-import Button from '../blocks/Button'
-import chevron from '../assets/chevron.svg'
+import { useState } from "react"
+import Container from "../blocks/Container"
+import Button from "../blocks/Button"
+import chevron from "../assets/chevron.svg"
 
 export interface Parameter {
   label: string
@@ -19,7 +19,7 @@ function Parameters({ params }: ParameterProps) {
 
   const displayParams = firstChunk.map((e, i) => {
     return (
-      <div className="spread mb-2">
+      <div key={i} className="spread mb-2">
         <p className="text__medium-m is-grey-1">{e.label}</p>
         <p className="text__medium-m is-black">{e.value}</p>
       </div>
@@ -28,7 +28,7 @@ function Parameters({ params }: ParameterProps) {
 
   const displayFull = secondChunk.map((e, i) => {
     return (
-      <div className="spread mb-2">
+      <div key={i} className="spread mb-2">
         <p className="text__medium-m is-grey-1">{e.label}</p>
         <p className="text__medium-m is-black">{e.value}</p>
       </div>
@@ -36,7 +36,7 @@ function Parameters({ params }: ParameterProps) {
   })
 
   return (
-    <Container type="background" xtra={`params ${open ? 'is-open' : ''}`}>
+    <Container type="background" xtra={`params ${open ? "is-open" : ""}`}>
       <div>SLIDER</div>
       {displayParams}
       {open && displayFull}

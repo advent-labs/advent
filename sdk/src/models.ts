@@ -40,7 +40,30 @@ export interface SettlementTableAccount {
 }
 
 export interface VariableDepositAccount {
+  token: PublicKey
+  collateralAmount: BN
+  collateralCoefficient: BN
+  collateralVaultAccount: PublicKey
+}
+
+export interface VariableBorrowAccount {
   amount: BN
   token: PublicKey
-  collateralVaultAccount: PublicKey
+}
+
+export interface FixedBorrowAccount {
+  token: PublicKey
+  start: BN
+  duration: BN
+  amount: BN
+  interestAmount: BN
+}
+
+export interface FixedDepositAccount {
+  token: PublicKey
+  start: BN
+  duration: BN
+  amount: BN
+  interestAmount: BN
+  depositNoteVault: PublicKey
 }

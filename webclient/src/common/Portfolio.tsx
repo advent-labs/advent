@@ -205,13 +205,9 @@ function Portfolio() {
         </>
       )
     } else if (portfolioTab === "Lend") {
-      return userLendData.map((e, i) => {
-        return <UserAsset {...e} />
-      })
+      return userLendData.map((e, i) => <UserAsset key={i} {...e} />)
     } else if (portfolioTab === "Borrow") {
-      return userBorrowData.map((e, i) => {
-        return <UserAsset {...e} />
-      })
+      return userBorrowData.map((e, i) => <UserAsset key={i} {...e} />)
     }
   }
 

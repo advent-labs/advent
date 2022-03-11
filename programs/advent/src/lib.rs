@@ -51,11 +51,11 @@ pub mod advent {
         instructions::variable_withdraw_tokens::handler(ctx, amount)
     }
 
-    pub fn fixed_borrow(ctx: Context<FixedBorrow>, amount: u64, duration: u32) -> Result<()> {
+    pub fn fixed_borrow(ctx: Context<FixedBorrow>, amount: u64, duration: u64) -> Result<()> {
         instructions::fixed_borrow::handler(ctx, amount, duration)
     }
 
-    pub fn fixed_deposit(ctx: Context<FixedDeposit>, amount: u64, duration: u32) -> Result<()> {
+    pub fn fixed_deposit(ctx: Context<FixedDeposit>, amount: u64, duration: u64) -> Result<()> {
         instructions::fixed_deposit::handler(ctx, amount, duration)
     }
 

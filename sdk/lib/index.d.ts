@@ -1,9 +1,9 @@
 import { Connection, PublicKey } from "@solana/web3.js";
 import { ReadonlyProgram } from "./models";
-import { AdventPortfolio } from "./portfolio";
+import { AdventPortfolio, IPortfolio, IFixedBorrow, IFixedDeposit, IVariableBorrow, IVariableDeposit } from "./portfolio";
 import { IReserve, Reserve, ISettlementPeriod, ISettlementTable } from "./reserve";
 import { AdventMarket } from "./market";
-export { AdventPortfolio, AdventMarket, Reserve, IReserve, ISettlementPeriod, ISettlementTable, };
+export { AdventPortfolio, AdventMarket, Reserve, IReserve, ISettlementPeriod, ISettlementTable, IPortfolio, IFixedBorrow, IFixedDeposit, IVariableBorrow, IVariableDeposit, };
 export declare class AdventSDK {
     connection: Connection;
     program: ReadonlyProgram;

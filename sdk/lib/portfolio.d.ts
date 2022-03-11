@@ -1,21 +1,35 @@
-/// <reference types="bn.js" />
 import { PublicKey } from "@solana/web3.js";
 import { AdventMarket } from "./market";
-import { ReadonlyProgram, VariableDepositAccount } from "./models";
-import { BN } from "@project-serum/anchor";
-export interface FixedBorrow {
+import { FixedBorrowAccount, FixedDepositAccount, ReadonlyProgram, VariableBorrowAccount, VariableDepositAccount } from "./models";
+export interface IFixedBorrow {
     token: PublicKey;
     start: number;
     duration: number;
     amount: number;
     interestAmount: number;
 }
-export interface FixedBorrowRaw {
+export interface IFixedDeposit {
     token: PublicKey;
-    start: BN;
-    duration: BN;
-    amount: BN;
-    interestAmount: BN;
+    start: number;
+    duration: number;
+    amount: number;
+    interestAmount: number;
+}
+export interface IVariableDeposit {
+    token: PublicKey;
+    collateralAmount: number;
+    collateralCoefficient: number;
+    collateralVaultAccount: PublicKey;
+}
+export interface IVariableBorrow {
+    amount: number;
+    token: PublicKey;
+}
+export interface IPortfolio {
+    variableDeposits: IVariableDeposit[];
+    variableBorrows: IVariableBorrow[];
+    fixedBorrows: IFixedBorrow[];
+    fixedDeposits: IFixedDeposit[];
 }
 export declare class AdventPortfolio {
     private program;
@@ -24,11 +38,16 @@ export declare class AdventPortfolio {
     market: AdventMarket;
     positionsKey: PublicKey;
     private _variableDeposits;
+    private _variableBorrows;
+    private _fixedDeposits;
     private _fixedBorrows;
-    constructor(program: ReadonlyProgram, address: PublicKey, authority: PublicKey, market: AdventMarket, positionsKey: PublicKey, _variableDeposits: VariableDepositAccount[], _fixedBorrows: FixedBorrowRaw[]);
+    constructor(program: ReadonlyProgram, address: PublicKey, authority: PublicKey, market: AdventMarket, positionsKey: PublicKey, _variableDeposits: VariableDepositAccount[], _variableBorrows: VariableBorrowAccount[], _fixedDeposits: FixedDepositAccount[], _fixedBorrows: FixedBorrowAccount[]);
     refresh(): Promise<void>;
-    get variableDeposits(): VariableDepositAccount[];
-    get fixedBorrows(): FixedBorrowRaw[];
+    serialize(): IPortfolio;
+    get variableDeposits(): IVariableDeposit[];
+    get variableBorrows(): IVariableBorrow[];
+    get fixedBorrows(): IFixedBorrow[];
+    get fixedDeposits(): IFixedDeposit[];
     variableDepositTokensIX(token: PublicKey, amount: number): Promise<import("@solana/web3.js").TransactionInstruction>;
     reserveByToken(token: PublicKey): import("./reserve").Reserve;
     variableDepositCollateralIX(token: PublicKey, amount: number): Promise<import("@solana/web3.js").TransactionInstruction>;

@@ -28,9 +28,9 @@ pub struct FixedBorrow {
     /// Mint
     pub token: Pubkey,
     /// Start epoch (day)
-    pub start: u32,
+    pub start: u64,
     /// Duration in epochs (days)
-    pub duration: u32,
+    pub duration: u64,
     /// Amount borrowed
     pub amount: u64,
     /// Amount of interest
@@ -46,10 +46,18 @@ pub struct VariableDeposit {
     pub collateral_coefficient: u64,
 }
 
+#[zero_copy]
+#[derive(Default)]
+pub struct VariableBorrow {
+    pub token: Pubkey,
+    pub amount: u64,
+}
+
 #[account(zero_copy)]
 #[repr(packed)]
 pub struct Positions {
     pub variable_deposits: [VariableDeposit; 16],
+    pub variable_borrows: [VariableBorrow; 16],
     pub fixed_deposits: [FixedDeposit; 32],
     pub fixed_borrows: [FixedBorrow; 32],
 }
@@ -74,6 +82,9 @@ impl Default for Positions {
                 ..Default::default()
             }; 32],
             variable_deposits: [VariableDeposit {
+                ..Default::default()
+            }; 16],
+            variable_borrows: [VariableBorrow {
                 ..Default::default()
             }; 16],
         }

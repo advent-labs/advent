@@ -34,7 +34,7 @@ pub struct FixedDeposit<'info> {
     pub token_program: Program<'info, Token>,
 }
 
-pub fn handler(ctx: Context<FixedDeposit>, amount: u64, duration: u32) -> Result<()> {
+pub fn handler(ctx: Context<FixedDeposit>, amount: u64, duration: u64) -> Result<()> {
     let mut positions = ctx.accounts.positions.load_mut()?;
     let reserve = &mut ctx.accounts.reserve;
     let market = ctx.accounts.market.load()?;

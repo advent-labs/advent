@@ -58,10 +58,10 @@ class AdventMarket {
     }
     portfolio(authority) {
         return __awaiter(this, void 0, void 0, function* () {
-            const [a, _] = yield this.portfolioPDA(authority);
+            const [a] = yield this.portfolioPDA(authority);
             const portfolio = yield this.program.account.portfolio.fetch(a);
             const positions = yield this.fetchPositions(portfolio.positions);
-            return new portfolio_1.AdventPortfolio(this.program, a, authority, this, portfolio.positions, positions.variableDeposits, positions.fixedBorrows);
+            return new portfolio_1.AdventPortfolio(this.program, a, authority, this, portfolio.positions, positions.variableDeposits, positions.variableBorrows, positions.fixedDeposits, positions.fixedBorrows);
         });
     }
     fetchPositions(address) {
@@ -104,7 +104,7 @@ class AdventMarket {
     }
     initPositionsIX(authority, positions) {
         return __awaiter(this, void 0, void 0, function* () {
-            const space = 6664;
+            const space = 7048;
             const lamports = yield this.program.provider.connection.getMinimumBalanceForRentExemption(space);
             return web3_js_1.SystemProgram.createAccount({
                 fromPubkey: authority,

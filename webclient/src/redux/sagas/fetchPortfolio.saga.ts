@@ -1,17 +1,79 @@
+import { AdventMarket, AdventPortfolio, IPortfolio } from "@advent/sdk"
+import { PublicKey } from "@solana/web3.js"
 import { getContext, put } from "redux-saga/effects"
 import { Portfolio } from "../../sdk/models"
 import { SolanaConnectionContext } from "../../solanaConnectionContext"
-import { actions as userPortfolioActions } from "../reducer/userPortfolio"
+import {
+  actions as userPortfolioActions,
+  defaultPortfolio,
+  FixedBorrow,
+  FixedDeposit,
+  UserPortfolio,
+  VariableBorrow,
+  VariableDeposit,
+} from "../reducer/userPortfolio"
+
+function serializePortfolio(p: IPortfolio): UserPortfolio {
+  const epochToSeconds = (e: number) => e * 24 * 60 * 60
+
+  const fixedDeposits: FixedDeposit[] = p.fixedDeposits.map((x) => ({
+    startTime: epochToSeconds(x.start),
+    endTime: epochToSeconds(x.start + x.duration),
+    interestAmount: x.interestAmount,
+    amount: x.amount,
+    token: x.token.toBase58(),
+  }))
+
+  const fixedBorrows: FixedBorrow[] = p.fixedBorrows.map((x) => ({
+    startTime: epochToSeconds(x.start),
+    endTime: epochToSeconds(x.start + x.duration),
+    interestAmount: x.interestAmount,
+    amount: x.amount,
+    token: x.token.toBase58(),
+  }))
+
+  const variableDeposits: VariableDeposit[] = p.variableDeposits.map((x) => ({
+    token: x.token.toBase58(),
+    collateralAmount: x.collateralAmount,
+    collateralVaultAccount: x.collateralVaultAccount.toBase58(),
+  }))
+
+  const variableBorrows: VariableBorrow[] = p.variableBorrows.map((x) => ({
+    token: x.token.toBase58(),
+    notes: x.amount,
+  }))
+
+  return {
+    fixedBorrows,
+    fixedDeposits,
+    variableBorrows,
+    variableDeposits,
+  }
+}
 
 export function* fetchUserPortfolio() {
-  const { sdk } = (yield getContext(
+  const { sdk, adventMarketSDK, wallet } = (yield getContext(
     "solanaConnectionContext"
   )) as SolanaConnectionContext
 
+  console.log(sdk, wallet, adventMarketSDK)
   if (!sdk) return
+  if (!wallet) return
+  if (!adventMarketSDK) return
 
-  // do the work
-  const portfolio: Portfolio = yield sdk.fetchUserPortfolio()
+  let p: UserPortfolio
 
-  yield put(userPortfolioActions.loaded(portfolio))
+  try {
+    const portfolio = (yield adventMarketSDK.portfolio(
+      wallet.publicKey
+    )) as AdventPortfolio
+    const sdkPortfolio = portfolio.serialize()
+    p = serializePortfolio(sdkPortfolio)
+  } catch {
+    // Portfolio not initialied for user yet
+    console.log("Portfolio not initialized")
+    p = defaultPortfolio
+  }
+
+  yield put(userPortfolioActions.loaded(p))
 }
