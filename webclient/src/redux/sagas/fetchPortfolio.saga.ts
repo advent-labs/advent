@@ -13,7 +13,7 @@ import {
   VariableDeposit,
 } from "../reducer/userPortfolio"
 
-function serializePortfolio(p: IPortfolio): UserPortfolio {
+export function serializePortfolio(p: IPortfolio): UserPortfolio {
   const epochToSeconds = (e: number) => e * 24 * 60 * 60
 
   const fixedDeposits: FixedDeposit[] = p.fixedDeposits.map((x) => ({
@@ -52,12 +52,10 @@ function serializePortfolio(p: IPortfolio): UserPortfolio {
 }
 
 export function* fetchUserPortfolio() {
-  const { sdk, adventMarketSDK, wallet } = (yield getContext(
+  const { adventMarketSDK, wallet } = (yield getContext(
     "solanaConnectionContext"
   )) as SolanaConnectionContext
 
-  console.log(sdk, wallet, adventMarketSDK)
-  if (!sdk) return
   if (!wallet) return
   if (!adventMarketSDK) return
 

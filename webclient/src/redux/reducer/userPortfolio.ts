@@ -67,6 +67,7 @@ const userPortfolio = createSlice({
   name: "userPortfolio",
   initialState,
   reducers: {
+    portfolioInitialized(s) {},
     loadRequested(s) {
       s.status = "loading"
     },
