@@ -122,7 +122,7 @@ export function* variableDeposit(
   const useAsCollateral = state.appui.useCollateral
   const isVariableDepositInitialized =
     portfolioSelectors.isVariableDepositInitialized(state.userPortfolio)(token)
-
+  console.log(isVariableDepositInitialized)
   const reserve = reservesSelectors.selectReserveByToken(token)(state)
 
   if (!reserve) {

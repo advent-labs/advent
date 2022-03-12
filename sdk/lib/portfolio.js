@@ -32,7 +32,6 @@ exports.AdventPortfolio = void 0;
 const web3_js_1 = require("@solana/web3.js");
 const sab = __importStar(require("@saberhq/token-utils"));
 const anchor_1 = require("@project-serum/anchor");
-const spl_token_1 = require("@solana/spl-token");
 function serializeVariableDepositAccount(v) {
     return {
         token: v.token,
@@ -112,9 +111,7 @@ class AdventPortfolio {
         return r;
     }
     variableDepositCollateralIX(token, amount) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return this.market.variableDepositCollateralIX(token, amount, this.authority, this.positionsKey);
-        });
+        return this.market.variableDepositCollateralIX(token, amount, this.authority, this.positionsKey);
     }
     variableWithdrawCollateralIX(token, amount) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -166,27 +163,7 @@ class AdventPortfolio {
         });
     }
     fixedBorrowIX(token, amount, duration) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const [reserve] = yield this.market.reservePDA(token);
-            const r = this.reserveByToken(token);
-            const userReserve = yield sab.getATAAddress({
-                mint: token,
-                owner: this.authority,
-            });
-            return this.program.instruction.fixedBorrow(new anchor_1.BN(amount), new anchor_1.BN(duration), {
-                accounts: {
-                    authority: this.authority,
-                    market: this.market.address,
-                    reserve,
-                    settlementTable: r.settlementTableAddress,
-                    portfolio: this.address,
-                    positions: this.positionsKey,
-                    reserveVault: r.vault,
-                    userReserve,
-                    tokenProgram: spl_token_1.TOKEN_PROGRAM_ID,
-                },
-            });
-        });
+        return this.market.fixedBorrowIX(token, amount, duration, this.authority, this.positionsKey);
     }
     collateralVaultByToken(token) {
         return __awaiter(this, void 0, void 0, function* () {
