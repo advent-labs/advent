@@ -119,7 +119,6 @@ export function* variableDeposit(
   const isPortfolioInitalized = portfolioSelectors.isPortfolioInitialized(
     state.userPortfolio
   )
-  console.log(token)
   const useAsCollateral = state.appui.useCollateral
   const isVariableDepositInitialized =
     portfolioSelectors.isVariableDepositInitialized(state.userPortfolio)(token)

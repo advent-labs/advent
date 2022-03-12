@@ -193,6 +193,56 @@ class AdventMarket {
             });
         });
     }
+    fixedBorrowIX(token, amount, duration, authority, positions) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const [reserve] = yield this.reservePDA(token);
+            const r = this.reserveByToken(token);
+            const userReserve = yield sab.getATAAddress({
+                mint: token,
+                owner: authority,
+            });
+            return this.program.instruction.fixedBorrow(new anchor_1.BN(amount), new anchor_1.BN(duration), {
+                accounts: {
+                    authority: authority,
+                    market: this.address,
+                    reserve,
+                    settlementTable: r.settlementTableAddress,
+                    portfolio: this.address,
+                    positions,
+                    reserveVault: r.vault,
+                    userReserve,
+                    tokenProgram: spl_token_1.TOKEN_PROGRAM_ID,
+                },
+            });
+        });
+    }
+    variableWithdrawTokensIX(token, amount, authority, positions) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const [reserve] = yield this.reservePDA(token);
+            const r = this.reserveByToken(token);
+            const depositNoteUser = yield sab.getATAAddress({
+                mint: r.depositNoteMint,
+                owner: authority,
+            });
+            const userReserve = yield sab.getATAAddress({
+                mint: token,
+                owner: authority,
+            });
+            return this.program.instruction.variableWithdrawTokens(new anchor_1.BN(amount), {
+                accounts: {
+                    authority: authority,
+                    market: this.address,
+                    reserve,
+                    positions,
+                    depositNoteMint: r.depositNoteMint,
+                    reserveVault: r.vault,
+                    userReserve,
+                    depositNoteUser,
+                    tokenProgram: sab.TOKEN_PROGRAM_ID,
+                },
+            });
+        });
+    }
     variableDepositTokensIX(token, amount, authority) {
         return __awaiter(this, void 0, void 0, function* () {
             const [reserve] = yield this.reservePDA(token);
