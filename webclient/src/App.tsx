@@ -93,6 +93,7 @@ export const Wrapper: FC = () => {
 function App() {
   const wallet = useWallet()
   const dispatch = useAppDispatch()
+  const reserveStatus = useAppSelector((s) => s.reserves.status)
   const tokenStatus = useAppSelector((state) => state.userTokenAccounts.status)
   const [context, setContext] = useState<AppContext>({
     addresses: addresses.dev,
@@ -155,7 +156,9 @@ function App() {
     // advent market sdk required
     if (!solanaConnectionContext.adventMarketSDK) return
 
-    dispatch(userPortfolioActions.loadRequested())
+    if (reserveStatus === "still") {
+      dispatch(userPortfolioActions.loadRequested())
+    }
 
     // If user portfolio exists, load it
     // solanaConnectionContext.adventMarketSDK
@@ -169,7 +172,12 @@ function App() {
     //     dispatch(userPortfolioActions.portfolioInitialized())
     //   })
     //   .catch((e) => console.log("User portfolio not initialized"))
-  }, [wallet.connected, solanaConnectionContext.adventMarketSDK, dispatch])
+  }, [
+    wallet.connected,
+    solanaConnectionContext.adventMarketSDK,
+    reserveStatus,
+    dispatch,
+  ])
 
   useEffect(() => {
     if (!solanaConnectionContext.sdk) {
