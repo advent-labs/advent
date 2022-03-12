@@ -2,7 +2,7 @@ import { IReserve } from "@advent/sdk"
 import { getContext, put } from "redux-saga/effects"
 import { SolanaConnectionContext } from "../../solanaConnectionContext"
 import { actions, Reserve } from "../reducer/reserves"
-
+import { actions as portfolioActions } from "../reducer/userPortfolio"
 function sdkReserveToState(r: IReserve): Reserve {
   return {
     ...r,
@@ -26,9 +26,13 @@ export function* fetchReserves() {
     // TODO
     console.log(e.toString())
   }
-  yield put(
-    actions.loaded(
-      adventMarketSDK.reserves.map((r) => r.serialize()).map(sdkReserveToState)
-    )
-  )
+  const reserves = adventMarketSDK.reserves
+    .map((r) => r.serialize())
+    .map(sdkReserveToState)
+
+  // load in the reserve info
+  yield put(actions.loaded(reserves))
+
+  // now that reserves are loaded, get the user's balances for token accounts in the reserves
+  // yield put(portfolioActions.loadRequested())
 }

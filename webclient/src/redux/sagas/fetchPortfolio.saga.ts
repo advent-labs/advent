@@ -2,6 +2,7 @@ import { AdventMarket, AdventPortfolio, IPortfolio } from "@advent/sdk"
 import { PublicKey } from "@solana/web3.js"
 import { getContext, put } from "redux-saga/effects"
 import { Portfolio } from "../../sdk/models"
+import { actions as depositBalanceActions } from "../reducer/depositBalances"
 import { SolanaConnectionContext } from "../../solanaConnectionContext"
 import {
   actions as userPortfolioActions,
@@ -60,19 +61,17 @@ export function* fetchUserPortfolio() {
   if (!wallet) return
   if (!adventMarketSDK) return
 
-  let p: UserPortfolio
-
   try {
     const portfolio = (yield adventMarketSDK.portfolio(
       wallet.publicKey
     )) as AdventPortfolio
     const sdkPortfolio = portfolio.serialize()
-    p = serializePortfolio(sdkPortfolio)
+    const p = serializePortfolio(sdkPortfolio)
+    yield put(userPortfolioActions.loaded(p))
+    yield put(depositBalanceActions.request())
   } catch {
     // Portfolio not initialied for user yet
     console.log("Portfolio not initialized")
-    p = defaultPortfolio
+    yield put(userPortfolioActions.loaded(defaultPortfolio))
   }
-
-  yield put(userPortfolioActions.loaded(p))
 }

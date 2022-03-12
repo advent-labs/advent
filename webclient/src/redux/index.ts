@@ -12,6 +12,7 @@ import userTokenAccounts from "./reducer/userTokenBalances"
 import variableDeposit from "./reducer/variableDeposit"
 import reserves from "./reducer/reserves"
 import userPortfolio from "./reducer/userPortfolio"
+import depositBalances from "./reducer/depositBalances"
 import appui from "./ui/appui"
 
 const sagaMiddleware = createSagaMiddleware({
@@ -35,6 +36,7 @@ export const store = configureStore({
     dashboardUI,
     appui,
     variableDeposit,
+    depositBalances,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
