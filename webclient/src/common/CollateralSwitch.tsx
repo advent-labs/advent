@@ -1,10 +1,10 @@
-import { selectAppUIValues, actions } from '../redux/ui/appui'
-import { useAppSelector } from '../redux'
-import ChangeParameters, { ChangeParameter } from './ChangeParameters'
-import Container from '../blocks/Container'
-import CoInput from '../blocks/CoInput'
-import Switch from '../blocks/Switch'
-import Button from '../blocks/Button'
+import { selectAppUIValues, actions } from "../store/ui/appui"
+import { useAppSelector } from "../store"
+import ChangeParameters, { ChangeParameter } from "./ChangeParameters"
+import Container from "../blocks/Container"
+import CoInput from "../blocks/CoInput"
+import Switch from "../blocks/Switch"
+import Button from "../blocks/Button"
 
 export interface CollateralSwitchProps {
   // parameters: ChangeParameter[]
@@ -13,13 +13,13 @@ export interface CollateralSwitchProps {
 function CollateralSwitch({}: CollateralSwitchProps) {
   const { coInputVal } = useAppSelector(selectAppUIValues)
   const selectedUserReserve = useAppSelector(
-    (s) => s.dashboardUI.selectedUserReserve,
+    (s) => s.dashboardUI.selectedUserReserve
   )
-  console.log('selected', selectedUserReserve)
+  console.log("selected", selectedUserReserve)
   const { icon, uTokenName, mint, data } = selectedUserReserve
   // const { useCollateral, currentCollateral} = selectedUserReserve[]
   const collateralData = data.filter((e, i) => {
-    return e.id === 'collateral'
+    return e.id === "collateral"
   })[0]
   console.log(collateralData)
   const currentCollateral = collateralData?.value || 0
@@ -27,24 +27,24 @@ function CollateralSwitch({}: CollateralSwitchProps) {
 
   const changeParameters = [
     {
-      label: 'Borrow limit used',
+      label: "Borrow limit used",
       value: 38,
       nextValue: 25,
     },
     {
-      label: 'Borrow limit',
+      label: "Borrow limit",
       value: 80,
       nextValue: 85,
-      square: 'red',
+      square: "red",
     },
     {
-      label: 'Liquidation threshold',
+      label: "Liquidation threshold",
       value: 85,
       nextValue: 88,
-      square: 'black',
+      square: "black",
     },
     {
-      label: 'Health factor',
+      label: "Health factor",
       value: 1.34,
       nextValue: 1.52,
     },

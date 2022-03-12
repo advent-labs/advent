@@ -1,13 +1,13 @@
-import { useMemo } from 'react'
-import Tabs from './Tabs'
-import Container from '../blocks/Container'
-import { useAppDispatch, useAppSelector } from '../redux'
-import { useContext, useEffect } from 'react'
-import { Context } from '../App'
-import fixed from '../assets/fixed.svg'
-import variable from '../assets/variable.svg'
-import UserReserve from './UserReserve'
-import { actions as uiActions } from '../redux/ui/dashboard'
+import { useMemo } from "react"
+import Tabs from "./Tabs"
+import Container from "../blocks/Container"
+import { useAppDispatch, useAppSelector } from "../store"
+import { useContext, useEffect } from "react"
+import { Context } from "../App"
+import fixed from "../assets/fixed.svg"
+import variable from "../assets/variable.svg"
+import UserReserve from "./UserReserve"
+import { actions as uiActions } from "../store/ui/dashboard"
 
 export interface UserRowProps {
   currentTab: string
@@ -18,62 +18,62 @@ function UserRows({ currentTab, tabHandler }: UserRowProps) {
   const { addresses } = useContext(Context)
   const dispatch = useAppDispatch()
 
-  const tabOptions = ['All', 'Fixed rate', 'Variable rate']
+  const tabOptions = ["All", "Fixed rate", "Variable rate"]
   const reserves = useAppSelector((s) => s.reserves.state)
 
   const mockDataFixed = [
     {
       value: 6.56,
-      currency: '%',
+      currency: "%",
       loadedOnce: true,
       icon: fixed,
-      id: 'rate',
+      id: "rate",
     },
     {
       value: 45000.32,
-      currency: 'USDC',
+      currency: "USDC",
       loadedOnce: true,
-      id: 'supply',
+      id: "supply",
     },
     {
       value: 64,
-      currency: 'd',
+      currency: "d",
       loadedOnce: true,
-      id: 'term',
+      id: "term",
     },
     {
       value: 100,
-      currency: '%',
+      currency: "%",
       loadedOnce: true,
-      id: 'collateral',
+      id: "collateral",
     },
   ]
 
   const mockDataVar = [
     {
       value: 7.12,
-      currency: '%',
+      currency: "%",
       loadedOnce: true,
       icon: variable,
-      id: 'rate',
+      id: "rate",
     },
     {
       value: 0,
-      currency: 'USDC',
+      currency: "USDC",
       loadedOnce: true,
-      id: 'supply',
+      id: "supply",
     },
     {
       value: 64,
-      currency: 'd',
+      currency: "d",
       loadedOnce: true,
-      id: 'term',
+      id: "term",
     },
     {
       value: 100,
-      currency: '%',
+      currency: "%",
       loadedOnce: true,
-      id: 'collateral',
+      id: "collateral",
     },
   ]
 
@@ -101,7 +101,7 @@ function UserRows({ currentTab, tabHandler }: UserRowProps) {
 
   const allData = useMemo(
     () => [...fixedData, ...varData],
-    [fixedData, varData],
+    [fixedData, varData]
   )
 
   useEffect(() => {
@@ -115,15 +115,15 @@ function UserRows({ currentTab, tabHandler }: UserRowProps) {
   }
 
   const rows = () => {
-    if (currentTab === 'All') {
+    if (currentTab === "All") {
       return allData.map((e, i) => (
         <UserReserve {...e} key={i} action={() => onUserReserveClick(e)} />
       ))
-    } else if (currentTab === 'Fixed rate') {
+    } else if (currentTab === "Fixed rate") {
       return fixedData.map((e, i) => (
         <UserReserve {...e} key={i} action={() => onUserReserveClick(e)} />
       ))
-    } else if (currentTab === 'Variable rate') {
+    } else if (currentTab === "Variable rate") {
       return varData.map((e, i) => (
         <UserReserve {...e} key={i} action={() => onUserReserveClick(e)} />
       ))

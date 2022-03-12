@@ -1,4 +1,4 @@
-import { useAppDispatch, useAppSelector } from '../redux'
+import { useAppDispatch, useAppSelector } from "../store"
 
 export interface SwitchProps {
   useColl: boolean

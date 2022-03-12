@@ -1,15 +1,15 @@
 import Preview from "../../common/Preview"
 import Container from "../../blocks/Container"
-import { useAppDispatch, useAppSelector } from "../../redux"
+import { useAppDispatch, useAppSelector } from "../../store"
 import { Context } from "../../App"
 import { ReactNode, useContext } from "react"
 import {
   actions as uiActions,
   selectDepositUIValues,
-} from "../../redux/ui/depositui"
+} from "../../store/ui/depositui"
 import { totalInterestEarnedForDeposit } from "../../sdk/eqs"
-import { actions as depoActions } from "../../redux/reducer/variableDeposit"
-import { selectors } from "../../redux/reducer/reserves"
+import { actions as depoActions } from "../../store/reducer/variableDeposit"
+import { selectors } from "../../store/reducer/reserves"
 import Tabs from "../../common/Tabs"
 import TextInput from "../../blocks/TextInput"
 import Parameters from "../../common/Parameters"

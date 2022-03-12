@@ -1,8 +1,8 @@
 import { useContext } from "react"
 import { Addresses } from "../../addresses"
 import { Context } from "../../App"
-import { useAppSelector } from "../../redux"
-import { FixedBorrow } from "../../redux/reducer/userPortfolio"
+import { useAppSelector } from "../../store"
+import { FixedBorrow } from "../../store/reducer/userPortfolio"
 
 function Row(i: number, b: FixedBorrow, a: Addresses) {
   return (

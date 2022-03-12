@@ -1,7 +1,7 @@
 import { useContext } from "react"
 import { Context } from "../../App"
-import { useAppSelector } from "../../redux"
-import { selectors } from "../../redux/reducer/reserves"
+import { useAppSelector } from "../../store"
+import { selectors } from "../../store/reducer/reserves"
 
 export function SettlementPeriods() {
   const { addresses } = useContext(Context)
