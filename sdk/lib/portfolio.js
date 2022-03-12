@@ -74,6 +74,7 @@ class AdventPortfolio {
     }
     serialize() {
         return {
+            positionsAddress: this.positionsKey,
             variableDeposits: this.variableDeposits,
             variableBorrows: this.variableBorrows,
             fixedBorrows: this.fixedBorrows,
@@ -101,32 +102,7 @@ class AdventPortfolio {
             .map(serializeFixedDepositAccount);
     }
     variableDepositTokensIX(token, amount) {
-        return __awaiter(this, void 0, void 0, function* () {
-            const [reserve] = yield this.market.reservePDA(token);
-            const [reserveVault] = yield this.market.reserveVaultPDA(token);
-            const r = this.reserveByToken(token);
-            const reserveUser = yield sab.getATAAddress({
-                mint: r.token,
-                owner: this.authority,
-            });
-            const depositNoteUser = yield sab.getATAAddress({
-                mint: r.depositNoteMint,
-                owner: this.authority,
-            });
-            const accounts = {
-                authority: this.authority,
-                market: this.market.address,
-                reserve,
-                depositNoteMint: r.depositNoteMint,
-                reserveVault,
-                reserveUser,
-                depositNoteUser,
-                tokenProgram: sab.TOKEN_PROGRAM_ID,
-            };
-            return this.program.instruction.variableDepositTokens(new anchor_1.BN(amount), {
-                accounts,
-            });
-        });
+        return this.market.variableDepositTokensIX(token, amount, this.authority);
     }
     reserveByToken(token) {
         const r = this.market.reserves.find((r) => r.token.toBase58() === token.toBase58());

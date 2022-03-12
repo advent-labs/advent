@@ -1,21 +1,25 @@
-import { configureStore } from '@reduxjs/toolkit'
-import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import borrowui from './ui/borrowui'
-import variableDepositUI from './ui/variableDeposit'
-import variableBorrowUI from './ui/variableBorrow'
-import depositui from './ui/depositui'
-import dashboardUI from './ui/dashboard'
-import createSagaMiddleware from 'redux-saga'
-import { solanaConnectionContext } from '../solanaConnectionContext'
-import saga from './sagas'
-import userTokenAccounts from './reducer/userTokenBalances'
-import reserves from './reducer/reserves'
-import userPortfolio from './reducer/userPortfolio'
-import appui from './ui/appui'
+import { configureStore } from "@reduxjs/toolkit"
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
+import borrowui from "./ui/borrowui"
+import variableDepositUI from "./ui/variableDeposit"
+import variableBorrowUI from "./ui/variableBorrow"
+import depositui from "./ui/depositui"
+import dashboardUI from "./ui/dashboard"
+import createSagaMiddleware from "redux-saga"
+import { solanaConnectionContext } from "../solanaConnectionContext"
+import saga from "./sagas"
+import userTokenAccounts from "./reducer/userTokenBalances"
+import variableDeposit from "./reducer/variableDeposit"
+import reserves from "./reducer/reserves"
+import userPortfolio from "./reducer/userPortfolio"
+import appui from "./ui/appui"
 
 const sagaMiddleware = createSagaMiddleware({
   context: {
     solanaConnectionContext,
+  },
+  onError: (e: any) => {
+    console.log(e)
   },
 })
 
@@ -30,6 +34,7 @@ export const store = configureStore({
     variableBorrowUI,
     dashboardUI,
     appui,
+    variableDeposit,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),

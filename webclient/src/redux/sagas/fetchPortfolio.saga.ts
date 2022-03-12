@@ -48,6 +48,7 @@ export function serializePortfolio(p: IPortfolio): UserPortfolio {
     fixedDeposits,
     variableBorrows,
     variableDeposits,
+    positionsAddress: p.positionsAddress.toBase58(),
   }
 }
 

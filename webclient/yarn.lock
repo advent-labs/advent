@@ -3,7 +3,7 @@
 
 
 "@advent/sdk@../sdk":
-  version "0.0.4"
+  version "0.0.5"
   dependencies:
     "@advent/sdk" "../sdk"
     "@project-serum/anchor" "^0.22.0"

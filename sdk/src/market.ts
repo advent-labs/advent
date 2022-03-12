@@ -12,6 +12,7 @@ import {
 } from "./models"
 import { AdventPortfolio } from "./portfolio"
 import { Reserve } from "./reserve"
+import * as sab from "@saberhq/token-utils"
 
 function reserveAccountToClass(
   r: ReserveAccount,
@@ -173,6 +174,45 @@ export class AdventMarket {
         systemProgram: SystemProgram.programId,
         rent: SYSVAR_RENT_PUBKEY,
       },
+    })
+  }
+
+  async variableDepositTokensIX(
+    token: PublicKey,
+    amount: number,
+    authority: PublicKey
+  ) {
+    const [reserve] = await this.reservePDA(token)
+    const [reserveVault] = await this.reserveVaultPDA(token)
+
+    const r = this.reserveByToken(token)
+
+    if (!r) {
+      throw new Error(`Reserve not found for ${token.toBase58()}`)
+    }
+
+    const reserveUser = await sab.getATAAddress({
+      mint: r.token,
+      owner: authority,
+    })
+
+    const depositNoteUser = await sab.getATAAddress({
+      mint: r.depositNoteMint,
+      owner: authority,
+    })
+
+    const accounts = {
+      authority: authority,
+      market: this.address,
+      reserve,
+      depositNoteMint: r.depositNoteMint,
+      reserveVault,
+      reserveUser,
+      depositNoteUser,
+      tokenProgram: sab.TOKEN_PROGRAM_ID,
+    }
+    return this.program.instruction.variableDepositTokens(new BN(amount), {
+      accounts,
     })
   }
 

@@ -20,7 +20,12 @@ export function* fetchReserves() {
   )) as SolanaConnectionContext
 
   if (!adventMarketSDK) return
-  yield adventMarketSDK.refresh()
+  try {
+    yield adventMarketSDK.refresh()
+  } catch (e: any) {
+    // TODO
+    console.log(e.toString())
+  }
   yield put(
     actions.loaded(
       adventMarketSDK.reserves.map((r) => r.serialize()).map(sdkReserveToState)

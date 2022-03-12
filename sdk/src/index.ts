@@ -24,7 +24,7 @@ import {
   ISettlementTable,
 } from "./reserve"
 import { AdventMarket } from "./market"
-
+import { IDLERRORS, parseError } from "./errors"
 export {
   AdventPortfolio,
   AdventMarket,
@@ -37,6 +37,8 @@ export {
   IFixedDeposit,
   IVariableBorrow,
   IVariableDeposit,
+  IDLERRORS,
+  parseError,
 }
 
 const DEFAULT_PROGRAM_ID = "ke798ave2o7MMZkriRUPSCz1aLrrmPQY2zHdrikJ298"

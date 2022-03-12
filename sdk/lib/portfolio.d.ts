@@ -26,6 +26,7 @@ export interface IVariableBorrow {
     token: PublicKey;
 }
 export interface IPortfolio {
+    positionsAddress: PublicKey;
     variableDeposits: IVariableDeposit[];
     variableBorrows: IVariableBorrow[];
     fixedBorrows: IFixedBorrow[];

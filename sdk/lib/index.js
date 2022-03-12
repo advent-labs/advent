@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AdventSDK = exports.Reserve = exports.AdventMarket = exports.AdventPortfolio = void 0;
+exports.AdventSDK = exports.parseError = exports.IDLERRORS = exports.Reserve = exports.AdventMarket = exports.AdventPortfolio = void 0;
 const anchor_1 = require("@project-serum/anchor");
 const spl_token_1 = require("@solana/spl-token");
 const web3_js_1 = require("@solana/web3.js");
@@ -20,6 +20,9 @@ const reserve_1 = require("./reserve");
 Object.defineProperty(exports, "Reserve", { enumerable: true, get: function () { return reserve_1.Reserve; } });
 const market_1 = require("./market");
 Object.defineProperty(exports, "AdventMarket", { enumerable: true, get: function () { return market_1.AdventMarket; } });
+const errors_1 = require("./errors");
+Object.defineProperty(exports, "IDLERRORS", { enumerable: true, get: function () { return errors_1.IDLERRORS; } });
+Object.defineProperty(exports, "parseError", { enumerable: true, get: function () { return errors_1.parseError; } });
 const DEFAULT_PROGRAM_ID = "ke798ave2o7MMZkriRUPSCz1aLrrmPQY2zHdrikJ298";
 class AdventSDK {
     constructor(connection, program = DEFAULT_PROGRAM_ID) {
