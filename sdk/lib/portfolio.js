@@ -113,24 +113,7 @@ class AdventPortfolio {
     }
     variableDepositCollateralIX(token, amount) {
         return __awaiter(this, void 0, void 0, function* () {
-            const [reserve] = yield this.market.reservePDA(token);
-            const [depositNoteVault] = yield this.market.collateralVaultPDA(reserve, this.authority);
-            const r = this.reserveByToken(token);
-            const depositNoteUser = yield sab.getATAAddress({
-                mint: r.depositNoteMint,
-                owner: this.authority,
-            });
-            return this.program.instruction.variableDepositCollateral(new anchor_1.BN(amount), {
-                accounts: {
-                    authority: this.authority,
-                    market: this.market.address,
-                    reserve,
-                    positions: this.positionsKey,
-                    depositNoteVault,
-                    depositNoteUser,
-                    tokenProgram: sab.TOKEN_PROGRAM_ID,
-                },
-            });
+            return this.market.variableDepositCollateralIX(token, amount, this.authority, this.positionsKey);
         });
     }
     variableWithdrawCollateralIX(token, amount) {

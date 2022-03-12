@@ -116,7 +116,12 @@ export class AdventMarket {
   }
 
   reserveByToken(token: PublicKey) {
-    return this.reserves.find((r) => r.token.equals(token))
+    const r = this.reserves.find((r) => r.token.equals(token))
+
+    if (!r) {
+      throw new Error(`Reserve not found for ${token.toBase58()}`)
+    }
+    return r
   }
 
   async initPositionsIX(authority: PublicKey, positions: PublicKey) {
@@ -173,6 +178,35 @@ export class AdventMarket {
         tokenProgram: TOKEN_PROGRAM_ID,
         systemProgram: SystemProgram.programId,
         rent: SYSVAR_RENT_PUBKEY,
+      },
+    })
+  }
+
+  async variableDepositCollateralIX(
+    token: PublicKey,
+    amount: number,
+    authority: PublicKey,
+    positions: PublicKey
+  ) {
+    const [reserve] = await this.reservePDA(token)
+    const [depositNoteVault] = await this.collateralVaultPDA(
+      reserve,
+      this.authority
+    )
+    const r = this.reserveByToken(token)
+    const depositNoteUser = await sab.getATAAddress({
+      mint: r.depositNoteMint,
+      owner: authority,
+    })
+    return this.program.instruction.variableDepositCollateral(new BN(amount), {
+      accounts: {
+        authority,
+        market: this.address,
+        reserve,
+        positions,
+        depositNoteVault,
+        depositNoteUser,
+        tokenProgram: sab.TOKEN_PROGRAM_ID,
       },
     })
   }

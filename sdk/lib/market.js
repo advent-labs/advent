@@ -120,7 +120,11 @@ class AdventMarket {
         });
     }
     reserveByToken(token) {
-        return this.reserves.find((r) => r.token.equals(token));
+        const r = this.reserves.find((r) => r.token.equals(token));
+        if (!r) {
+            throw new Error(`Reserve not found for ${token.toBase58()}`);
+        }
+        return r;
     }
     initPositionsIX(authority, positions) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -163,6 +167,28 @@ class AdventMarket {
                     tokenProgram: spl_token_1.TOKEN_PROGRAM_ID,
                     systemProgram: web3_js_1.SystemProgram.programId,
                     rent: web3_js_1.SYSVAR_RENT_PUBKEY,
+                },
+            });
+        });
+    }
+    variableDepositCollateralIX(token, amount, authority, positions) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const [reserve] = yield this.reservePDA(token);
+            const [depositNoteVault] = yield this.collateralVaultPDA(reserve, this.authority);
+            const r = this.reserveByToken(token);
+            const depositNoteUser = yield sab.getATAAddress({
+                mint: r.depositNoteMint,
+                owner: authority,
+            });
+            return this.program.instruction.variableDepositCollateral(new anchor_1.BN(amount), {
+                accounts: {
+                    authority,
+                    market: this.address,
+                    reserve,
+                    positions,
+                    depositNoteVault,
+                    depositNoteUser,
+                    tokenProgram: sab.TOKEN_PROGRAM_ID,
                 },
             });
         });
