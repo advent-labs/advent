@@ -1,8 +1,8 @@
-import { RefObject, useRef } from 'react'
-import { useAppDispatch, useAppSelector } from '../redux'
-import Button from '../blocks/Button'
-import Tabs from '../common/Tabs'
-import { selectAppUIValues, actions } from '../redux/ui/appui'
+import { RefObject, useRef } from "react"
+import { useAppDispatch, useAppSelector } from "../store"
+import Button from "../blocks/Button"
+import Tabs from "../common/Tabs"
+import { selectAppUIValues, actions } from "../store/ui/appui"
 
 export interface CoInputProps {
   value: string
@@ -24,9 +24,9 @@ function CoInput({ value, handleInput, disabled, placeholder }: CoInputProps) {
             className={`input has-text-left`}
             disabled={disabled}
             onChange={(e) => dispatch(handleInput(e.target.value))}
-            value={value === 'NaN' ? '0' : value}
+            value={value === "NaN" ? "0" : value}
             type=""
-            placeholder={placeholder ? placeholder : '0'}
+            placeholder={placeholder ? placeholder : "0"}
             autoComplete="off"
             ref={inputElement}
           />

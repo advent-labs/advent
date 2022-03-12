@@ -1,9 +1,9 @@
-import { selectAppUIValues, actions as appActions } from "../../redux/ui/appui"
-import { useAppDispatch, useAppSelector } from "../../redux"
+import { selectAppUIValues, actions as appActions } from "../../store/ui/appui"
+import { useAppDispatch, useAppSelector } from "../../store"
 import {
   actions as uiActions,
   selectBorrowUIValues,
-} from "../../redux/ui/borrowui"
+} from "../../store/ui/borrowui"
 import { Context } from "../../App"
 import { useContext } from "react"
 import Container from "../../blocks/Container"

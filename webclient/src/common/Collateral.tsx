@@ -1,8 +1,8 @@
-import { selectAppUIValues, actions } from '../redux/ui/appui'
-import { useAppSelector } from '../redux'
-import Container from '../blocks/Container'
-import Switch from '../blocks/Switch'
-import CoInput from '../blocks/CoInput'
+import { selectAppUIValues, actions } from "../store/ui/appui"
+import { useAppSelector } from "../store"
+import Container from "../blocks/Container"
+import Switch from "../blocks/Switch"
+import CoInput from "../blocks/CoInput"
 
 function Collateral() {
   const { coInputVal, useCollateral } = useAppSelector(selectAppUIValues)

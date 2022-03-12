@@ -1,4 +1,4 @@
-import { store, useAppSelector, useAppDispatch } from "./redux"
+import { store, useAppSelector, useAppDispatch } from "./store"
 import { Provider } from "react-redux"
 import { createContext, FC, useMemo, useEffect, useState } from "react"
 import { Route, Routes } from "react-router-dom"
@@ -25,7 +25,7 @@ import { addresses, Addresses } from "./addresses"
 import {
   userTokenBalancesStateRequested,
   resetTokenBalances,
-} from "./redux/reducer/userTokenBalances"
+} from "./store/reducer/userTokenBalances"
 import Container from "./blocks/Container"
 import Balances from "./common/Balances"
 import { Dash } from "./pages/dash/Dash"
@@ -37,8 +37,8 @@ import {
   AdventSDK as OldAdventSDK,
 } from "./sdk"
 import { AdventMarket, AdventPortfolio, AdventSDK } from "@advent/sdk"
-import { actions as userPortfolioActions } from "./redux/reducer/userPortfolio"
-import { actions as reservesAction } from "./redux/reducer/reserves"
+import { actions as userPortfolioActions } from "./store/reducer/userPortfolio"
+import { actions as reservesAction } from "./store/reducer/reserves"
 import { ToastContainer } from "react-toastify"
 import Portfolio from "./common/Portfolio"
 

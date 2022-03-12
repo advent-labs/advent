@@ -1,25 +1,26 @@
-import { Reserves } from './Reserves'
-import { FixedDeposit } from './FixedDeposit'
-import { FixedBorrow } from './FIxedBorrow'
-import { FixedLoans } from './FixedLoans'
-import { VariableDeposit } from './VarDeposit'
-import { VariableBorrow } from './VarBorrow'
-import { Modal } from '../../common/Modal'
-import { useAppDispatch, useAppSelector } from '../../redux'
-import { SettlementPeriods } from './SettlementPeriods'
-import { actions } from '../../redux/ui/dashboard'
-import UserSupply from '../../common/UserSupply'
-import UserBorrow from '../../common/UserBorrow'
-import UserRows from '../../common/UserRows'
-import { actions as uiActions } from '../../redux/ui/dashboard'
-import CollateralSwitch from '../../common/CollateralSwitch'
+import { Reserves } from "./Reserves"
+import { FixedDeposit } from "./FixedDeposit"
+import { FixedBorrow } from "./FIxedBorrow"
+import { FixedLoans } from "./FixedLoans"
+import { VariableDeposit } from "./VarDeposit"
+import { VariableBorrow } from "./VarBorrow"
+import { Modal } from "../../common/Modal"
+import { useAppDispatch, useAppSelector } from "../../store"
+import { SettlementPeriods } from "./SettlementPeriods"
+import { actions } from "../../store/ui/dashboard"
+import UserSupply from "../../common/UserSupply"
+import UserBorrow from "../../common/UserBorrow"
+import UserRows from "../../common/UserRows"
+import { actions as uiActions } from "../../store/ui/dashboard"
+import CollateralSwitch from "../../common/CollateralSwitch"
+import { UserVariableDeposits } from "./UserVariableDeposits"
 
 export function Dash() {
   const settlementPeriodVisible = useAppSelector(
-    (s) => s.dashboardUI.settlementPeriodVisible,
+    (s) => s.dashboardUI.settlementPeriodVisible
   )
   const { supplyTab, borrowTab, collateralSwitchOpen } = useAppSelector(
-    (s) => s.dashboardUI,
+    (s) => s.dashboardUI
   )
   const dispatch = useAppDispatch()
 
@@ -74,6 +75,11 @@ export function Dash() {
         <div className="columns">
           <div className="column">
             <FixedLoans />
+          </div>
+        </div>
+        <div className="columns">
+          <div className="column">
+            <UserVariableDeposits />
           </div>
         </div>
         <Modal open={settlementPeriodVisible} onClose={hideSettlementPeriods}>

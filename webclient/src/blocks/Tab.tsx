@@ -1,4 +1,4 @@
-import { useAppDispatch } from '../redux'
+import { useAppDispatch } from "../store"
 
 export interface TabProps {
   isActive: boolean
@@ -11,7 +11,7 @@ function Tab({ isActive, text, handler }: TabProps) {
 
   return (
     <div
-      className={`tab ${isActive ? 'is-active' : ''}`}
+      className={`tab ${isActive ? "is-active" : ""}`}
       onClick={() => dispatch(handler(text))}
     >
       {text}

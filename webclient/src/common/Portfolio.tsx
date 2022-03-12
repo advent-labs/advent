@@ -1,5 +1,5 @@
-import { selectAppUIValues, actions } from "../redux/ui/appui"
-import { useAppSelector } from "../redux"
+import { selectAppUIValues, actions } from "../store/ui/appui"
+import { useAppSelector } from "../store"
 import Tabs from "../common/Tabs"
 import UserAsset from "./UserAsset"
 import usdcIcon from "../assets/usdc.svg"

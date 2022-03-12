@@ -1,12 +1,12 @@
-import { useAppDispatch, useAppSelector } from "../../redux"
+import { useAppDispatch, useAppSelector } from "../../store"
 import {
   actions as uiActions,
   selectDepositUIValues,
-} from "../../redux/ui/depositui"
+} from "../../store/ui/depositui"
 import { useContext } from "react"
 import { Context } from "../../App"
 import { totalInterestEarnedForDeposit } from "../../sdk/eqs"
-import { selectors } from "../../redux/reducer/reserves"
+import { selectors } from "../../store/reducer/reserves"
 import { Reserve } from "@advent/sdk"
 
 export function FixedDeposit() {

@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from '../redux'
-import { actions, selectAppUIValues } from '../redux/ui/appui'
+import { useAppDispatch, useAppSelector } from "../store"
+import { actions, selectAppUIValues } from "../store/ui/appui"
 
 function RateTabs() {
   const { isFixed } = useAppSelector(selectAppUIValues)
@@ -8,13 +8,13 @@ function RateTabs() {
   return (
     <div className="tabs is-filled p-1 mt-1">
       <div
-        className={`${isFixed ? 'is-active' : ''} tab`}
+        className={`${isFixed ? "is-active" : ""} tab`}
         onClick={() => dispatch(actions.setIsFixed())}
       >
         Fixed rates
       </div>
       <div
-        className={`${isFixed ? '' : 'is-active'} tab`}
+        className={`${isFixed ? "" : "is-active"} tab`}
         onClick={() => dispatch(actions.setIsVariable())}
       >
         Variable rates

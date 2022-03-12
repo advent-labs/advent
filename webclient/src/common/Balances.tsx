@@ -1,14 +1,14 @@
-import { useContext } from 'react'
-import { useWallet } from '@solana/wallet-adapter-react'
-import { Context } from '../App'
-import { useAppSelector } from '../redux/index'
+import { useContext } from "react"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { Context } from "../App"
+import { useAppSelector } from "../store/index"
 
 function Balances() {
   const ctx = useContext(Context)
   const wallet = useWallet()
   const connected = wallet.connected
   const { balances, loadedOnce } = useAppSelector(
-    (state) => state.userTokenAccounts,
+    (state) => state.userTokenAccounts
   )
 
   if (!connected) {

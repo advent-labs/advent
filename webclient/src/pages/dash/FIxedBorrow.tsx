@@ -1,10 +1,10 @@
 import { useContext } from "react"
 import { Context } from "../../App"
-import { useAppDispatch, useAppSelector } from "../../redux"
+import { useAppDispatch, useAppSelector } from "../../store"
 import {
   actions as uiActions,
   selectBorrowUIValues,
-} from "../../redux/ui/borrowui"
+} from "../../store/ui/borrowui"
 
 function BorrowInfo() {
   const { amount, duration } = useAppSelector(selectBorrowUIValues)

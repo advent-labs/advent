@@ -1,9 +1,9 @@
 import { useContext } from "react"
 import { Addresses } from "../../addresses"
 import { Context } from "../../App"
-import { useAppDispatch, useAppSelector } from "../../redux"
-import { Reserve } from "../../redux/reducer/reserves"
-import { actions } from "../../redux/ui/dashboard"
+import { useAppDispatch, useAppSelector } from "../../store"
+import { Reserve } from "../../store/reducer/reserves"
+import { actions } from "../../store/ui/dashboard"
 
 function Row(
   showSettlementPeriods: (s: string) => void,

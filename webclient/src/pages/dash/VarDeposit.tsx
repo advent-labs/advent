@@ -1,5 +1,5 @@
-import { useAppDispatch, useAppSelector } from "../../redux"
-import { actions } from "../../redux/ui/variableDeposit"
+import { useAppDispatch, useAppSelector } from "../../store"
+import { actions } from "../../store/ui/variableDeposit"
 import { useContext } from "react"
 import { Context } from "../../App"
 

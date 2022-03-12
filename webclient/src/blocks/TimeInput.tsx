@@ -1,8 +1,8 @@
-import { RefObject, useRef } from 'react'
-import { useAppDispatch, useAppSelector } from '../redux'
-import Button from '../blocks/Button'
-import Tabs from '../common/Tabs'
-import { selectAppUIValues, actions } from '../redux/ui/appui'
+import { RefObject, useRef } from "react"
+import { useAppDispatch, useAppSelector } from "../store"
+import Button from "../blocks/Button"
+import Tabs from "../common/Tabs"
+import { selectAppUIValues, actions } from "../store/ui/appui"
 
 export interface TimeInputProps {
   value: string
@@ -14,7 +14,7 @@ export interface TimeInputProps {
 function TimeInput({ value, handleInput, disabled }: TimeInputProps) {
   const dispatch = useAppDispatch()
   const inputElement = useRef(null) as RefObject<HTMLInputElement>
-  const tabOptions = ['Months', 'Days']
+  const tabOptions = ["Months", "Days"]
   const { timeTab } = useAppSelector(selectAppUIValues)
 
   return (
@@ -32,7 +32,7 @@ function TimeInput({ value, handleInput, disabled }: TimeInputProps) {
             className={`input has-text-right`}
             disabled={disabled}
             onChange={(e) => dispatch(handleInput(e.target.value))}
-            value={value === 'NaN' ? '0' : value}
+            value={value === "NaN" ? "0" : value}
             type=""
             placeholder="0"
             autoComplete="off"
