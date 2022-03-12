@@ -174,7 +174,7 @@ class AdventMarket {
     variableDepositCollateralIX(token, amount, authority, positions) {
         return __awaiter(this, void 0, void 0, function* () {
             const [reserve] = yield this.reservePDA(token);
-            const [depositNoteVault] = yield this.collateralVaultPDA(reserve, this.authority);
+            const [depositNoteVault] = yield this.collateralVaultPDA(reserve, authority);
             const r = this.reserveByToken(token);
             const depositNoteUser = yield sab.getATAAddress({
                 mint: r.depositNoteMint,

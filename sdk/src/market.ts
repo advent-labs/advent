@@ -189,10 +189,7 @@ export class AdventMarket {
     positions: PublicKey
   ) {
     const [reserve] = await this.reservePDA(token)
-    const [depositNoteVault] = await this.collateralVaultPDA(
-      reserve,
-      this.authority
-    )
+    const [depositNoteVault] = await this.collateralVaultPDA(reserve, authority)
     const r = this.reserveByToken(token)
     const depositNoteUser = await sab.getATAAddress({
       mint: r.depositNoteMint,
