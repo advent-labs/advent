@@ -7,12 +7,20 @@ import {
   PublicKey,
   TransactionInstruction,
 } from "@solana/web3.js"
-import { getContext, select } from "redux-saga/effects"
+import { getContext, put, select } from "redux-saga/effects"
 import { RootState } from ".."
 import { SolanaConnectionContext } from "../../solanaConnectionContext"
-import { Reserve } from "../reducer/reserves"
-import { selectors as portfolioSelectors } from "../reducer/userPortfolio"
-import { selectors as reservesSelectors } from "../reducer/reserves"
+import {
+  selectors as portfolioSelectors,
+  actions as portfolioActions,
+} from "../reducer/userPortfolio"
+import {
+  Reserve,
+  selectors as reservesSelectors,
+  actions as reservesActions,
+} from "../reducer/reserves"
+
+import { actions as variableDepositActions } from "../reducer/variableDeposit"
 import { getOrCreateATA, signAllAndSend } from "./common"
 import { getATAAddress } from "@saberhq/token-utils"
 
@@ -40,12 +48,14 @@ async function doVariableDeposit(
       owner: wallet.publicKey,
     })
     if (instruction) {
+      console.log("Init deposit note ATA")
       ixs.push(instruction)
     }
   }
 
   // if no positions address - then portfolio has not been initialized
   if (!positionsAddress) {
+    console.log("Init positions")
     newPositions = Keypair.generate()
     const initPortfolioIXs = await sdk.initPortfolioIX(
       wallet.publicKey,
@@ -62,6 +72,7 @@ async function doVariableDeposit(
 
   // if the seed account holding the variable deposit has not been created, add it
   if (!depositInitialized) {
+    console.log("Init deposit account")
     const ix = await sdk.initVariableDepositIX(
       wallet.publicKey,
       token,
@@ -117,4 +128,8 @@ export function* variableDeposit(
   } catch (e: any) {
     console.log(e)
   }
+
+  yield put(variableDepositActions.succeeded())
+  yield put(portfolioActions.loadRequested())
+  yield put(reservesActions.loadRequested())
 }

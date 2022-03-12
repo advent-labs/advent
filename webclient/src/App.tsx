@@ -155,18 +155,20 @@ function App() {
     // advent market sdk required
     if (!solanaConnectionContext.adventMarketSDK) return
 
+    dispatch(userPortfolioActions.loadRequested())
+
     // If user portfolio exists, load it
-    solanaConnectionContext.adventMarketSDK
-      .portfolio(wallet.publicKey as PublicKey)
-      .then((adventPortfolioSDK) => {
-        solanaConnectionContext.adventPortfolioSDK = adventPortfolioSDK
-        setContext({
-          ...context,
-          adventPortfolioSDK,
-        })
-        dispatch(userPortfolioActions.portfolioInitialized())
-      })
-      .catch((e) => console.log("User portfolio not initialized"))
+    // solanaConnectionContext.adventMarketSDK
+    //   .portfolio(wallet.publicKey as PublicKey)
+    //   .then((adventPortfolioSDK) => {
+    //     solanaConnectionContext.adventPortfolioSDK = adventPortfolioSDK
+    //     setContext({
+    //       ...context,
+    //       adventPortfolioSDK,
+    //     })
+    //     dispatch(userPortfolioActions.portfolioInitialized())
+    //   })
+    //   .catch((e) => console.log("User portfolio not initialized"))
   }, [wallet.connected, solanaConnectionContext.adventMarketSDK, dispatch])
 
   useEffect(() => {

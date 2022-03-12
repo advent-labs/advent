@@ -87,7 +87,7 @@ export const selectors = {
     s.state.positionsAddress !== "",
   isVariableDepositInitialized:
     (s: Loadable<UserPortfolio>) => (token: string) =>
-      !!s.state.variableBorrows.find((v) => v.token === token),
+      !s.state.variableBorrows.find((v) => v.token === token),
 }
 
 export const actions = userPortfolio.actions
