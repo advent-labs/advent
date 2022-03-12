@@ -524,6 +524,7 @@ export declare class AdventMarket {
     initPositionsIX(authority: PublicKey, positions: PublicKey): Promise<import("@solana/web3.js").TransactionInstruction>;
     initSettlementTableIX(authority: PublicKey, target: PublicKey): Promise<import("@solana/web3.js").TransactionInstruction>;
     initVariableDepositIX(authority: PublicKey, token: PublicKey, positions: PublicKey, reserveDepositNoteMint: PublicKey): Promise<import("@solana/web3.js").TransactionInstruction>;
+    variableDepositTokensIX(token: PublicKey, amount: number, authority: PublicKey): Promise<import("@solana/web3.js").TransactionInstruction>;
     initReserveIX(authority: PublicKey, settlementTable: PublicKey, depositNoteMint: PublicKey, token: PublicKey): Promise<import("@solana/web3.js").TransactionInstruction[]>;
     initPortfolioIX(authority: PublicKey, positions: PublicKey): Promise<import("@solana/web3.js").TransactionInstruction[]>;
     portfolioPDA(authority: PublicKey): Promise<[PublicKey, number]>;

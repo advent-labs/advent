@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { RootState } from ".."
 import { Loadable } from "./util"
 export interface FixedDeposit {
   // when did the deposit start, in seconds
@@ -43,6 +44,8 @@ export interface VariableDeposit {
 }
 
 export interface UserPortfolio {
+  // the base58 address for the "positions account"
+  positionsAddress: string
   fixedDeposits: FixedDeposit[]
   fixedBorrows: FixedBorrow[]
   variableBorrows: VariableBorrow[]
@@ -50,6 +53,7 @@ export interface UserPortfolio {
 }
 
 export const defaultPortfolio: UserPortfolio = {
+  positionsAddress: "",
   fixedBorrows: [],
   fixedDeposits: [],
   variableBorrows: [],
@@ -67,6 +71,7 @@ const userPortfolio = createSlice({
   name: "userPortfolio",
   initialState,
   reducers: {
+    portfolioInitialized(s) {},
     loadRequested(s) {
       s.status = "loading"
     },
@@ -76,6 +81,14 @@ const userPortfolio = createSlice({
     },
   },
 })
+
+export const selectors = {
+  isPortfolioInitialized: (s: Loadable<UserPortfolio>) =>
+    s.state.positionsAddress !== "",
+  isVariableDepositInitialized:
+    (s: Loadable<UserPortfolio>) => (token: string) =>
+      !s.state.variableBorrows.find((v) => v.token === token),
+}
 
 export const actions = userPortfolio.actions
 export default userPortfolio.reducer

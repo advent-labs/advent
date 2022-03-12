@@ -23,7 +23,7 @@ import { Reserve } from "@advent/sdk"
 function DepositFixed() {
   const dispatch = useAppDispatch()
   const { addresses } = useContext(Context)
-  const { amount, duration, tab, inputVal, inputTime } = useAppSelector(
+  const { amount, duration, tab, inputTime } = useAppSelector(
     selectDepositUIValues
   )
   const isWithdraw = tab === "Withdraw"
@@ -109,7 +109,7 @@ function DepositFixed() {
           ) : (
             <div className="center-column">
               <TextInput
-                value={inputVal}
+                value={amount.toString()}
                 handleInput={uiActions.inputHasChanged}
                 large
               />

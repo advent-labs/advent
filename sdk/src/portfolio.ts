@@ -40,6 +40,7 @@ export interface IVariableBorrow {
 }
 
 export interface IPortfolio {
+  positionsAddress: PublicKey
   variableDeposits: IVariableDeposit[]
   variableBorrows: IVariableBorrow[]
   fixedBorrows: IFixedBorrow[]
@@ -112,6 +113,7 @@ export class AdventPortfolio {
 
   serialize(): IPortfolio {
     return {
+      positionsAddress: this.positionsKey,
       variableDeposits: this.variableDeposits,
       variableBorrows: this.variableBorrows,
       fixedBorrows: this.fixedBorrows,
@@ -143,35 +145,8 @@ export class AdventPortfolio {
       .map(serializeFixedDepositAccount)
   }
 
-  async variableDepositTokensIX(token: PublicKey, amount: number) {
-    const [reserve] = await this.market.reservePDA(token)
-    const [reserveVault] = await this.market.reserveVaultPDA(token)
-
-    const r = this.reserveByToken(token)
-
-    const reserveUser = await sab.getATAAddress({
-      mint: r.token,
-      owner: this.authority,
-    })
-
-    const depositNoteUser = await sab.getATAAddress({
-      mint: r.depositNoteMint,
-      owner: this.authority,
-    })
-
-    const accounts = {
-      authority: this.authority,
-      market: this.market.address,
-      reserve,
-      depositNoteMint: r.depositNoteMint,
-      reserveVault,
-      reserveUser,
-      depositNoteUser,
-      tokenProgram: sab.TOKEN_PROGRAM_ID,
-    }
-    return this.program.instruction.variableDepositTokens(new BN(amount), {
-      accounts,
-    })
+  variableDepositTokensIX(token: PublicKey, amount: number) {
+    return this.market.variableDepositTokensIX(token, amount, this.authority)
   }
 
   reserveByToken(token: PublicKey) {
