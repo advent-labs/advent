@@ -208,6 +208,76 @@ export class AdventMarket {
     })
   }
 
+  async fixedBorrowIX(
+    token: PublicKey,
+    amount: number,
+    duration: number,
+    authority: PublicKey,
+    positions: PublicKey
+  ) {
+    const [reserve] = await this.reservePDA(token)
+
+    const r = this.reserveByToken(token)
+
+    const userReserve = await sab.getATAAddress({
+      mint: token,
+      owner: authority,
+    })
+
+    return this.program.instruction.fixedBorrow(
+      new BN(amount),
+      new BN(duration),
+      {
+        accounts: {
+          authority: authority,
+          market: this.address,
+          reserve,
+          settlementTable: r.settlementTableAddress,
+          portfolio: this.address,
+          positions,
+          reserveVault: r.vault,
+          userReserve,
+          tokenProgram: TOKEN_PROGRAM_ID,
+        },
+      }
+    )
+  }
+
+  async variableWithdrawTokensIX(
+    token: PublicKey,
+    amount: number,
+    authority: PublicKey,
+    positions: PublicKey
+  ) {
+    const [reserve] = await this.reservePDA(token)
+
+    const r = this.reserveByToken(token)
+
+    const depositNoteUser = await sab.getATAAddress({
+      mint: r.depositNoteMint,
+      owner: authority,
+    })
+
+    const userReserve = await sab.getATAAddress({
+      mint: token,
+      owner: authority,
+    })
+
+    return this.program.instruction.variableWithdrawTokens(new BN(amount), {
+      accounts: {
+        authority: authority,
+        market: this.address,
+        reserve,
+        positions,
+        depositNoteMint: r.depositNoteMint,
+        reserveVault: r.vault,
+        userReserve,
+        depositNoteUser,
+        tokenProgram: sab.TOKEN_PROGRAM_ID,
+      },
+    })
+  }
+
   async variableDepositTokensIX(
     token: PublicKey,
     amount: number,

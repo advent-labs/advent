@@ -159,7 +159,7 @@ export class AdventPortfolio {
     return r
   }
 
-  async variableDepositCollateralIX(token: PublicKey, amount: number) {
+  variableDepositCollateralIX(token: PublicKey, amount: number) {
     return this.market.variableDepositCollateralIX(
       token,
       amount,
@@ -222,32 +222,13 @@ export class AdventPortfolio {
     })
   }
 
-  async fixedBorrowIX(token: PublicKey, amount: number, duration: number) {
-    const [reserve] = await this.market.reservePDA(token)
-
-    const r = this.reserveByToken(token)
-
-    const userReserve = await sab.getATAAddress({
-      mint: token,
-      owner: this.authority,
-    })
-
-    return this.program.instruction.fixedBorrow(
-      new BN(amount),
-      new BN(duration),
-      {
-        accounts: {
-          authority: this.authority,
-          market: this.market.address,
-          reserve,
-          settlementTable: r.settlementTableAddress,
-          portfolio: this.address,
-          positions: this.positionsKey,
-          reserveVault: r.vault,
-          userReserve,
-          tokenProgram: TOKEN_PROGRAM_ID,
-        },
-      }
+  fixedBorrowIX(token: PublicKey, amount: number, duration: number) {
+    return this.market.fixedBorrowIX(
+      token,
+      amount,
+      duration,
+      this.authority,
+      this.positionsKey
     )
   }
 
