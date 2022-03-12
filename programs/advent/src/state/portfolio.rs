@@ -15,11 +15,8 @@ pub struct FixedDeposit {
     pub amount: u64,
     /// Amount of interest
     pub interest_amount: u64,
-
-    /// Holds deposit notes
-    /// Purely for accounting purposes, as these are unusable by the user
-    /// Whet the fixed deposit is claimed, these notes will be burned
-    pub deposit_note_vault: Pubkey,
+    /// Hom many tokens are marked as collateral
+    pub collateral_amount: u64,
 }
 
 #[zero_copy]
