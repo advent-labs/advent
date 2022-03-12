@@ -7,7 +7,7 @@ import {
   PublicKey,
   TransactionInstruction,
 } from "@solana/web3.js"
-import { getContext, put, select } from "redux-saga/effects"
+import { call, getContext, put, select } from "redux-saga/effects"
 import { RootState } from ".."
 import { SolanaConnectionContext } from "../../solanaConnectionContext"
 import {
@@ -22,7 +22,6 @@ import {
 
 import { actions as variableDepositActions } from "../reducer/variableDeposit"
 import { getOrCreateATA, signAllAndSend } from "./common"
-import { getATAAddress } from "@saberhq/token-utils"
 
 async function doVariableDeposit(
   amount: number,
@@ -31,13 +30,13 @@ async function doVariableDeposit(
   reserve: Reserve,
   wallet: Wallet,
   depositInitialized: boolean,
+  useAsCollateral: boolean,
   positionsAddress?: PublicKey
 ) {
   const ixs: TransactionInstruction[] = []
   const additionalSigners: Keypair[] = []
   const token = new PublicKey(reserve.token)
   const depositNoteMint = new PublicKey(reserve.depositNoteMint)
-  console.log(sdk)
   let newPositions: Keypair | undefined = undefined
 
   // get ATA for deposit notes
@@ -82,9 +81,26 @@ async function doVariableDeposit(
     ixs.push(ix)
   }
 
-  const ix = await sdk.variableDepositTokensIX(token, amount, wallet.publicKey)
-  ixs.push(ix)
+  // deposit the tokens
+  {
+    const ix = await sdk.variableDepositTokensIX(
+      token,
+      amount,
+      wallet.publicKey
+    )
+    ixs.push(ix)
+  }
 
+  // deposit collateral
+  if (useAsCollateral) {
+    const ix = await sdk.variableDepositCollateralIX(
+      token,
+      amount,
+      wallet.publicKey,
+      positionsAddress as PublicKey
+    )
+    ixs.push(ix)
+  }
   await signAllAndSend(ixs, wallet, connection, additionalSigners)
 }
 
@@ -103,6 +119,7 @@ export function* variableDeposit(
   const isPortfolioInitalized = portfolioSelectors.isPortfolioInitialized(
     state.userPortfolio
   )
+  const useAsCollateral = state.appui.useCollateral
   const isVariableDepositInitialized =
     portfolioSelectors.isVariableDepositInitialized(state.userPortfolio)(token)
 
@@ -115,14 +132,17 @@ export function* variableDeposit(
   const positionsAddress = isPortfolioInitalized
     ? new PublicKey(state.userPortfolio.state.positionsAddress)
     : undefined
+
   try {
-    yield doVariableDeposit(
+    yield call(
+      doVariableDeposit,
       amount,
       connection,
       adventMarketSDK,
       reserve,
       wallet as Wallet,
       isVariableDepositInitialized,
+      useAsCollateral,
       positionsAddress
     )
   } catch (e: any) {
