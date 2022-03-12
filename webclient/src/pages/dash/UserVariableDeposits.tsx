@@ -14,6 +14,7 @@ export function UserVariableDeposits() {
 
       <div>Collateral Percentage: {b.collateralPercentage}</div>
       <div>Total amount deposited: {b.totalDeposited}</div>
+      <div>Rate: {b.rate}</div>
     </div>
   ))
 
