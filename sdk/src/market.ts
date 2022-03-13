@@ -278,6 +278,42 @@ export class AdventMarket {
     })
   }
 
+  async fixedDepositIX(
+    token: PublicKey,
+    amount: number,
+    duration: number,
+    authority: PublicKey,
+    positions: PublicKey
+  ) {
+    const [reserve] = await this.reservePDA(token)
+    const [reserveVault] = await this.reserveVaultPDA(token)
+    const [portfolio] = await this.portfolioPDA(authority)
+    const r = this.reserveByToken(token)
+
+    const userReserve = await sab.getATAAddress({
+      mint: r.token,
+      owner: authority,
+    })
+
+    return this.program.instruction.fixedDeposit(
+      new BN(amount),
+      new BN(duration),
+      {
+        accounts: {
+          authority,
+          reserve,
+          reserveVault,
+          userReserve,
+          positions,
+          portfolio,
+          settlementTable: r.settlementTableAddress,
+          market: this.address,
+          tokenProgram: TOKEN_PROGRAM_ID,
+        },
+      }
+    )
+  }
+
   async variableDepositTokensIX(
     token: PublicKey,
     amount: number,

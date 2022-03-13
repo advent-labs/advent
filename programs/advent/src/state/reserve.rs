@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 
 use crate::number::Number;
 
-use super::FixedBorrow;
+use super::{FixedBorrow, FixedDeposit};
 
 #[account]
 #[derive(Default)]
@@ -110,6 +110,15 @@ impl Reserve {
             interest_amount,
         }
     }
+
+    pub fn calc_fixed_deposit_interest(&self, _start: u64, _duration: u64, amount: u64) -> u64 {
+        // TODO - calc interest
+        amount * 6 / 100
+    }
+
+    pub fn register_fixed_deposit(&mut self, amount: u64) {
+        self.fixed_deposits += amount;
+    }
 }
 
 impl Default for SettlementTable {
@@ -168,7 +177,10 @@ impl SettlementPeriod {
         interest_earned
     }
 
-    pub fn apply_fixed_borrow(&mut self, amount: u64, interest_paid: Number) {}
+    pub fn apply_fixed_borrow(&mut self, amount: u64, interest_paid: u64) {
+        self.borrowed += amount;
+        self.free_interest += interest_paid;
+    }
 
     /// How much interest will be collected, in absolute token units
     pub fn allocated_interest_amount_for_period(&self) -> u64 {

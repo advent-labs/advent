@@ -14,7 +14,7 @@ import {
 import { AdventMarket, AdventPortfolio, Reserve } from "../sdk/src"
 import { Token } from "@solana/spl-token"
 import * as sab from "@saberhq/token-utils"
-describe("fixed deposit", () => {
+describe("fixed borrow", () => {
   const admin = Keypair.generate()
   const connection = new Connection("http://localhost:8899", {
     commitment: "confirmed",

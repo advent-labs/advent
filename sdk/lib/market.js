@@ -243,6 +243,31 @@ class AdventMarket {
             });
         });
     }
+    fixedDepositIX(token, amount, duration, authority, positions) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const [reserve] = yield this.reservePDA(token);
+            const [reserveVault] = yield this.reserveVaultPDA(token);
+            const [portfolio] = yield this.portfolioPDA(authority);
+            const r = this.reserveByToken(token);
+            const userReserve = yield sab.getATAAddress({
+                mint: r.token,
+                owner: authority,
+            });
+            return this.program.instruction.fixedDeposit(new anchor_1.BN(amount), new anchor_1.BN(duration), {
+                accounts: {
+                    authority,
+                    reserve,
+                    reserveVault,
+                    userReserve,
+                    positions,
+                    portfolio,
+                    settlementTable: r.settlementTableAddress,
+                    market: this.address,
+                    tokenProgram: spl_token_1.TOKEN_PROGRAM_ID,
+                },
+            });
+        });
+    }
     variableDepositTokensIX(token, amount, authority) {
         return __awaiter(this, void 0, void 0, function* () {
             const [reserve] = yield this.reservePDA(token);
