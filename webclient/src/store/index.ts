@@ -9,6 +9,8 @@ import createSagaMiddleware from "redux-saga"
 import { solanaConnectionContext } from "../solanaConnectionContext"
 import saga from "./sagas"
 import userTokenAccounts from "./reducer/userTokenBalances"
+import fixedDeposit from "./reducer/fixedDeposit"
+import fixedBorrow from "./reducer/fixedBorrow"
 import variableDeposit from "./reducer/variableDeposit"
 import reserves from "./reducer/reserves"
 import userPortfolio from "./reducer/userPortfolio"
@@ -35,6 +37,8 @@ export const store = configureStore({
     variableBorrowUI,
     dashboardUI,
     appui,
+    fixedDeposit,
+    fixedBorrow,
     variableDeposit,
     depositBalances,
   },
