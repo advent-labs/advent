@@ -124,6 +124,19 @@ impl Positions {
         Err(error!(ErrorCode::NoFreeFixedBorrow))
     }
 
+    pub fn insert_fixed_deposit(&mut self, new: FixedDeposit) -> Result<()> {
+        for x in self.fixed_deposits.iter_mut() {
+            if x.token != Pubkey::default() {
+                continue;
+            }
+            *x = new;
+
+            return Ok(());
+        }
+
+        Err(error!(ErrorCode::NoFreeFixedDeposit))
+    }
+
     pub fn add_variable_deposit_collateral(
         &mut self,
         token: Pubkey,

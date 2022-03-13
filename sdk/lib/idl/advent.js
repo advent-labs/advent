@@ -401,6 +401,11 @@ exports.IDL = {
                     "isSigner": false
                 },
                 {
+                    "name": "settlementTable",
+                    "isMut": true,
+                    "isSigner": false
+                },
+                {
                     "name": "portfolio",
                     "isMut": false,
                     "isSigner": false
@@ -417,16 +422,6 @@ exports.IDL = {
                 },
                 {
                     "name": "userReserve",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "depositNoteVault",
-                    "isMut": true,
-                    "isSigner": false
-                },
-                {
-                    "name": "depositNoteMint",
                     "isMut": true,
                     "isSigner": false
                 },
@@ -813,8 +808,8 @@ exports.IDL = {
                         "type": "u64"
                     },
                     {
-                        "name": "depositNoteVault",
-                        "type": "publicKey"
+                        "name": "collateralAmount",
+                        "type": "u64"
                     }
                 ]
             }
@@ -926,6 +921,11 @@ exports.IDL = {
         },
         {
             "code": 6003,
+            "name": "NoFreeFixedDeposit",
+            "msg": "no free space left to add a new fixed deposit"
+        },
+        {
+            "code": 6004,
             "name": "UnregisteredVariableDeposit",
             "msg": "unregistered variable deposit"
         }

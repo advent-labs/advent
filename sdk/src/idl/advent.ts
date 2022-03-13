@@ -398,6 +398,11 @@ export type Advent = {
           "isSigner": false
         },
         {
+          "name": "settlementTable",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "portfolio",
           "isMut": false,
           "isSigner": false
@@ -414,16 +419,6 @@ export type Advent = {
         },
         {
           "name": "userReserve",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "depositNoteVault",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "depositNoteMint",
           "isMut": true,
           "isSigner": false
         },
@@ -810,8 +805,8 @@ export type Advent = {
             "type": "u64"
           },
           {
-            "name": "depositNoteVault",
-            "type": "publicKey"
+            "name": "collateralAmount",
+            "type": "u64"
           }
         ]
       }
@@ -923,6 +918,11 @@ export type Advent = {
     },
     {
       "code": 6003,
+      "name": "NoFreeFixedDeposit",
+      "msg": "no free space left to add a new fixed deposit"
+    },
+    {
+      "code": 6004,
       "name": "UnregisteredVariableDeposit",
       "msg": "unregistered variable deposit"
     }
@@ -1329,6 +1329,11 @@ export const IDL: Advent = {
           "isSigner": false
         },
         {
+          "name": "settlementTable",
+          "isMut": true,
+          "isSigner": false
+        },
+        {
           "name": "portfolio",
           "isMut": false,
           "isSigner": false
@@ -1345,16 +1350,6 @@ export const IDL: Advent = {
         },
         {
           "name": "userReserve",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "depositNoteVault",
-          "isMut": true,
-          "isSigner": false
-        },
-        {
-          "name": "depositNoteMint",
           "isMut": true,
           "isSigner": false
         },
@@ -1741,8 +1736,8 @@ export const IDL: Advent = {
             "type": "u64"
           },
           {
-            "name": "depositNoteVault",
-            "type": "publicKey"
+            "name": "collateralAmount",
+            "type": "u64"
           }
         ]
       }
@@ -1854,6 +1849,11 @@ export const IDL: Advent = {
     },
     {
       "code": 6003,
+      "name": "NoFreeFixedDeposit",
+      "msg": "no free space left to add a new fixed deposit"
+    },
+    {
+      "code": 6004,
       "name": "UnregisteredVariableDeposit",
       "msg": "unregistered variable deposit"
     }
