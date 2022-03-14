@@ -1,6 +1,6 @@
 export interface PortMetricProps {
   label: string
-  value: number
+  value: number | string
   square?: string
   mt?: string
 }

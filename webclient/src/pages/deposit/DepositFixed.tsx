@@ -12,7 +12,7 @@ import { selectors } from '../../store/reducer/reserves'
 import Tabs from '../../common/Tabs'
 import TextInput from '../../blocks/TextInput'
 import TimeInput from '../../blocks/TimeInput'
-import Parameters from '../../common/Parameters'
+import ChangeParameters from '../../common/ChangeParameters'
 import Button from '../../blocks/Button'
 import { toast } from 'react-toastify'
 import Toast, { ToastData } from '../../common/Toast'
@@ -47,11 +47,16 @@ function DepositFixed() {
   const tabOptions = ['Lend', 'Withdraw']
   const tabHandler = (tab: string) => uiActions.setTab(tab)
   const parameters = [
-    { label: 'Borrow limit used', value: '23$' },
-    { label: 'Borrow limit', value: '$200,000' },
-    { label: 'Liquidation threshold', value: '$200,000' },
-    { label: 'Health factor', value: '1.83' },
-    { label: 'Loan to value', value: '75%' },
+    { label: 'Borrow limit used', value: 38, nextValue: 25 },
+    { label: 'Borrow limit', value: 80, nextValue: 85, square: 'red' },
+    {
+      label: 'Liquidation threshold',
+      value: 85,
+      nextValue: 88,
+      square: 'black',
+    },
+    { label: 'Health factor', value: 1.34, nextValue: 1.52 },
+    { label: 'Loan to value', value: 75 },
   ]
 
   const toastData = {
@@ -139,7 +144,7 @@ function DepositFixed() {
               />
             </div>
           )}
-          <Parameters params={parameters} />
+          <ChangeParameters params={parameters} />
           <Button
             type="secondary"
             text={tab}
