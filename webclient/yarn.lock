@@ -1699,10 +1699,10 @@
     tiny-invariant "^1.2.0"
     tslib "^2.3.1"
 
-"@saberhq/solana-contrib@^1.12.52":
-  version "1.12.52"
-  resolved "https://registry.yarnpkg.com/@saberhq/solana-contrib/-/solana-contrib-1.12.52.tgz#dd5f388456434c0aba6a0438f5c2073bf2c9991e"
-  integrity sha512-znTUlEHfgmyPS/Sm3xk61CLLaN7lDQ62zmASHBZe9ScJZa9JAQfNPajTM2secpmAR9fe5cbwUX8v+RlLWh4ifQ==
+"@saberhq/solana-contrib@^1.12.51":
+  version "1.12.51"
+  resolved "https://registry.yarnpkg.com/@saberhq/solana-contrib/-/solana-contrib-1.12.51.tgz#d15b9dcb150bac44e9b9386b53ec339109714762"
+  integrity sha512-pjRUZFM4FFpanTzC1QVmNyTmoczn29f2/EPIrHunb5B+19c1lvXMtOsIuAvyY8HpQTUhTWu9VJFDT7vsJGkqhA==
   dependencies:
     "@types/promise-retry" "^1.1.3"
     "@types/retry" "^0.12.1"
@@ -1724,11 +1724,11 @@
     tslib "^2.3.1"
 
 "@saberhq/token-utils@^1.9.0":
-  version "1.12.52"
-  resolved "https://registry.yarnpkg.com/@saberhq/token-utils/-/token-utils-1.12.52.tgz#243a909aa8205c3c20708c11f9780c516dcd3d79"
-  integrity sha512-xQpFl8Ym4dIB2Ci9/Xpsr4wFSRy6SEB3v94hhuobBzyMEE0c1ndsPuQLC8utLYTPEigwuqmaAkUnDwSAj8S29Q==
+  version "1.12.51"
+  resolved "https://registry.yarnpkg.com/@saberhq/token-utils/-/token-utils-1.12.51.tgz#5c40b788a12e0ef3879ef6ae5389bda07d434c39"
+  integrity sha512-R/Ug0WbidwJ9OerjfFIy6gqsQU95CboGD8TM6JyuQQFvdm60YCCN6Z8baCQNmCKAh5fk9OyVoEQKmkJpBudDpA==
   dependencies:
-    "@saberhq/solana-contrib" "^1.12.52"
+    "@saberhq/solana-contrib" "^1.12.51"
     "@solana/buffer-layout" "^4.0.0"
     "@solana/spl-token" "^0.1.8"
     "@ubeswap/token-math" "^4.4.4"

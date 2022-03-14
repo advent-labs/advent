@@ -1,34 +1,38 @@
-import Preview from "../../common/Preview"
-import Container from "../../blocks/Container"
-import { useAppDispatch, useAppSelector } from "../../store"
-import { Context } from "../../App"
-import { ReactNode, useContext } from "react"
+import Preview from '../../common/Preview'
+import Container from '../../blocks/Container'
+import { useAppDispatch, useAppSelector } from '../../store'
+import { Context } from '../../App'
+import { ReactNode, useContext } from 'react'
 import {
   actions as uiActions,
   selectDepositUIValues,
-} from "../../store/ui/depositui"
-import { totalInterestEarnedForDeposit } from "../../sdk/eqs"
-import { actions as depoActions } from "../../store/reducer/variableDeposit"
-import { selectors } from "../../store/reducer/reserves"
-import Tabs from "../../common/Tabs"
-import TextInput from "../../blocks/TextInput"
-import Parameters from "../../common/Parameters"
-import Button from "../../blocks/Button"
-import { toast } from "react-toastify"
-import Toast, { ToastData } from "../../common/Toast"
-import Switch from "../../blocks/Switch"
-import DataPoint from "../../common/DataPoint"
-import Warning from "../../blocks/Warning"
-import TimeInput from "../../blocks/TimeInput"
-import Collateral from "../../common/Collateral"
+} from '../../store/ui/depositui'
+import { totalInterestEarnedForDeposit } from '../../sdk/eqs'
+import { actions as depoActions } from '../../store/reducer/variableDeposit'
+import { selectors } from '../../store/reducer/reserves'
+import Tabs from '../../common/Tabs'
+import TextInput from '../../blocks/TextInput'
+import Parameters from '../../common/Parameters'
+import Button from '../../blocks/Button'
+import { toast } from 'react-toastify'
+import Toast, { ToastData } from '../../common/Toast'
+import Switch from '../../blocks/Switch'
+import DataPoint from '../../common/DataPoint'
+import Warning from '../../blocks/Warning'
+import TimeInput from '../../blocks/TimeInput'
+import Collateral from '../../common/Collateral'
+import TimeSlider from '../../common/TimeSlider'
+import { selectAppUIValues } from '../../store/ui/appui'
 
 function DepositVar() {
   const dispatch = useAppDispatch()
   const { addresses } = useContext(Context)
   const { amount, duration, tab, inputTime } = useAppSelector(
-    selectDepositUIValues
+    selectDepositUIValues,
   )
-  const isWithdraw = tab === "Withdraw"
+  const { timeTab } = useAppSelector(selectAppUIValues)
+  const isMonths = timeTab === 'Months'
+  const isWithdraw = tab === 'Withdraw'
   const token = useAppSelector((s) => s.depositui.token)
   const reserve = useAppSelector(selectors.selectReserveByToken(token))
   if (!reserve) return <></>
@@ -36,26 +40,26 @@ function DepositVar() {
   const { name } = mintMeta
 
   const apr = 13.96
-  const tabOptions = ["Lend", "Withdraw"]
+  const tabOptions = ['Lend', 'Withdraw']
   const tabHandler = (tab: string) => uiActions.setTab(tab)
   const parameters = [
-    { label: "Borrow limit used", value: "23$" },
-    { label: "Borrow limit", value: "$200,000" },
-    { label: "Liquidation threshold", value: "$200,000" },
-    { label: "Health factor", value: "1.83" },
-    { label: "Loan to value", value: "75%" },
+    { label: 'Borrow limit used', value: '23$' },
+    { label: 'Borrow limit', value: '$200,000' },
+    { label: 'Liquidation threshold', value: '$200,000' },
+    { label: 'Health factor', value: '1.83' },
+    { label: 'Loan to value', value: '75%' },
   ]
 
   const toastData = {
     title: `${tab} Success!`,
-    type: "success",
-    message: "You did the thing",
+    type: 'success',
+    message: 'You did the thing',
   }
 
   const dataPoints = [
     {
-      label: "Currently supplying",
-      value: "0",
+      label: 'Currently supplying',
+      value: '0',
       currency: name,
       loadedOnce: true,
     },
@@ -75,7 +79,7 @@ function DepositVar() {
   const handler = () => {
     console.log(amount)
     console.log(reserve.token)
-    console.log("clicked!")
+    console.log('clicked!')
     const token = reserve.token
     dispatch(depoActions.requested({ amount, token }))
   }
@@ -126,7 +130,11 @@ function DepositVar() {
                   <p className="text__xl-m is-grey-1">{apr}%</p>
                 </Container>
               </div>
-              <div>SLIDER</div>
+              <TimeSlider
+                value={inputTime}
+                handleInput={uiActions.inputTimeHasChanged}
+                isMonths={isMonths}
+              />
             </div>
           )}
           <Parameters params={parameters} />

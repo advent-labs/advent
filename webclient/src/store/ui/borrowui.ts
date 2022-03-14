@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { actions as reservesActions } from '../reducer/reserves'
 import { RootState } from '..'
+import { actions as uiActions } from '../ui/appui'
 
 export interface FixedBorrowPayload {
   amount: number
@@ -61,6 +62,9 @@ export const borrowUI = createSlice({
   extraReducers: (builder) => {
     builder.addCase(reservesActions.loaded, (s, a) => {
       s.token = a.payload[0].token
+    })
+    builder.addCase(uiActions.setTimeTab, (s, a) => {
+      s.inputTime = '0'
     })
   },
 })

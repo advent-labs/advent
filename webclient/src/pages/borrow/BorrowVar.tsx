@@ -1,32 +1,36 @@
-import Preview from "../../common/Preview"
-import Container from "../../blocks/Container"
-import { useAppDispatch, useAppSelector } from "../../store"
-import { Context } from "../../App"
-import { ReactNode, useContext } from "react"
+import Preview from '../../common/Preview'
+import Container from '../../blocks/Container'
+import { useAppDispatch, useAppSelector } from '../../store'
+import { Context } from '../../App'
+import { ReactNode, useContext } from 'react'
 import {
   actions as uiActions,
   selectBorrowUIValues,
-} from "../../store/ui/borrowui"
-import { totalInterestEarnedForDeposit } from "../../sdk/eqs"
-import { selectors } from "../../store/reducer/reserves"
-import Tabs from "../../common/Tabs"
-import TextInput from "../../blocks/TextInput"
-import Parameters from "../../common/Parameters"
-import Button from "../../blocks/Button"
-import { toast } from "react-toastify"
-import Toast, { ToastData } from "../../common/Toast"
-import Switch from "../../blocks/Switch"
-import DataPoint from "../../common/DataPoint"
-import Warning from "../../blocks/Warning"
-import TimeInput from "../../blocks/TimeInput"
-import Collateral from "../../common/Collateral"
+} from '../../store/ui/borrowui'
+import { totalInterestEarnedForDeposit } from '../../sdk/eqs'
+import { selectors } from '../../store/reducer/reserves'
+import Tabs from '../../common/Tabs'
+import TextInput from '../../blocks/TextInput'
+import Parameters from '../../common/Parameters'
+import Button from '../../blocks/Button'
+import { toast } from 'react-toastify'
+import Toast, { ToastData } from '../../common/Toast'
+import Switch from '../../blocks/Switch'
+import DataPoint from '../../common/DataPoint'
+import Warning from '../../blocks/Warning'
+import TimeInput from '../../blocks/TimeInput'
+import Collateral from '../../common/Collateral'
+import TimeSlider from '../../common/TimeSlider'
+import { selectAppUIValues } from '../../store/ui/appui'
 
 function BorrowFixed() {
   const dispatch = useAppDispatch()
   const { addresses } = useContext(Context)
   const { amount, duration, tab, inputVal, inputTime } =
     useAppSelector(selectBorrowUIValues)
-  const isRepay = tab === "Repay"
+  const { timeTab } = useAppSelector(selectAppUIValues)
+  const isMonths = timeTab === 'Months'
+  const isRepay = tab === 'Repay'
   const token = useAppSelector((s) => s.borrowui.token)
   const reserve = useAppSelector(selectors.selectReserveByToken(token))
   if (!reserve) return <></>
@@ -34,26 +38,26 @@ function BorrowFixed() {
   const { name } = mintMeta
 
   const apr = 0.063
-  const tabOptions = ["Borrow", "Repay"]
+  const tabOptions = ['Borrow', 'Repay']
   const tabHandler = (tab: string) => uiActions.setTab(tab)
   const parameters = [
-    { label: "Borrow limit used", value: "23$" },
-    { label: "Borrow limit", value: "$200,000" },
-    { label: "Liquidation threshold", value: "$200,000" },
-    { label: "Health factor", value: "1.83" },
-    { label: "Loan to value", value: "75%" },
+    { label: 'Borrow limit used', value: '23$' },
+    { label: 'Borrow limit', value: '$200,000' },
+    { label: 'Liquidation threshold', value: '$200,000' },
+    { label: 'Health factor', value: '1.83' },
+    { label: 'Loan to value', value: '75%' },
   ]
 
   const toastData = {
     title: `${tab} Success!`,
-    type: "success",
-    message: "You did the thing",
+    type: 'success',
+    message: 'You did the thing',
   }
 
   const dataPoints = [
     {
-      label: "Currently borrowing",
-      value: "0",
+      label: 'Currently borrowing',
+      value: '0',
       currency: name,
       loadedOnce: true,
     },
@@ -116,7 +120,11 @@ function BorrowFixed() {
                   <p className="text__xl-m is-grey-1">{apr}%</p>
                 </Container>
               </div>
-              <div>SLIDER</div>
+              <TimeSlider
+                value={inputTime}
+                handleInput={uiActions.inputTimeHasChanged}
+                isMonths={isMonths}
+              />
             </div>
           )}
           <Parameters params={parameters} />

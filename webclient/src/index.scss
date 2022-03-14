@@ -7,6 +7,8 @@ body {
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: greyscale;
+  min-height: 100vh;
+  background: var(--bg-gradient);
 }
 
 code {
@@ -344,7 +346,7 @@ hr {
   }
   .modal-content {
     max-height: 100vh !important;
-    max-width: 60%;
+    width: 70%;
     border-radius: 12px;
     background-color: var(--background);
     @include mobile {
@@ -951,6 +953,7 @@ input:checked + .slider:before {
 }
 
 .portfolio {
+  min-height: 100vh;
   .port-tabs {
     margin-top: 2rem;
   }
@@ -1044,4 +1047,53 @@ input:checked + .slider:before {
 .collateral-switch {
   width: 30rem;
   margin: 0 auto;
+}
+
+.horizontal-slider {
+  padding: 2rem 0;
+  width: 100%;
+  // max-width: 500px;
+  height: 1rem;
+  margin: auto;
+}
+.slider-thumb {
+  cursor: pointer;
+  position: absolute;
+  z-index: 100;
+  background: #ccc;
+  // border: 0.5rem solid red;
+  border-radius: 100%;
+  display: block;
+  background-image: url('./assets/slider.svg');
+  height: 38px;
+  width: 38px;
+  transform: translate(0px, -15px);
+
+  // box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
+}
+// .slider-thumb.active {
+//   background-color: grey;
+// }
+.example-track {
+  position: relative;
+  background: var(--grey-70);
+  height: 0.5rem;
+}
+
+.example-track.example-track-0 {
+  background: var(--accent-1);
+}
+
+.example-mark.example-mark-active {
+  border: 2px solid #00d4ff;
+  background-color: rgb(255, 255, 255);
+}
+
+.marks {
+  width: 95%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-left: 0rem;
+  // margin-right: 3%;
 }

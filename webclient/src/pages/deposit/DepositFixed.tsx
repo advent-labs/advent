@@ -1,32 +1,37 @@
-import Preview from "../../common/Preview"
-import Container from "../../blocks/Container"
-import { useAppDispatch, useAppSelector } from "../../store"
-import { Context } from "../../App"
-import { ReactNode, useContext } from "react"
+import Preview from '../../common/Preview'
+import Container from '../../blocks/Container'
+import { useAppDispatch, useAppSelector } from '../../store'
+import { Context } from '../../App'
+import { ReactNode, useContext } from 'react'
 import {
   actions as uiActions,
   selectDepositUIValues,
-} from "../../store/ui/depositui"
-import { totalInterestEarnedForDeposit } from "../../sdk/eqs"
-import { selectors } from "../../store/reducer/reserves"
-import Tabs from "../../common/Tabs"
-import TextInput from "../../blocks/TextInput"
-import TimeInput from "../../blocks/TimeInput"
-import Parameters from "../../common/Parameters"
-import Button from "../../blocks/Button"
-import { toast } from "react-toastify"
-import Toast, { ToastData } from "../../common/Toast"
-import Warning from "../../blocks/Warning"
-import Collateral from "../../common/Collateral"
-import { Reserve } from "@advent/sdk"
+} from '../../store/ui/depositui'
+import { totalInterestEarnedForDeposit } from '../../sdk/eqs'
+import { selectors } from '../../store/reducer/reserves'
+import Tabs from '../../common/Tabs'
+import TextInput from '../../blocks/TextInput'
+import TimeInput from '../../blocks/TimeInput'
+import Parameters from '../../common/Parameters'
+import Button from '../../blocks/Button'
+import { toast } from 'react-toastify'
+import Toast, { ToastData } from '../../common/Toast'
+import Warning from '../../blocks/Warning'
+import Collateral from '../../common/Collateral'
+import { Reserve } from '@advent/sdk'
+import TimeSlider from '../../common/TimeSlider'
+import { selectAppUIValues } from '../../store/ui/appui'
 
 function DepositFixed() {
   const dispatch = useAppDispatch()
   const { addresses } = useContext(Context)
   const { amount, duration, tab, inputTime } = useAppSelector(
-    selectDepositUIValues
+    selectDepositUIValues,
   )
-  const isWithdraw = tab === "Withdraw"
+  const { timeTab } = useAppSelector(selectAppUIValues)
+  const isMonths = timeTab === 'Months'
+
+  const isWithdraw = tab === 'Withdraw'
   const token = useAppSelector((s) => s.depositui.token)
   const reserve = useAppSelector(selectors.selectReserveByToken(token))
   if (!reserve) return <></>
@@ -36,35 +41,35 @@ function DepositFixed() {
   const totalInterestEarned = Reserve.math.availableInterestForDuration(
     reserve.settlementTable,
     amount,
-    duration
+    duration,
   )
   const apr = (totalInterestEarned / amount / duration) * 12 || 0
-  const tabOptions = ["Lend", "Withdraw"]
+  const tabOptions = ['Lend', 'Withdraw']
   const tabHandler = (tab: string) => uiActions.setTab(tab)
   const parameters = [
-    { label: "Borrow limit used", value: "23$" },
-    { label: "Borrow limit", value: "$200,000" },
-    { label: "Liquidation threshold", value: "$200,000" },
-    { label: "Health factor", value: "1.83" },
-    { label: "Loan to value", value: "75%" },
+    { label: 'Borrow limit used', value: '23$' },
+    { label: 'Borrow limit', value: '$200,000' },
+    { label: 'Liquidation threshold', value: '$200,000' },
+    { label: 'Health factor', value: '1.83' },
+    { label: 'Loan to value', value: '75%' },
   ]
 
   const toastData = {
     title: `${tab} Success!`,
-    type: "success",
-    message: "You did the thing",
+    type: 'success',
+    message: 'You did the thing',
   }
 
   const dataPoints = [
     {
-      label: "Total at maturity | XXXDATEXXX",
-      value: "0",
+      label: 'Total at maturity | XXXDATEXXX',
+      value: '0',
       currency: name,
       loadedOnce: true,
     },
     {
-      label: "Interest earned",
-      value: "0",
+      label: 'Interest earned',
+      value: '0',
       currency: name,
       loadedOnce: true,
     },
@@ -127,7 +132,11 @@ function DepositFixed() {
                   <p className="text__xl-m is-grey-1">{apr}%</p>
                 </Container>
               </div>
-              <div>SLIDER</div>
+              <TimeSlider
+                value={inputTime}
+                handleInput={uiActions.inputTimeHasChanged}
+                isMonths={isMonths}
+              />
             </div>
           )}
           <Parameters params={parameters} />
