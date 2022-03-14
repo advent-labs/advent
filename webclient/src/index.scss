@@ -1097,3 +1097,62 @@ input:checked + .slider:before {
   margin-left: 0rem;
   // margin-right: 3%;
 }
+
+.limit-track {
+  position: relative;
+  background: var(--grey-70);
+  height: 0.5rem;
+}
+
+.limit-track.limit-track-0 {
+  background: linear-gradient(
+    90deg,
+    #26c679 0%,
+    #ffa800 89.09%,
+    #ff560e 162.75%
+  );
+}
+
+.limit-thumb {
+  cursor: none;
+  position: absolute;
+  z-index: 100;
+  background: #ffa800;
+  // border: 0.5rem solid red;
+  border-radius: 9999em;
+  border: 6px solid #fff;
+  @include Medium-Bold;
+  color: #fff;
+  display: block;
+  height: 38px;
+  line-height: 24px !important;
+  padding-left: 0.5rem;
+  width: 56px;
+  transform: translate(0px, -15px);
+
+  // box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
+}
+
+.limit-thumb::after {
+  content: '%';
+}
+
+.limit-thumb-1 {
+  height: 0.5rem;
+  width: 0.5rem;
+  transform: translate(0px, 0px);
+  border: none;
+  border-radius: 0;
+  background: var(--utility-red);
+  font-size: 1px;
+}
+
+.limit-thumb-2 {
+  height: 0.5rem;
+  width: 0.5rem;
+  border: none;
+  border-radius: 0;
+  background: var(--true-black);
+  transform: translate(0px, 0px);
+  font-size: 1px;
+}
