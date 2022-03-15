@@ -42,7 +42,6 @@ function Deposit() {
       value: 8.36,
       currency: '%',
       loadedOnce: true,
-      icon: rate,
     },
     {
       value: 0,

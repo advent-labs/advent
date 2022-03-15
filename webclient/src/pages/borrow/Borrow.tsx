@@ -45,7 +45,6 @@ function Borrow() {
       value: 7.12,
       currency: '%',
       loadedOnce: true,
-      icon: rate,
     },
     {
       value: 0,
