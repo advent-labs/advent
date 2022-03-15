@@ -25,7 +25,7 @@ function TimeSlider({ value, handleInput, isMonths }: TimeSliderProps) {
 
   const marks = markCount.map((e, i) => {
     return (
-      <span key={i} className="text__medium-semi is-black-30 mb-4">
+      <span key={i} className="text__medium-semi is-black-30">
         {e}
       </span>
     )

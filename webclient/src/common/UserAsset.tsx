@@ -20,7 +20,7 @@ function UserAsset({ icon, uTokenName, assetDataPoints }: UserAssetProps) {
           <p className="text__large-m is-black">{uTokenName}</p>
         </div>
       </div>
-      <hr className="is-grey mt-2" />
+      <hr className="is-grey mt-3" />
       {displayData}
     </div>
   )

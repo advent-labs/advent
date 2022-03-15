@@ -14,7 +14,7 @@ function LimitSlider({
   return (
     <>
       <ReactSlider
-        className="horizontal-slider"
+        className="horizontal-slider limit"
         thumbClassName="limit-thumb"
         trackClassName="limit-track"
         defaultValue={[borrowUsed, borrowLimit, liqThreshold]}

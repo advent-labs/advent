@@ -46,7 +46,6 @@ function BorrowFixed() {
   const tabOptions = ['Borrow', 'Repay']
   const tabHandler = (tab: string) => uiActions.setTab(tab)
   const parameters = [
-    { label: 'Borrow limit used', value: 38, nextValue: 25 },
     { label: 'Borrow limit', value: 80, nextValue: 85, square: 'red' },
     {
       label: 'Liquidation threshold',
@@ -81,7 +80,7 @@ function BorrowFixed() {
 
   const displayDataPoints = dataPoints.map((e, i) => {
     return (
-      <div className="center-column" key={i}>
+      <div className="center-column mb-4" key={i}>
         <p className="text__medium-m is-grey-1">{e.label}</p>
         <p className="text__xl-m is-black mt-2">
           {e.value}&nbsp;{e.currency}
@@ -92,19 +91,22 @@ function BorrowFixed() {
 
   return (
     <div className="borrow-fixed columns is-mobile">
-      <Container type="gradient" xtra="column is-4">
+      <Container type="gradient" xtra="width__35">
         <Preview reserve={reserve} apr={apr}>
           <Warning
             message="APR changes based on lend amount and maturity chosen"
             xtra="mt__2"
           />
           <Collateral />
-          <Container type="background" xtra="mt-2 br__8 is-full-width">
+          <Container
+            type="background"
+            xtra="mt-2 br__8 is-full-width pt-4 pb-0"
+          >
             {displayDataPoints}
           </Container>
         </Preview>
       </Container>
-      <div className="column is-8 p-0">
+      <div className="width__65 p-0">
         <Tabs
           type="plain"
           options={tabOptions}
@@ -112,7 +114,7 @@ function BorrowFixed() {
           handler={tabHandler}
           xtra="mb-0"
         />
-        <Container type="background">
+        <Container type="background" xtra="right-modal">
           {isRepay ? (
             <Warning message="Borrowed amount can be repayed at maturity where fixed rate borrow will automatically transition to variable rate borrow." />
           ) : (
@@ -122,16 +124,16 @@ function BorrowFixed() {
                 handleInput={uiActions.inputHasChanged}
                 large
               />
-              <p className="text__medium is-black-30">~$0</p>
+              <p className="text__medium is-black-30">≈$0</p>
               <p className="text__medium-m is-grey-1 is-align-self-baseline ml-4 mb-2">
-                Label
+                Lend term (max. 1 year)
               </p>
               <div className="is-flex is-full-width">
                 <TimeInput
                   value={inputTime}
                   handleInput={uiActions.inputTimeHasChanged}
                 />
-                <Container type="light" xtra="br__4 p-2 ml-4">
+                <Container type="light" xtra="br__4 pt-2 pb-2 pl-4 pr-4 ml-4">
                   <p className="text__small is-grey-1">APR fixed</p>
                   <p className="text__xl-m is-grey-1">{apr}%</p>
                 </Container>

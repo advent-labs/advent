@@ -37,8 +37,30 @@ function ChangeParameters({ params }: ChangeParameterProps) {
     )
   })
 
+  const borrowLimit = [{ label: 'Borrow limit used', value: 38, nextValue: 25 }]
+
+  const displayBorrow = borrowLimit.map((e, i) => {
+    return (
+      <div className="spread" key={i}>
+        <div className="is-flex is-align-items-center">
+          <p className="text__medium-m is-grey-1">{e.label}</p>
+        </div>
+        <div className="is-flex is-align-items-center">
+          <p className="text__medium-m is-black mb-0">{e.value}%</p>
+          {!!e.nextValue && (
+            <>
+              <img src={arrow} alt="arrow" />
+              <p className="text__medium-m is-black">{e.nextValue}%</p>
+            </>
+          )}
+        </div>
+      </div>
+    )
+  })
+
   return (
     <Container type="background" xtra={`change-params is-full-width mt-4`}>
+      {displayBorrow}
       <LimitSlider borrowUsed={38} borrowLimit={80} liqThreshold={85} />
       {displayParams}
     </Container>

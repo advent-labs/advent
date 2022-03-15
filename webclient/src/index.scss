@@ -1,6 +1,11 @@
 @import './variables.scss';
 @import '~bulma/bulma.sass';
 
+@font-face {
+  font-family: Gilroy;
+  src: url('./assets/Gilroy-Semibold.woff');
+}
+
 body {
   margin: 0;
   font-family: 'Inter', 'Helvetica Neue', sans-serif;
@@ -51,7 +56,7 @@ code {
 hr {
   margin: 0;
   &.is-grey {
-    border: 1px solid var(--grey-10);
+    border: 1px solid var(--grey-30);
   }
 }
 
@@ -88,6 +93,10 @@ hr {
 }
 
 .width {
+  &__90 {
+    width: 90%;
+  }
+
   &__80 {
     width: 80%;
   }
@@ -99,9 +108,28 @@ hr {
   &__65 {
     width: 65%;
   }
+
+  &__60 {
+    width: 60%;
+  }
+
+  &__40 {
+    width: 40%;
+  }
+
+  &__35 {
+    width: 35%;
+  }
+
+  &__30 {
+    width: 30%;
+  }
 }
 
 .text {
+  &.is-gilroy {
+    font-family: Gilroy !important;
+  }
   &__xs2 {
     @include XS2;
     @include TextColors;
@@ -270,6 +298,7 @@ hr {
     background: var(--accent-2);
     color: var(--background);
     border-radius: 12px;
+    height: 3rem;
   }
 
   &.is-transparent {
@@ -346,7 +375,7 @@ hr {
   }
   .modal-content {
     max-height: 100vh !important;
-    width: 70%;
+    width: 60%;
     border-radius: 12px;
     background-color: var(--background);
     @include mobile {
@@ -371,7 +400,8 @@ hr {
 
 .input-container {
   border-radius: 8px;
-  padding: 0 1rem 1rem 1rem;
+  padding: 2rem 1rem 0rem 1rem;
+  margin-bottom: 0;
   .input {
     background-color: transparent;
     border: none;
@@ -404,23 +434,31 @@ hr {
 }
 
 .time-input-container {
-  border-radius: 8px;
+  border-radius: 4px;
   padding: 0;
-  width: 80%;
+  width: 78.2%;
   .input {
     background-color: var(--grey-10);
-    border: none;
-    border-radius: 12px;
+    border: 1px solid transparent;
+    border-radius: 4px;
     height: 3.5rem;
-    @include XL3-Semi;
+    @include XL3-Medium;
     color: var(--true-black);
     padding-right: 1rem !important;
+
+    box-shadow: none !important;
 
     &:focus {
       outline: none !important;
       border-color: inherit !important;
       -webkit-box-shadow: none !important;
       box-shadow: none !important;
+      color: var(--true-black) !important;
+      background: var(--background) !important;
+    }
+
+    &:hover {
+      border: 1px solid var(--true-black);
     }
 
     &::placeholder {
@@ -641,6 +679,7 @@ input[disabled] {
     background: var(--grey-10);
     min-height: 3rem;
     padding: 0.25rem;
+    margin-bottom: 16px;
 
     .tab {
       line-height: 2.5rem !important;
@@ -780,7 +819,7 @@ input[disabled] {
   background: var(--background);
   cursor: pointer;
   height: 5rem;
-  border-top: 1px solid var(--grey-10);
+  border-top: 1px solid var(--grey-30);
   margin-left: -1.5rem;
   margin-right: -1.5rem;
   padding-left: 1.5rem;
@@ -852,7 +891,7 @@ input[disabled] {
 }
 
 .token-size {
-  height: 2.5rem;
+  height: 2rem;
 
   &.is-large {
     height: 4rem;
@@ -935,7 +974,7 @@ input:checked + .slider:before {
 
 .title-block {
   margin-top: 2rem;
-  margin-bottom: 3rem;
+  margin-bottom: 40px;
 }
 
 .connect-wrapper {
@@ -958,6 +997,7 @@ input:checked + .slider:before {
 
 #portfolio {
   // width: 30rem;
+  padding: 2.5rem 4rem 0 4rem;
 }
 
 .small-data {
@@ -1019,7 +1059,7 @@ input:checked + .slider:before {
 }
 
 .change-params {
-  border: 1px solid var(--true-black);
+  border: 1px solid var(--grey-1);
   border-radius: 12px;
 }
 
@@ -1032,10 +1072,10 @@ input:checked + .slider:before {
 
 .buffer {
   height: 4.5rem;
-  width: 75%;
+  width: 70%;
 
   &.white {
-    width: 25%;
+    width: 30%;
     height: 4.5rem;
     background-color: var(--background);
   }
@@ -1069,22 +1109,32 @@ input:checked + .slider:before {
   // max-width: 500px;
   height: 1rem;
   margin: auto;
+
+  &.limit {
+    padding: 24px 0 !important;
+  }
 }
+
 .slider-thumb {
   cursor: pointer;
   position: absolute;
   z-index: 100;
   background: #ccc;
   // border: 0.5rem solid red;
+  background-image: url('./assets/black-slider.svg');
+
   border-radius: 100%;
   display: block;
-  background-image: url('./assets/slider.svg');
   height: 38px;
   width: 38px;
   transform: translate(0px, -15px);
-
+  // &:hover {
+  //   background-image: url('./assets/slider.svg');
+  // }
   // box-shadow: 0 0 2px 0 rgb(0 0 0 / 44%);
+  background-image: url('./assets/slider.svg');
 }
+
 // .slider-thumb.active {
 //   background-color: grey;
 // }
@@ -1114,7 +1164,7 @@ input:checked + .slider:before {
 
 .limit-track {
   position: relative;
-  background: var(--grey-70);
+  background: var(--grey-20);
   height: 0.5rem;
 }
 
@@ -1169,4 +1219,12 @@ input:checked + .slider:before {
   background: var(--true-black);
   transform: translate(0px, 0px);
   font-size: 1px;
+}
+
+.user-asset {
+  padding: 1rem 0;
+}
+
+.right-modal {
+  padding: 1rem 2.5rem;
 }
