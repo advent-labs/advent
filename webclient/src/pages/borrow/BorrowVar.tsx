@@ -22,6 +22,7 @@ import TimeInput from '../../blocks/TimeInput'
 import Collateral from '../../common/Collateral'
 import TimeSlider from '../../common/TimeSlider'
 import { selectAppUIValues } from '../../store/ui/appui'
+import WalletBalance from 'common/WalletBalance'
 
 function BorrowFixed() {
   const dispatch = useAppDispatch()
@@ -82,10 +83,6 @@ function BorrowFixed() {
     <div className="borrow-var columns is-mobile">
       <Container type="gradient" xtra="width__35">
         <Preview reserve={reserve} apr={apr}>
-          <Warning
-            message="APR changes based on lend amount and maturity chosen"
-            xtra="mt__2"
-          />
           <Collateral />
           <Container
             type="background"
@@ -114,24 +111,6 @@ function BorrowFixed() {
                 large
               />
               <p className="text__medium is-black-30">≈$0</p>
-              <p className="text__medium-m is-grey-1 is-align-self-baseline ml-4 mb-2">
-                Lend term (max. 1 year)
-              </p>
-              <div className="is-flex is-full-width">
-                <TimeInput
-                  value={inputTime}
-                  handleInput={uiActions.inputTimeHasChanged}
-                />
-                <Container type="light" xtra="br__4 pt-2 pb-2 pl-4 pr-4 ml-4">
-                  <p className="text__small is-grey-1">APR fixed</p>
-                  <p className="text__xl-m is-grey-1">{apr}%</p>
-                </Container>
-              </div>
-              <TimeSlider
-                value={inputTime}
-                handleInput={uiActions.inputTimeHasChanged}
-                isMonths={isMonths}
-              />
             </div>
           )}
           <ChangeParameters params={parameters} />
@@ -141,10 +120,7 @@ function BorrowFixed() {
             handler={() => toast(<Toast props={toastData} />)}
             xtra="is-full-width mt-4"
           />
-          <div className="is-flex is-align-items-center mt-4">
-            <p className="text__medium-m is-grey-1">Wallet balance</p>
-            <p className="text__medium-m is-black ml-2">XXXXXXXX</p>
-          </div>
+          <WalletBalance mint={token} name={name} />
         </Container>
       </div>
     </div>

@@ -494,6 +494,12 @@ hr {
       border-color: inherit !important;
       -webkit-box-shadow: none !important;
       box-shadow: none !important;
+      color: var(--true-black) !important;
+      background: var(--background) !important;
+    }
+
+    &:hover {
+      border: 1px solid var(--true-black);
     }
 
     &::placeholder {

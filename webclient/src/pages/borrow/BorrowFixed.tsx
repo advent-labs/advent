@@ -23,6 +23,7 @@ import Collateral from '../../common/Collateral'
 import { Reserve } from '@advent/sdk'
 import TimeSlider from '../../common/TimeSlider'
 import { selectAppUIValues } from '../../store/ui/appui'
+import WalletBalance from 'common/WalletBalance'
 
 function BorrowFixed() {
   const dispatch = useAppDispatch()
@@ -31,11 +32,13 @@ function BorrowFixed() {
     useAppSelector(selectBorrowUIValues)
   const isRepay = tab === 'Repay'
   const token = useAppSelector((s) => s.borrowui.token)
+  console.log('token', token)
   const reserve = useAppSelector(selectors.selectReserveByToken(token))
   const { timeTab } = useAppSelector(selectAppUIValues)
   const isMonths = timeTab === 'Months'
   if (!reserve) return <></>
   const mintMeta = addresses?.mintMetaMap[token]
+  console.log('meta', mintMeta)
   const { name } = mintMeta
   const totalInterestEarned = Reserve.math.availableInterestForDuration(
     reserve.settlementTable,
@@ -71,7 +74,7 @@ function BorrowFixed() {
       loadedOnce: true,
     },
     {
-      label: 'Interest earned',
+      label: 'Interest paid',
       value: '0',
       currency: name,
       loadedOnce: true,
@@ -152,10 +155,7 @@ function BorrowFixed() {
             handler={() => toast(<Toast props={toastData} />)}
             xtra="is-full-width mt-4"
           />
-          <div className="is-flex is-align-items-center mt-4">
-            <p className="text__medium-m is-grey-1">Wallet balance</p>
-            <p className="text__medium-m is-black ml-2">XXXXXXXX</p>
-          </div>
+          <WalletBalance mint={token} name={name} />
         </Container>
       </div>
     </div>

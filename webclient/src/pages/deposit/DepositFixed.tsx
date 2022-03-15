@@ -20,6 +20,7 @@ import Collateral from '../../common/Collateral'
 import { Reserve } from '@advent/sdk'
 import TimeSlider from '../../common/TimeSlider'
 import { selectAppUIValues } from '../../store/ui/appui'
+import WalletBalance from 'common/WalletBalance'
 
 function DepositFixed() {
   const dispatch = useAppDispatch()
@@ -155,10 +156,7 @@ function DepositFixed() {
             handler={() => toast.success('You did it')}
             xtra="is-full-width mt-4"
           />
-          <div className="is-flex is-align-items-center mt-4">
-            <p className="text__medium-m is-grey-1">Wallet balance</p>
-            <p className="text__medium-m is-black ml-2">XXXXXXXX</p>
-          </div>
+          <WalletBalance mint={token} name={name} />
         </Container>
       </div>
     </div>
