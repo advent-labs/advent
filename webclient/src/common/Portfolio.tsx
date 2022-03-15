@@ -175,8 +175,8 @@ function Portfolio() {
       mt: 'mt-3',
     },
     {
-      label: 'Borrow limit',
-      value: 85,
+      label: 'Health factor',
+      value: 88,
       mt: 'mt-3',
     },
   ]
