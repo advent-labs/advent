@@ -111,7 +111,7 @@ function Deposit() {
       <div className="columns">
         <div className="width__70">
           <div className="center-column title-block">
-            <h1 className="text__xl6-semi is-white">
+            <h1 className="text__xl6-semi is-white is-gilroy">
               Lend crypto and get yield
             </h1>
             <p className="text__large-semi is-alpha-60 width__65 mt-4">

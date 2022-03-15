@@ -114,7 +114,7 @@ function Borrow() {
       <div className="columns">
         <div className="width__70">
           <div className="center-column title-block">
-            <h1 className="text__xl6-semi is-white">Borrow crypto</h1>
+            <h1 className="text__xl6-semi is-white is-gilroy">Borrow crypto</h1>
             <p className="text__large-semi is-alpha-60 width__65 mt-4">
               Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
               posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam

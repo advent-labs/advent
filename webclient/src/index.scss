@@ -2,8 +2,8 @@
 @import '~bulma/bulma.sass';
 
 @font-face {
-  font-family: Gilroy;
-  src: url('./assets/Gilroy-Semibold.woff');
+  font-family: 'Gilroy';
+  src: url('./assets/Gilroy-Semibold.woff') format('woff');
 }
 
 body {
@@ -126,10 +126,11 @@ hr {
   }
 }
 
+.is-gilroy {
+  font-family: Gilroy !important;
+}
+
 .text {
-  &.is-gilroy {
-    font-family: Gilroy !important;
-  }
   &__xs2 {
     @include XS2;
     @include TextColors;
