@@ -14,8 +14,7 @@ import TextInput from '../../blocks/TextInput'
 import TimeInput from '../../blocks/TimeInput'
 import ChangeParameters from '../../common/ChangeParameters'
 import Button from '../../blocks/Button'
-import { toast } from 'react-toastify'
-import Toast, { ToastData } from '../../common/Toast'
+import { toast } from 'react-hot-toast'
 import Warning from '../../blocks/Warning'
 import Collateral from '../../common/Collateral'
 import { Reserve } from '@advent/sdk'
@@ -115,7 +114,10 @@ function DepositFixed() {
         />
         <Container type="background">
           {isWithdraw ? (
-            <Warning message="Lent amount can be withdrawn at maturity where fixed rate lend will automatically transition to variable rate lend." />
+            <Warning
+              message="Lent amount can be withdrawn at maturity where fixed rate lend will automatically transition to variable rate lend."
+              xtra="is-primary"
+            />
           ) : (
             <div className="center-column">
               <TextInput
@@ -148,7 +150,7 @@ function DepositFixed() {
           <Button
             type="secondary"
             text={tab}
-            handler={() => toast(<Toast props={toastData} />)}
+            handler={() => toast.success('You did it')}
             xtra="is-full-width mt-4"
           />
           <div className="is-flex is-align-items-center mt-4">

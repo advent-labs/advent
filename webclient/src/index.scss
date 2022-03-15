@@ -70,7 +70,7 @@ hr {
   margin-left: 0;
   margin-right: 0;
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 0 !important;
 }
 
 .top-right {
@@ -556,9 +556,6 @@ input[disabled] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  position: absolute;
-  z-index: 10000;
-
   background-color: var(--true-black);
 
   padding-right: 1rem;
@@ -977,6 +974,23 @@ input:checked + .slider:before {
   border-radius: 0.5rem;
   padding: 0.5rem 1rem;
   background-color: var(--alpha-15);
+
+  &.is-primary {
+    background: rgba(80, 112, 217, 0.1);
+    border-radius: 12px;
+    padding: 8px 24px;
+
+    img {
+      height: 40px;
+      width: 40px;
+    }
+
+    p {
+      @include Large;
+      color: var(--accent-1) !important;
+      margin-left: 2rem !important;
+    }
+  }
 }
 
 .mt {
