@@ -1,15 +1,15 @@
-import { store, useAppSelector, useAppDispatch } from "./store"
-import { Provider } from "react-redux"
-import { createContext, FC, useMemo, useEffect, useState } from "react"
-import { Route, Routes } from "react-router-dom"
-import adventAddresses from "./adventAddresses.json"
+import { store, useAppSelector, useAppDispatch } from './store'
+import { Provider } from 'react-redux'
+import { createContext, FC, useMemo, useEffect, useState } from 'react'
+import { Route, Routes, BrowserRouter as Router } from 'react-router-dom'
+import adventAddresses from './adventAddresses.json'
 import {
   ConnectionProvider,
   WalletProvider,
   useWallet,
-} from "@solana/wallet-adapter-react"
-import { solanaConnectionContext } from "./solanaConnectionContext"
-import { WalletAdapterNetwork } from "@solana/wallet-adapter-base"
+} from '@solana/wallet-adapter-react'
+import { solanaConnectionContext } from './solanaConnectionContext'
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base'
 import {
   LedgerWalletAdapter,
   PhantomWalletAdapter,
@@ -18,31 +18,32 @@ import {
   SolletExtensionWalletAdapter,
   SolletWalletAdapter,
   TorusWalletAdapter,
-} from "@solana/wallet-adapter-wallets"
-import { WalletModalProvider } from "@solana/wallet-adapter-react-ui"
-import { clusterApiUrl, Connection, PublicKey } from "@solana/web3.js"
-import { addresses, Addresses } from "./addresses"
+} from '@solana/wallet-adapter-wallets'
+import { WalletModalProvider } from '@solana/wallet-adapter-react-ui'
+import { clusterApiUrl, Connection, PublicKey } from '@solana/web3.js'
+import { addresses, Addresses } from './addresses'
 import {
   userTokenBalancesStateRequested,
   resetTokenBalances,
-} from "./store/reducer/userTokenBalances"
-import Container from "./blocks/Container"
-import Balances from "./common/Balances"
-import { Dash } from "./pages/dash/Dash"
-import Lend from "./pages/deposit/Deposit"
-import Borrow from "./pages/borrow/Borrow"
-import Nav from "./common/Nav"
+} from './store/reducer/userTokenBalances'
+import Container from './blocks/Container'
+import Balances from './common/Balances'
+import { Dash } from './pages/dash/Dash'
+import Lend from './pages/deposit/Deposit'
+import Borrow from './pages/borrow/Borrow'
+import Nav from './common/Nav'
 import {
   AdventMarket as OldAdventMarket,
   AdventSDK as OldAdventSDK,
-} from "./sdk"
-import { AdventMarket, AdventPortfolio, AdventSDK } from "@advent/sdk"
-import { actions as userPortfolioActions } from "./store/reducer/userPortfolio"
-import { actions as reservesAction } from "./store/reducer/reserves"
-import { ToastContainer } from "react-toastify"
-import Portfolio from "./common/Portfolio"
+} from './sdk'
+import { AdventMarket, AdventPortfolio, AdventSDK } from '@advent/sdk'
+import { actions as userPortfolioActions } from './store/reducer/userPortfolio'
+import { actions as reservesAction } from './store/reducer/reserves'
+import { ToastContainer } from 'react-toastify'
+import Portfolio from './common/Portfolio'
+import { Toaster } from 'react-hot-toast'
 
-require("@solana/wallet-adapter-react-ui/styles.css")
+require('@solana/wallet-adapter-react-ui/styles.css')
 
 interface AppContext {
   addresses: Addresses
@@ -62,7 +63,7 @@ export const Wrapper: FC = () => {
   // You can also provide a custom RPC endpoint.
   const endpoint = useMemo(() => clusterApiUrl(network), [network])
 
-  const connection = new Connection(endpoint, "confirmed")
+  const connection = new Connection(endpoint, 'confirmed')
   solanaConnectionContext.connection = connection
 
   // @solana/wallet-adapter-wallets includes all the adapters but supports tree shaking and lazy loading --
@@ -74,7 +75,7 @@ export const Wrapper: FC = () => {
       new SlopeWalletAdapter(),
       new SolflareWalletAdapter({ network }),
     ],
-    [network]
+    [network],
   )
 
   return (
@@ -101,7 +102,7 @@ function App() {
 
   useEffect(() => {
     if (!solanaConnectionContext.connection) {
-      console.log("Wating for connection")
+      console.log('Wating for connection')
       return
     }
     const sdk = new AdventSDK(solanaConnectionContext.connection)
@@ -129,13 +130,13 @@ function App() {
 
   useEffect(() => {
     if (!solanaConnectionContext.connection) {
-      console.log("Wating for connection")
+      console.log('Wating for connection')
       return
     }
 
     solanaConnectionContext.wallet = wallet as any
     if (!wallet.connected) {
-      if (tokenStatus === "loaded") {
+      if (tokenStatus === 'loaded') {
         dispatch(resetTokenBalances())
       }
     }
@@ -143,7 +144,7 @@ function App() {
 
   useEffect(() => {
     if (wallet.connected) {
-      if (tokenStatus === "init") {
+      if (tokenStatus === 'init') {
         dispatch(userTokenBalancesStateRequested())
       }
     }
@@ -156,7 +157,7 @@ function App() {
     // advent market sdk required
     if (!solanaConnectionContext.adventMarketSDK) return
 
-    if (reserveStatus === "still") {
+    if (reserveStatus === 'still') {
       dispatch(userPortfolioActions.loadRequested())
     }
 
@@ -187,7 +188,7 @@ function App() {
   }, [context.sdk])
 
   return (
-    <div className="is-bg-gradient">
+    <>
       <Nav />
       <Routes>
         <Route path="/" element={<Balances />} />
@@ -195,7 +196,8 @@ function App() {
         <Route path="/lend" element={<Lend />} />
         <Route path="/borrow" element={<Borrow />} />
       </Routes>
-    </div>
+      <Toaster position="bottom-left" toastOptions={{ duration: 5000 }} />
+    </>
   )
 }
 

@@ -1,19 +1,19 @@
-import { selectAppUIValues, actions as appActions } from "../../store/ui/appui"
-import { useAppDispatch, useAppSelector } from "../../store"
+import { selectAppUIValues, actions as appActions } from '../../store/ui/appui'
+import { useAppDispatch, useAppSelector } from '../../store'
 import {
   actions as uiActions,
   selectBorrowUIValues,
-} from "../../store/ui/borrowui"
-import { Context } from "../../App"
-import { useContext } from "react"
-import Container from "../../blocks/Container"
-import RateTabs from "../../common/RateTabs"
-import Reserve from "../../common/Reserve"
-import { Modal } from "../../common/Modal"
-import BorrowFixed from "./BorrowFixed"
-import BorrowVar from "./BorrowVar"
-import rate from "../../assets/rate.svg"
-import Portfolio from "../../common/Portfolio"
+} from '../../store/ui/borrowui'
+import { Context } from '../../App'
+import { useContext } from 'react'
+import Container from '../../blocks/Container'
+import RateTabs from '../../common/RateTabs'
+import Reserve from '../../common/Reserve'
+import { Modal } from '../../common/Modal'
+import BorrowFixed from './BorrowFixed'
+import BorrowVar from './BorrowVar'
+import rate from '../../assets/rate.svg'
+import Portfolio from '../../common/Portfolio'
 
 function Borrow() {
   const { addresses } = useContext(Context)
@@ -24,18 +24,18 @@ function Borrow() {
   const mockDataFixed = [
     {
       value: 6.56,
-      currency: "%",
+      currency: '%',
       loadedOnce: true,
       icon: rate,
     },
     {
       value: 45000.32,
-      currency: "USDC",
+      currency: 'USDC',
       loadedOnce: true,
     },
     {
       value: 10000000,
-      currency: "USDC",
+      currency: 'USDC',
       loadedOnce: true,
     },
   ]
@@ -43,18 +43,17 @@ function Borrow() {
   const mockDataVar = [
     {
       value: 7.12,
-      currency: "%",
+      currency: '%',
       loadedOnce: true,
-      icon: rate,
     },
     {
       value: 0,
-      currency: "USDC",
+      currency: 'USDC',
       loadedOnce: true,
     },
     {
       value: 9999999,
-      currency: "USDC",
+      currency: 'USDC',
       loadedOnce: true,
     },
   ]
@@ -90,7 +89,7 @@ function Borrow() {
     <div className="columns is-mobile text-left">
       <p className="column is-3 text__medium-m is-grey-1">Asset</p>
       <p className="column is-3 text__medium-m is-grey-1">
-        {isFixed ? "Fixed" : "Variable"} borrow rate
+        {isFixed ? 'Fixed' : 'Variable'} borrow rate
       </p>
       <p className="column is-3 text__medium-m is-grey-1">Borrow balance</p>
       <p className="column is-3 text__medium-m is-grey-1">Wallet balance</p>
@@ -112,9 +111,9 @@ function Borrow() {
         <div className="buffer white" />
       </div>
       <div className="columns">
-        <div className="column is-9">
+        <div className="width__70">
           <div className="center-column title-block">
-            <h1 className="text__xl6-semi is-white">Borrow crypto</h1>
+            <h1 className="text__xl6-semi is-white is-gilroy">Borrow crypto</h1>
             <p className="text__large-semi is-alpha-60 width__65 mt-4">
               Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
               posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam
@@ -126,11 +125,11 @@ function Borrow() {
             xtra="center-column width__80 center has-shadow"
           >
             <RateTabs />
-            <div className="mt-4 is-full-width pl-2 pr-2">{rowLabels}</div>
+            <div className="is-full-width pl-2 pr-2 pt-2">{rowLabels}</div>
             <div className="mt-5 is-full-width pl-2 pr-2">{reserveRows}</div>
           </Container>
         </div>
-        <Container type="background" id="portfolio" xtra="column is-3">
+        <Container type="background" id="portfolio" xtra="width__30">
           <Portfolio />
         </Container>
         <Modal

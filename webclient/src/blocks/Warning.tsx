@@ -1,4 +1,3 @@
-import Container from './Container'
 import warn from '../assets/warn.svg'
 
 function Warning({ message, xtra }: { message: string; xtra?: string }) {

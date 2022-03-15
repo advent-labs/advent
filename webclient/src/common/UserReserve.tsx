@@ -1,4 +1,4 @@
-import Switch from "../blocks/Switch"
+import Switch from '../blocks/Switch'
 
 export interface ReserveData {
   value: number
@@ -17,16 +17,16 @@ export interface UserReserveProps {
 
 function UserReserve({ uTokenName, icon, data, action }: UserReserveProps) {
   let dataDisplay = data?.map((e, i) => {
-    const columnWidth = e.id === "rate" || e.id === "term" ? "is-2" : "is-3"
+    const columnWidth = e.id === 'rate' || e.id === 'term' ? 'is-2' : 'is-3'
     return (
       <div
         className={`reserve-data is-flex is-align-items-center column ${columnWidth}`}
         key={i}
       >
-        {!!e.icon && <img src={e.icon} className="mr-1" />}
+        {!!e.icon && <img src={e.icon} className="mr-1" alt={uTokenName} />}
         <p className="text__large-m is-black">{e.value}</p>
         <p className="text__large-m is-black ml-1">{e.currency}</p>
-        {e.id === "collateral" && <Switch useColl={true} toggle={() => null} />}
+        {e.id === 'collateral' && <Switch useColl={true} toggle={() => null} />}
       </div>
     )
   })

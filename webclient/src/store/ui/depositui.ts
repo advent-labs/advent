@@ -1,6 +1,7 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { RootState } from ".."
-import { actions as reservesActions } from "../reducer/reserves"
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { RootState } from '..'
+import { actions as reservesActions } from '../reducer/reserves'
+import { actions as uiActions } from '../ui/appui'
 export interface DepositRequestedPayload {
   amount: number
   token: string
@@ -17,16 +18,16 @@ export type DepositUI = {
 }
 
 const initialState: DepositUI = {
-  duration: "1",
-  amount: "",
-  token: "",
+  duration: '1',
+  amount: '',
+  token: '',
   busy: false,
-  tab: "Lend",
-  inputTime: "",
+  tab: 'Lend',
+  inputTime: '',
 }
 
 export const depositUI = createSlice({
-  name: "depositui",
+  name: 'depositui',
   initialState,
   reducers: {
     setAmount: (s: DepositUI, action: PayloadAction<string>) => {
@@ -43,8 +44,8 @@ export const depositUI = createSlice({
     },
     depositSucceed: (s) => {
       s.busy = false
-      s.amount = ""
-      s.duration = "1"
+      s.amount = ''
+      s.duration = '1'
     },
     setTab: (s: DepositUI, action: PayloadAction<string>) => {
       s.tab = action.payload
@@ -59,6 +60,9 @@ export const depositUI = createSlice({
   extraReducers: (builder) => {
     builder.addCase(reservesActions.loaded, (s, a) => {
       s.token = a.payload[0].token
+    })
+    builder.addCase(uiActions.setTimeTab, (s, a) => {
+      s.inputTime = '0'
     })
   },
 })
