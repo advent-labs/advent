@@ -14,6 +14,8 @@ import {
   selectors as portfolioSelectors,
   actions as portfolioActions,
 } from "../reducer/userPortfolio"
+import { actions as userTokenBalanceActions } from "store/reducer/userTokenBalances"
+
 import {
   Reserve,
   selectors as reservesSelectors,
@@ -154,6 +156,6 @@ export function* variableDeposit(
   }
 
   yield put(variableDepositActions.succeeded())
-  yield put(portfolioActions.loadRequested())
+  yield put(userTokenBalanceActions.userTokenBalancesStateRequested())
   yield put(reservesActions.loadRequested())
 }
