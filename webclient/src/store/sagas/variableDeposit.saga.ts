@@ -33,6 +33,8 @@ async function doVariableDeposit(
   useAsCollateral: boolean,
   positionsAddress?: PublicKey
 ) {
+  console.log(reserve.decimals)
+  amount = amount * 10 ** reserve.decimals
   const ixs: TransactionInstruction[] = []
   const additionalSigners: Keypair[] = []
   const token = new PublicKey(reserve.token)
@@ -112,7 +114,10 @@ export function* variableDeposit(
     "solanaConnectionContext"
   )) as SolanaConnectionContext
 
-  if (!wallet || !adventMarketSDK || !connection) return
+  if (!wallet || !adventMarketSDK || !connection) {
+    console.log("Context not available")
+    return
+  }
 
   const state = (yield select()) as RootState
 
@@ -128,7 +133,6 @@ export function* variableDeposit(
   if (!reserve) {
     throw new Error(`Unable to find reserve for ${token}`)
   }
-
   const positionsAddress = isPortfolioInitalized
     ? new PublicKey(state.userPortfolio.state.positionsAddress)
     : undefined

@@ -23,3 +23,10 @@ export const selectVariableDeposits = (m: MintMetaMap) => (s: RootState) => {
   })
   return balances
 }
+
+export const selectUserVariableDeposit = (t: string) => (s: RootState) => {
+  const b = s.depositBalances.state[t]
+  if (!b) return 0
+
+  return (b.collateral + b.depositNotes) / 10 ** 6
+}

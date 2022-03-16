@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import Container from '../blocks/Container'
-import Button from '../blocks/Button'
-import chevron from '../assets/chevron.svg'
-import arrow from '../assets/arrow.svg'
-import LimitSlider from '../common/LimitSlider'
+import { useState } from "react"
+import Container from "../blocks/Container"
+import Button from "../blocks/Button"
+import chevron from "../assets/chevron.svg"
+import arrow from "../assets/arrow.svg"
+import LimitSlider from "../common/LimitSlider"
 
 export interface ChangeParameter {
   label: string
@@ -37,7 +37,7 @@ function ChangeParameters({ params }: ChangeParameterProps) {
     )
   })
 
-  const borrowLimit = [{ label: 'Borrow limit used', value: 38, nextValue: 25 }]
+  const borrowLimit = [{ label: "Borrow limit used", value: 38, nextValue: 25 }]
 
   const displayBorrow = borrowLimit.map((e, i) => {
     return (

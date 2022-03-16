@@ -1,9 +1,9 @@
-import { useState } from 'react'
-import Container from '../blocks/Container'
-import Button from '../blocks/Button'
-import chevron from '../assets/chevron.svg'
-import LimitSlider from '../common/LimitSlider'
-import PortMetric from '../common/PortMetric'
+import { useState } from "react"
+import Container from "../blocks/Container"
+import Button from "../blocks/Button"
+import chevron from "../assets/chevron.svg"
+import LimitSlider from "../common/LimitSlider"
+import PortMetric from "../common/PortMetric"
 
 export interface Parameter {
   label: string
@@ -33,8 +33,8 @@ function Parameters({ params }: ParameterProps) {
   })
 
   return (
-    <Container type="background" xtra={`params ${open ? 'is-open' : ''}`}>
-      <LimitSlider borrowUsed={38} borrowLimit={80} liqThreshold={85} />
+    <Container type="background" xtra={`params ${open ? "is-open" : ""}`}>
+      <LimitSlider borrowUsed={78} borrowLimit={80} liqThreshold={85} />
       {displayParams}
       {open && displayFull}
       <Button
