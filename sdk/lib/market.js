@@ -196,6 +196,7 @@ class AdventMarket {
     fixedBorrowIX(token, amount, duration, authority, positions) {
         return __awaiter(this, void 0, void 0, function* () {
             const [reserve] = yield this.reservePDA(token);
+            const [portfolio] = yield this.portfolioPDA(authority);
             const r = this.reserveByToken(token);
             const userReserve = yield sab.getATAAddress({
                 mint: token,
@@ -207,7 +208,7 @@ class AdventMarket {
                     market: this.address,
                     reserve,
                     settlementTable: r.settlementTableAddress,
-                    portfolio: this.address,
+                    portfolio,
                     positions,
                     reserveVault: r.vault,
                     userReserve,

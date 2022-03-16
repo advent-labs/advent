@@ -35,8 +35,6 @@ async function doVariableDeposit(
   useAsCollateral: boolean,
   positionsAddress?: PublicKey
 ) {
-  console.log(reserve.decimals)
-  amount = amount * 10 ** reserve.decimals
   const ixs: TransactionInstruction[] = []
   const additionalSigners: Keypair[] = []
   const token = new PublicKey(reserve.token)

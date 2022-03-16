@@ -88,7 +88,12 @@ function DepositVar() {
     console.log(reserve.token)
     console.log("clicked!")
     const token = reserve.token
-    dispatch(depoActions.requested({ amount, token }))
+    dispatch(
+      depoActions.requested({
+        amount: amount * 10 ** reserve.decimals,
+        token,
+      })
+    )
   }
 
   return (

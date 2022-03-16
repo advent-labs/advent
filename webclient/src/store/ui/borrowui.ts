@@ -1,35 +1,34 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { actions as reservesActions } from '../reducer/reserves'
-import { RootState } from '..'
-import { actions as uiActions } from '../ui/appui'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { actions as reservesActions } from "../reducer/reserves"
+import { RootState } from ".."
+import { actions as uiActions } from "../ui/appui"
 
 export interface FixedBorrowPayload {
   amount: number
   token: string
   duration: number
 }
+
 export type BorrowUI = {
   duration: string
   amount: string
   token: string
   busy: boolean
   tab: string
-  inputVal: string
   inputTime: string
 }
 
 const initialState: BorrowUI = {
-  duration: '1',
-  amount: '',
-  token: '',
+  duration: "1",
+  amount: "",
+  token: "",
   busy: false,
-  tab: 'Borrow',
-  inputVal: '',
-  inputTime: '',
+  tab: "Borrow",
+  inputTime: "",
 }
 
 export const borrowUI = createSlice({
-  name: 'borrowui',
+  name: "borrowui",
   initialState,
   reducers: {
     setAmount: (s: BorrowUI, action: PayloadAction<string>) => {
@@ -46,14 +45,11 @@ export const borrowUI = createSlice({
     },
     borrowSucceed: (s) => {
       s.busy = false
-      s.amount = ''
-      s.duration = '1'
+      s.amount = ""
+      s.duration = "1"
     },
     setTab: (s: BorrowUI, action: PayloadAction<string>) => {
       s.tab = action.payload
-    },
-    inputHasChanged: (s: BorrowUI, action: PayloadAction<string>) => {
-      s.inputVal = action.payload
     },
     inputTimeHasChanged: (s: BorrowUI, action: PayloadAction<string>) => {
       s.inputTime = action.payload
@@ -64,7 +60,7 @@ export const borrowUI = createSlice({
       s.token = a.payload[0].token
     })
     builder.addCase(uiActions.setTimeTab, (s, a) => {
-      s.inputTime = '0'
+      s.inputTime = "0"
     })
   },
 })
@@ -76,6 +72,6 @@ export const selectBorrowUIValues = (s: RootState) => ({
   amount: parseFloat(s.borrowui.amount) || 0,
   duration: parseFloat(s.borrowui.duration) || 0,
   tab: s.borrowui.tab,
-  inputVal: s.borrowui.inputVal,
+  inputVal: s.borrowui.amount,
   inputTime: s.borrowui.inputTime,
 })

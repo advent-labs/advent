@@ -14,9 +14,6 @@ import TextInput from "../../blocks/TextInput"
 import ChangeParameters from "../../common/ChangeParameters"
 import Button from "../../blocks/Button"
 import { toast } from "react-toastify"
-import Toast, { ToastData } from "../../common/Toast"
-import Switch from "../../blocks/Switch"
-import DataPoint from "../../common/DataPoint"
 import Warning from "../../blocks/Warning"
 import TimeInput from "../../blocks/TimeInput"
 import Collateral from "../../common/Collateral"
@@ -24,6 +21,7 @@ import { Reserve } from "@advent/sdk"
 import TimeSlider from "../../common/TimeSlider"
 import { selectAppUIValues } from "../../store/ui/appui"
 import WalletBalance from "common/WalletBalance"
+import { actions as fixedBorrowActions } from "store/reducer/fixedBorrow"
 
 function BorrowFixed() {
   const dispatch = useAppDispatch()
@@ -81,6 +79,20 @@ function BorrowFixed() {
     },
   ]
 
+  const handler = () => {
+    console.log(amount)
+    console.log(reserve.token)
+    const token = reserve.token
+
+    dispatch(
+      fixedBorrowActions.requested({
+        amount: amount * 10 ** reserve.decimals,
+        token,
+        duration,
+      })
+    )
+  }
+
   const displayDataPoints = dataPoints.map((e, i) => {
     return (
       <div className="center-column mb-4" key={i}>
@@ -124,7 +136,7 @@ function BorrowFixed() {
             <div className="center-column">
               <TextInput
                 value={inputVal}
-                handleInput={uiActions.inputHasChanged}
+                handleInput={uiActions.setAmount}
                 large
               />
               <p className="text__medium is-black-30">≈$0</p>
@@ -152,7 +164,7 @@ function BorrowFixed() {
           <Button
             type="secondary"
             text={tab}
-            handler={() => toast(<Toast props={toastData} />)}
+            handler={handler}
             xtra="is-full-width mt-4"
           />
           <WalletBalance mint={token} name={name} />
