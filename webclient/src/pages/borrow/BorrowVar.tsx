@@ -7,20 +7,14 @@ import {
   actions as uiActions,
   selectBorrowUIValues,
 } from "../../store/ui/borrowui"
-import { totalInterestEarnedForDeposit } from "../../sdk/eqs"
 import { selectors } from "../../store/reducer/reserves"
 import Tabs from "../../common/Tabs"
 import TextInput from "../../blocks/TextInput"
 import ChangeParameters from "../../common/ChangeParameters"
 import Button from "../../blocks/Button"
-import { toast } from "react-toastify"
-import Toast, { ToastData } from "../../common/Toast"
-import Switch from "../../blocks/Switch"
-import DataPoint from "../../common/DataPoint"
+import { toast } from "react-hot-toast"
 import Warning from "../../blocks/Warning"
-import TimeInput from "../../blocks/TimeInput"
 import Collateral from "../../common/Collateral"
-import TimeSlider from "../../common/TimeSlider"
 import { selectAppUIValues } from "../../store/ui/appui"
 import WalletBalance from "common/WalletBalance"
 
@@ -116,7 +110,7 @@ function BorrowFixed() {
           <Button
             type="secondary"
             text={tab}
-            handler={() => toast(<Toast props={toastData} />)}
+            handler={() => toast.success("You did it")}
             xtra="is-full-width mt-4"
           />
           <WalletBalance mint={token} name={name} />

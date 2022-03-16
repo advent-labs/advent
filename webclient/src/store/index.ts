@@ -1,21 +1,21 @@
-import { configureStore } from "@reduxjs/toolkit"
-import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
-import borrowui from "./ui/borrowui"
-import variableDepositUI from "./ui/variableDeposit"
-import variableBorrowUI from "./ui/variableBorrow"
-import depositui from "./ui/depositui"
-import dashboardUI from "./ui/dashboard"
-import createSagaMiddleware from "redux-saga"
-import { solanaConnectionContext } from "../solanaConnectionContext"
-import saga from "./sagas"
-import userTokenAccounts from "./reducer/userTokenBalances"
-import fixedDeposit from "./reducer/fixedDeposit"
-import fixedBorrow from "./reducer/fixedBorrow"
-import variableDeposit from "./reducer/variableDeposit"
-import reserves from "./reducer/reserves"
-import userPortfolio from "./reducer/userPortfolio"
-import depositBalances from "./reducer/depositBalances"
-import appui from "./ui/appui"
+import { configureStore } from '@reduxjs/toolkit'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
+import borrowui from './ui/borrowui'
+import variableDepositUI from './ui/variableDeposit'
+import variableBorrowUI from './ui/variableBorrow'
+import depositui from './ui/depositui'
+import dashboardUI from './ui/dashboard'
+import createSagaMiddleware from 'redux-saga'
+import { solanaConnectionContext } from '../solanaConnectionContext'
+import saga from './sagas'
+import userTokenAccounts from './reducer/userTokenBalances'
+import fixedDeposit from './reducer/fixedDeposit'
+import fixedBorrow from './reducer/fixedBorrow'
+import variableDeposit from './reducer/variableDeposit'
+import reserves from './reducer/reserves'
+import userPortfolio from './reducer/userPortfolio'
+import depositBalances from './reducer/depositBalances'
+import appui from './ui/appui'
 
 const sagaMiddleware = createSagaMiddleware({
   context: {

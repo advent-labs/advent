@@ -59,15 +59,20 @@ function DepositFixed() {
     { label: "Loan to value", value: 75 },
   ]
 
-  const toastData = {
-    title: `${tab} Success!`,
-    type: "success",
-    message: "You did the thing",
+  const now = Date.now()
+  const msMonth = 2.628e9
+  const msDay = 8.64e7
+  let date
+  if (isMonths) {
+    date = new Date(now + msMonth * parseFloat(inputTime))
+  } else {
+    date = new Date(now + msDay * parseFloat(inputTime))
   }
+  const displayDate = date.toString().slice(3, 16)
 
   const dataPoints = [
     {
-      label: "Total at maturity | XXXDATEXXX",
+      label: `Total at maturity | ${displayDate}`,
       value: "0",
       currency: name,
       loadedOnce: true,

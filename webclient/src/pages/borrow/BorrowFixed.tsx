@@ -7,6 +7,7 @@ import {
   actions as uiActions,
   selectBorrowUIValues,
 } from "../../store/ui/borrowui"
+import { actions as fixedBorrowActions } from "store/reducer/fixedBorrow"
 import { selectors } from "../../store/reducer/reserves"
 import Tabs from "../../common/Tabs"
 import TextInput from "../../blocks/TextInput"
@@ -17,7 +18,6 @@ import TimeInput from "../../blocks/TimeInput"
 import TimeSlider from "../../common/TimeSlider"
 import { selectAppUIValues } from "../../store/ui/appui"
 import WalletBalance from "common/WalletBalance"
-import { actions as fixedBorrowActions } from "store/reducer/fixedBorrow"
 
 function BorrowFixed() {
   const dispatch = useAppDispatch()
@@ -52,15 +52,20 @@ function BorrowFixed() {
     { label: "Loan to value", value: 75 },
   ]
 
-  const toastData = {
-    title: `${tab} Success!`,
-    type: "success",
-    message: "You did the thing",
+  const now = Date.now()
+  const msMonth = 2.628e9
+  const msDay = 8.64e7
+  let date
+  if (isMonths) {
+    date = new Date(now + msMonth * duration)
+  } else {
+    date = new Date(now + msDay * duration)
   }
+  const displayDate = date.toString().slice(3, 16)
 
   const dataPoints = [
     {
-      label: "Total at maturity | XXXDATEXXX",
+      label: `Total at maturity | ${displayDate}`,
       value: amount,
       currency: name,
       loadedOnce: true,

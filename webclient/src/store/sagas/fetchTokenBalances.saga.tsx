@@ -2,7 +2,7 @@ import { deserializeAccount, getATAAddress } from '@saberhq/token-utils'
 import { Connection, PublicKey } from '@solana/web3.js'
 import { Addresses } from '../../addresses'
 import Toast, { ToastData } from '../../common/Toast'
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 import { call, getContext, put } from 'redux-saga/effects'
 import {
   UserTokenBalances,
@@ -35,7 +35,7 @@ export function* fetchUserTokenBalances() {
       message: e.message,
       type: 'error',
     }
-    toast(<Toast props={toastData} />)
+    toast.error(e.name)
     console.log(e)
   }
 }

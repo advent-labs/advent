@@ -1,4 +1,5 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { createSlice, PayloadAction, Action } from "@reduxjs/toolkit"
+import { RootState } from ".."
 
 export interface VariableDepositState {
   status: "still" | "pending"
@@ -31,3 +32,7 @@ export const variableDeposit = createSlice({
 
 export const actions = variableDeposit.actions
 export default variableDeposit.reducer
+
+export const selectVariableDepositStatus = (s: RootState) => ({
+  status: s.variableDeposit.status,
+})
