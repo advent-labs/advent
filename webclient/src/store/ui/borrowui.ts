@@ -15,7 +15,6 @@ export type BorrowUI = {
   token: string
   busy: boolean
   tab: string
-  inputTime: string
 }
 
 const initialState: BorrowUI = {
@@ -24,7 +23,6 @@ const initialState: BorrowUI = {
   token: "",
   busy: false,
   tab: "Borrow",
-  inputTime: "",
 }
 
 export const borrowUI = createSlice({
@@ -51,16 +49,13 @@ export const borrowUI = createSlice({
     setTab: (s: BorrowUI, action: PayloadAction<string>) => {
       s.tab = action.payload
     },
-    inputTimeHasChanged: (s: BorrowUI, action: PayloadAction<string>) => {
-      s.inputTime = action.payload
-    },
   },
   extraReducers: (builder) => {
     builder.addCase(reservesActions.loaded, (s, a) => {
       s.token = a.payload[0].token
     })
     builder.addCase(uiActions.setTimeTab, (s, a) => {
-      s.inputTime = "0"
+      s.duration = "1"
     })
   },
 })
@@ -73,5 +68,4 @@ export const selectBorrowUIValues = (s: RootState) => ({
   duration: parseFloat(s.borrowui.duration) || 0,
   tab: s.borrowui.tab,
   inputVal: s.borrowui.amount,
-  inputTime: s.borrowui.inputTime,
 })

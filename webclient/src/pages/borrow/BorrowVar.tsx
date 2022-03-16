@@ -27,8 +27,7 @@ import WalletBalance from "common/WalletBalance"
 function BorrowFixed() {
   const dispatch = useAppDispatch()
   const { addresses } = useContext(Context)
-  const { amount, duration, tab, inputVal, inputTime } =
-    useAppSelector(selectBorrowUIValues)
+  const { amount, tab, inputVal } = useAppSelector(selectBorrowUIValues)
   const { timeTab } = useAppSelector(selectAppUIValues)
   const isMonths = timeTab === "Months"
   const isRepay = tab === "Repay"
