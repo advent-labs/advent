@@ -2,19 +2,22 @@ import Preview from '../../common/Preview'
 import Container from '../../blocks/Container'
 import { useAppDispatch, useAppSelector } from '../../store'
 import { Context } from '../../App'
-import { ReactNode, useContext } from 'react'
+import { ReactNode, useContext, useEffect } from 'react'
 import {
   actions as uiActions,
   selectDepositUIValues,
 } from '../../store/ui/depositui'
 import { totalInterestEarnedForDeposit } from '../../sdk/eqs'
-import { actions as depoActions } from '../../store/reducer/variableDeposit'
+import {
+  actions as depoActions,
+  selectVariableDepositStatus,
+} from '../../store/reducer/variableDeposit'
 import { selectors } from '../../store/reducer/reserves'
 import Tabs from '../../common/Tabs'
 import TextInput from '../../blocks/TextInput'
 import ChangeParameters from '../../common/ChangeParameters'
 import Button from '../../blocks/Button'
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 import Toast, { ToastData } from '../../common/Toast'
 import Switch from '../../blocks/Switch'
 import DataPoint from '../../common/DataPoint'
@@ -24,6 +27,7 @@ import Collateral from '../../common/Collateral'
 import TimeSlider from '../../common/TimeSlider'
 import { selectAppUIValues } from '../../store/ui/appui'
 import WalletBalance from 'common/WalletBalance'
+import { selectVariableDeposits } from 'store/selectors'
 
 function DepositVar() {
   const dispatch = useAppDispatch()
@@ -31,6 +35,7 @@ function DepositVar() {
   const { amount, duration, tab, inputTime } = useAppSelector(
     selectDepositUIValues,
   )
+  const { status } = useAppSelector(selectVariableDepositStatus)
   const { timeTab } = useAppSelector(selectAppUIValues)
   const isMonths = timeTab === 'Months'
   const isWithdraw = tab === 'Withdraw'
