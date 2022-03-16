@@ -1,8 +1,8 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { RootState } from '..'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { RootState } from ".."
 
-export type PortTab = 'Overview' | 'Lend' | 'Borrow'
-export type TimeTab = 'Months' | 'Days'
+export type PortTab = "Overview" | "Lend" | "Borrow"
+export type TimeTab = "Months" | "Days"
 export type AppUI = {
   isFixed: boolean
   portfolioTab: PortTab
@@ -14,15 +14,15 @@ export type AppUI = {
 
 const initialState: AppUI = {
   isFixed: true,
-  portfolioTab: 'Overview',
+  portfolioTab: "Overview",
   modalOpen: false,
-  timeTab: 'Months',
-  coInputVal: '',
+  timeTab: "Months",
+  coInputVal: "100",
   useCollateral: true,
 }
 
 export const appUI = createSlice({
-  name: 'appui',
+  name: "appui",
   initialState,
   reducers: {
     setIsFixed: (s: AppUI) => {
@@ -48,6 +48,11 @@ export const appUI = createSlice({
     },
     toggleUseColl: (s: AppUI) => {
       s.useCollateral = !s.useCollateral
+      if (!s.useCollateral) {
+        s.coInputVal = "0"
+      } else {
+        s.coInputVal = "100"
+      }
     },
   },
 })

@@ -15,6 +15,7 @@ function Preview({ reserve, apr, children }: PreviewProps) {
   const { addresses } = useContext(Context)
   const { isFixed } = useAppSelector(selectAppUIValues)
   const location = useLocation()
+  const aprRounded = isNaN(apr) ? 0 : (apr * 100).toFixed(2)
   const path = location.pathname
   const isLend = path.includes("lend")
 
@@ -28,7 +29,7 @@ function Preview({ reserve, apr, children }: PreviewProps) {
       <p className="text__medium-m is-alpha-60 mt__2">
         APR {isFixed ? "Fixed" : "Variable"}
       </p>
-      <p className="text__xl7-m is-white">{isNaN(apr) ? 0 : apr}%</p>
+      <p className="text__xl7-m is-white">{aprRounded}%</p>
       {children}
     </div>
   )

@@ -1,4 +1,4 @@
-import ReactSlider from 'react-slider'
+import ReactSlider from "react-slider"
 
 export interface LimitSliderProps {
   borrowUsed: number
@@ -18,7 +18,7 @@ function LimitSlider({
         thumbClassName="limit-thumb"
         trackClassName="limit-track"
         defaultValue={[borrowUsed, borrowLimit, liqThreshold]}
-        ariaLabel={['Leftmost thumb', 'Middle thumb', 'Rightmost thumb']}
+        ariaLabel={["Leftmost thumb", "Middle thumb", "Rightmost thumb"]}
         renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
         pearling
         minDistance={10}

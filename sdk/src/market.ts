@@ -216,7 +216,7 @@ export class AdventMarket {
     positions: PublicKey
   ) {
     const [reserve] = await this.reservePDA(token)
-
+    const [portfolio] = await this.portfolioPDA(authority)
     const r = this.reserveByToken(token)
 
     const userReserve = await sab.getATAAddress({
@@ -233,7 +233,7 @@ export class AdventMarket {
           market: this.address,
           reserve,
           settlementTable: r.settlementTableAddress,
-          portfolio: this.address,
+          portfolio,
           positions,
           reserveVault: r.vault,
           userReserve,

@@ -4,6 +4,7 @@ import { actions } from "../ui/depositui"
 import { actions as reservesActions } from "../reducer/reserves"
 import { PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "store"
+import { actions as userTokenBalanceActions } from "store/reducer/userTokenBalances"
 import { AdventMarket } from "@advent/sdk"
 import {
   Connection,
@@ -79,5 +80,6 @@ export function* fixedDeposit(
   )
 
   yield put(actions.depositSucceed())
+  yield put(userTokenBalanceActions.userTokenBalancesStateRequested())
   yield put(reservesActions.loadRequested())
 }

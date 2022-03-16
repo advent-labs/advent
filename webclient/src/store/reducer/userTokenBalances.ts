@@ -1,7 +1,7 @@
-import { createSlice, PayloadAction, Action } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction, Action } from "@reduxjs/toolkit"
 
 export interface UserTokenBalancesState {
-  status: 'loaded' | 'loading' | 'init' | 'error'
+  status: "loaded" | "loading" | "init" | "error"
   balances: UserTokenBalances
   loadedOnce: boolean
 }
@@ -11,41 +11,41 @@ export interface UserTokenBalances {
 }
 
 const initialState: UserTokenBalancesState = {
-  status: 'init',
+  status: "init",
   balances: {},
   loadedOnce: false,
 }
 
 export const userTokenBalances = createSlice({
-  name: 'userTokenBalances',
+  name: "userTokenBalances",
   initialState,
   reducers: {
     userTokenBalancesStateLoaded: (
       s: UserTokenBalancesState,
       action: PayloadAction<{
         splBalances: UserTokenBalances
-      }>,
+      }>
     ) => {
       const payload = action.payload
       s.balances = payload.splBalances
-      s.status = 'loaded'
+      s.status = "loaded"
       s.loadedOnce = true
     },
     userTokenBalancesStateErrored: (
       s: UserTokenBalancesState,
-      action: Action,
+      action: Action
     ) => {
-      s.status = 'error'
+      s.status = "error"
     },
     userTokenBalancesStateRequested: (
       s: UserTokenBalancesState,
-      action: Action,
+      action: Action
     ) => {
-      s.status = 'loading'
+      s.status = "loading"
     },
     resetTokenBalances: (s: UserTokenBalancesState, action: Action) => {
       s.balances = {}
-      s.status = 'init'
+      s.status = "init"
       s.loadedOnce = false
     },
   },
@@ -57,4 +57,5 @@ export const {
   userTokenBalancesStateRequested,
   resetTokenBalances,
 } = userTokenBalances.actions
+export const actions = userTokenBalances.actions
 export default userTokenBalances.reducer

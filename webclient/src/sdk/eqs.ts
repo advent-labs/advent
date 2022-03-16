@@ -71,7 +71,6 @@ export function totalInterestEarnedForDeposit(
     amount,
     periods
   )
-  console.log(interestAmounts)
   return R.sum(interestAmounts)
 }
 
@@ -79,7 +78,6 @@ export function totalInterestEarnedForDeposit(
 export function allocatedInterestRateForPeriod(p: SettlmentPeriod) {
   // (1 - ratio^2) * (1 - Interest^2) = 1)
   const ratio = p.deposited / p.borrowed
-  console.log(ratio)
   return Math.sqrt(1 - 1 / (1 + ratio ** 2))
 }
 

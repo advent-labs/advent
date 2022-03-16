@@ -4,7 +4,9 @@ import {
   selectors as portfolioSelectors,
   actions as portfolioActions,
 } from "../reducer/userPortfolio"
-import { actions as reservesActions, Reserve } from "../reducer/reserves"
+import { actions as userTokenBalanceActions } from "store/reducer/userTokenBalances"
+import { actions as reservesActions } from "../reducer/reserves"
+import { actions as fixedBorrowActions } from "store/reducer/fixedBorrow"
 import { PayloadAction } from "@reduxjs/toolkit"
 import { AdventMarket } from "@advent/sdk"
 import {
@@ -97,5 +99,7 @@ export function* fixedBorrow(
     positionsAddress
   )
 
+  yield put(fixedBorrowActions.succeeded())
+  yield put(userTokenBalanceActions.userTokenBalancesStateRequested())
   yield put(reservesActions.loadRequested())
 }

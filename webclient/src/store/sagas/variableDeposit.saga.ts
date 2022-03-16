@@ -14,6 +14,8 @@ import {
   selectors as portfolioSelectors,
   actions as portfolioActions,
 } from "../reducer/userPortfolio"
+import { actions as userTokenBalanceActions } from "store/reducer/userTokenBalances"
+
 import {
   Reserve,
   selectors as reservesSelectors,
@@ -112,7 +114,10 @@ export function* variableDeposit(
     "solanaConnectionContext"
   )) as SolanaConnectionContext
 
-  if (!wallet || !adventMarketSDK || !connection) return
+  if (!wallet || !adventMarketSDK || !connection) {
+    console.log("Context not available")
+    return
+  }
 
   const state = (yield select()) as RootState
 
@@ -128,7 +133,6 @@ export function* variableDeposit(
   if (!reserve) {
     throw new Error(`Unable to find reserve for ${token}`)
   }
-
   const positionsAddress = isPortfolioInitalized
     ? new PublicKey(state.userPortfolio.state.positionsAddress)
     : undefined
@@ -150,6 +154,6 @@ export function* variableDeposit(
   }
 
   yield put(variableDepositActions.succeeded())
-  yield put(portfolioActions.loadRequested())
+  yield put(userTokenBalanceActions.userTokenBalancesStateRequested())
   yield put(reservesActions.loadRequested())
 }

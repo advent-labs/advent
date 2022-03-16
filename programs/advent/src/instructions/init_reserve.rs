@@ -78,6 +78,7 @@ pub fn handler(
     r.variable_pool_subsidy = 0;
     r.duration_fee = 0;
 
+    r.decimals = ctx.accounts.token.decimals.into();
     r.settlement_table = ctx.accounts.settlement_table.key();
     r.token = ctx.accounts.token.key();
     r.deposit_note_mint = ctx.accounts.deposit_note_mint.key();

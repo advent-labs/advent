@@ -4,9 +4,9 @@ import { fetchUserTokenBalances } from "./sagas/fetchTokenBalances.saga"
 import { actions as userPortfolioActions } from "./reducer/userPortfolio"
 import { actions as reservesActions } from "./reducer/reserves"
 import { actions as variableDepositActions } from "./reducer/variableDeposit"
+import { actions as fixedDepositActions } from "./reducer/fixedDeposit"
 import { actions as depositBalanceActions } from "./reducer/depositBalances"
-import { actions as fixedBorrowUIActions } from "./ui/borrowui"
-import { actions as fixedDepositUIActions } from "./ui/depositui"
+import { actions as fixedBorrowActions } from "./reducer/fixedBorrow"
 import { fetchUserPortfolio } from "./sagas/fetchPortfolio.saga"
 import { fetchReserves } from "./sagas/fetchReserves"
 import { fixedBorrow } from "./sagas/fixedBorrow.saga"
@@ -24,8 +24,8 @@ function* saga() {
   )
   yield takeLatest(variableDepositActions.requested.type, variableDeposit)
   yield takeLatest(userPortfolioActions.loadRequested.type, fetchUserPortfolio)
-  yield takeLatest(fixedBorrowUIActions.doRequestBorrow.type, fixedBorrow)
-  yield takeLatest(fixedDepositUIActions.depositRequested.type, fixedDeposit)
+  yield takeLatest(fixedBorrowActions.requested.type, fixedBorrow)
+  yield takeLatest(fixedDepositActions.requested.type, fixedDeposit)
   yield takeLatest(
     depositBalanceActions.request.type,
     fetchUserDepositsBalances

@@ -1,63 +1,55 @@
-import Preview from '../../common/Preview'
-import Container from '../../blocks/Container'
-import { useAppDispatch, useAppSelector } from '../../store'
-import { Context } from '../../App'
-import { ReactNode, useContext } from 'react'
+import Preview from "../../common/Preview"
+import Container from "../../blocks/Container"
+import { useAppDispatch, useAppSelector } from "../../store"
+import { Context } from "../../App"
+import { ReactNode, useContext } from "react"
 import {
   actions as uiActions,
   selectBorrowUIValues,
-} from '../../store/ui/borrowui'
-import { totalInterestEarnedForDeposit } from '../../sdk/eqs'
-import { selectors } from '../../store/reducer/reserves'
-import Tabs from '../../common/Tabs'
-import TextInput from '../../blocks/TextInput'
-import ChangeParameters from '../../common/ChangeParameters'
-import Button from '../../blocks/Button'
-import { toast } from 'react-hot-toast'
-import Toast, { ToastData } from '../../common/Toast'
-import Switch from '../../blocks/Switch'
-import DataPoint from '../../common/DataPoint'
-import Warning from '../../blocks/Warning'
-import TimeInput from '../../blocks/TimeInput'
-import Collateral from '../../common/Collateral'
-import { Reserve } from '@advent/sdk'
-import TimeSlider from '../../common/TimeSlider'
-import { selectAppUIValues } from '../../store/ui/appui'
-import WalletBalance from 'common/WalletBalance'
+} from "../../store/ui/borrowui"
+import { actions as fixedBorrowActions } from "store/reducer/fixedBorrow"
+import { selectors } from "../../store/reducer/reserves"
+import Tabs from "../../common/Tabs"
+import TextInput from "../../blocks/TextInput"
+import ChangeParameters from "../../common/ChangeParameters"
+import Button from "../../blocks/Button"
+import Warning from "../../blocks/Warning"
+import TimeInput from "../../blocks/TimeInput"
+import TimeSlider from "../../common/TimeSlider"
+import { selectAppUIValues } from "../../store/ui/appui"
+import WalletBalance from "common/WalletBalance"
 
 function BorrowFixed() {
   const dispatch = useAppDispatch()
   const { addresses } = useContext(Context)
-  const { amount, duration, tab, inputVal, inputTime } =
+  const { amount, duration, tab, inputVal } =
     useAppSelector(selectBorrowUIValues)
-  const isRepay = tab === 'Repay'
+  const timeInput = useAppSelector((s) => s.borrowui.duration)
+  const isRepay = tab === "Repay"
   const token = useAppSelector((s) => s.borrowui.token)
-  console.log('token', token)
   const reserve = useAppSelector(selectors.selectReserveByToken(token))
   const { timeTab } = useAppSelector(selectAppUIValues)
-  const isMonths = timeTab === 'Months'
+  const isMonths = timeTab === "Months"
+
   if (!reserve) return <></>
+
   const mintMeta = addresses?.mintMetaMap[token]
-  console.log('meta', mintMeta)
   const { name } = mintMeta
-  const totalInterestEarned = Reserve.math.availableInterestForDuration(
-    reserve.settlementTable,
-    amount,
-    duration,
-  )
-  const apr = (totalInterestEarned / amount / duration) * 12 || 0
-  const tabOptions = ['Borrow', 'Repay']
+  const rate = 0.06
+  const apr = rate + duration / 2000 || 0
+  const totalInterestSpent = (amount * apr * duration) / 365
+  const tabOptions = ["Borrow", "Repay"]
   const tabHandler = (tab: string) => uiActions.setTab(tab)
   const parameters = [
-    { label: 'Borrow limit', value: 80, nextValue: 85, square: 'red' },
+    { label: "Borrow limit", value: 80, nextValue: 85, square: "red" },
     {
-      label: 'Liquidation threshold',
+      label: "Liquidation threshold",
       value: 85,
       nextValue: 88,
-      square: 'black',
+      square: "black",
     },
-    { label: 'Health factor', value: 1.34, nextValue: 1.52 },
-    { label: 'Loan to value', value: 75 },
+    { label: "Health factor", value: 1.34, nextValue: 1.52 },
+    { label: "Loan to value", value: 75 },
   ]
 
   const now = Date.now()
@@ -65,26 +57,40 @@ function BorrowFixed() {
   const msDay = 8.64e7
   let date
   if (isMonths) {
-    date = new Date(now + msMonth * parseFloat(inputTime))
+    date = new Date(now + msMonth * duration)
   } else {
-    date = new Date(now + msDay * parseFloat(inputTime))
+    date = new Date(now + msDay * duration)
   }
   const displayDate = date.toString().slice(3, 16)
 
   const dataPoints = [
     {
       label: `Total at maturity | ${displayDate}`,
-      value: '0',
+      value: amount,
       currency: name,
       loadedOnce: true,
     },
     {
-      label: 'Interest paid',
-      value: '0',
+      label: "Interest paid",
+      value: totalInterestSpent.toFixed(2),
       currency: name,
       loadedOnce: true,
     },
   ]
+
+  const handler = () => {
+    console.log(amount)
+    console.log(reserve.token)
+    const token = reserve.token
+
+    dispatch(
+      fixedBorrowActions.requested({
+        amount: amount * 10 ** reserve.decimals,
+        token,
+        duration,
+      })
+    )
+  }
 
   const displayDataPoints = dataPoints.map((e, i) => {
     return (
@@ -105,7 +111,7 @@ function BorrowFixed() {
             message="APR changes based on lend amount and maturity chosen"
             xtra="mt__2"
           />
-          <Collateral />
+          {/* <Collateral /> */}
           <Container
             type="background"
             xtra="mt-2 br__8 is-full-width pt-4 pb-0"
@@ -129,26 +135,28 @@ function BorrowFixed() {
             <div className="center-column">
               <TextInput
                 value={inputVal}
-                handleInput={uiActions.inputHasChanged}
+                handleInput={uiActions.setAmount}
                 large
               />
-              <p className="text__medium is-black-30">≈$0</p>
+              {/* <p className="text__medium is-black-30">≈$0</p> */}
               <p className="text__medium-m is-grey-1 is-align-self-baseline ml-4 mb-2">
                 Lend term (max. 1 year)
               </p>
               <div className="is-flex is-full-width">
                 <TimeInput
-                  value={inputTime}
-                  handleInput={uiActions.inputTimeHasChanged}
+                  value={timeInput}
+                  handleInput={uiActions.setDuration}
                 />
                 <Container type="light" xtra="br__4 pt-2 pb-2 pl-4 pr-4 ml-4">
                   <p className="text__small is-grey-1">APR fixed</p>
-                  <p className="text__xl-m is-grey-1">{apr}%</p>
+                  <p className="text__xl-m is-grey-1">
+                    {(apr * 100).toFixed(2)}%
+                  </p>
                 </Container>
               </div>
               <TimeSlider
-                value={inputTime}
-                handleInput={uiActions.inputTimeHasChanged}
+                value={timeInput}
+                handleInput={uiActions.setDuration}
                 isMonths={isMonths}
               />
             </div>
@@ -157,7 +165,7 @@ function BorrowFixed() {
           <Button
             type="secondary"
             text={tab}
-            handler={() => toast.success('You did it')}
+            handler={handler}
             xtra="is-full-width mt-4"
           />
           <WalletBalance mint={token} name={name} />
