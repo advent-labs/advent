@@ -13,8 +13,7 @@ import Tabs from '../../common/Tabs'
 import TextInput from '../../blocks/TextInput'
 import ChangeParameters from '../../common/ChangeParameters'
 import Button from '../../blocks/Button'
-import { toast } from 'react-toastify'
-import Toast, { ToastData } from '../../common/Toast'
+import { toast } from 'react-hot-toast'
 import Switch from '../../blocks/Switch'
 import DataPoint from '../../common/DataPoint'
 import Warning from '../../blocks/Warning'
@@ -117,7 +116,7 @@ function BorrowFixed() {
           <Button
             type="secondary"
             text={tab}
-            handler={() => toast(<Toast props={toastData} />)}
+            handler={() => toast.success('You did it')}
             xtra="is-full-width mt-4"
           />
           <WalletBalance mint={token} name={name} />

@@ -1,14 +1,18 @@
-import { NATIVE_MINT } from "@solana/spl-token"
-import { TokenID } from "./realworld.service"
-import a from "./addresses.json"
-import usdcIcon from "./assets/usdc.svg"
-import usdtIcon from "./assets/usdt.svg"
-import solIcon from "./assets/sol.svg"
+import { NATIVE_MINT } from '@solana/spl-token'
+import { TokenID } from './realworld.service'
+import a from './addresses.json'
+import usdcIcon from './assets/usdc.svg'
+import usdtIcon from './assets/usdt.svg'
+import solIcon from './assets/sol.svg'
+import ustIcon from './assets/ustIcon.png'
+import btcIcon from './assets/btc.png'
 
 export interface Addresses {
   mintUsdc: string
   mintUsdt: string
   mintMetaMap: MintMetaMap
+  mintUST: string
+  mintFrax: string
 }
 
 export interface MintMeta {
@@ -31,35 +35,35 @@ const SOL = NATIVE_MINT.toBase58()
 export const mints: { dev: MintMetaMap } = {
   dev: {
     [a.mintUsdc]: {
-      name: "USDC",
+      name: 'USDC',
       decimals: 6,
       address: USDC_DEV,
       priceID: TokenID.usdc,
       icon: usdcIcon,
     },
     [a.mintUsdt]: {
-      name: "USDT",
+      name: 'SOL',
       decimals: 6,
       address: USDT_DEV,
       priceID: TokenID.usdt,
-      icon: usdtIcon,
+      icon: solIcon,
     },
     [a.mintUST]: {
-      name: "UST",
+      name: 'UST',
       decimals: 6,
       address: UST_DEV,
       priceID: TokenID.usdt,
-      icon: usdtIcon,
+      icon: ustIcon,
     },
     [a.mintFrax]: {
-      name: "FRAX",
+      name: 'BTC',
       decimals: 6,
       address: FRAX_DEV,
       priceID: TokenID.usdt,
-      icon: usdtIcon,
+      icon: btcIcon,
     },
     [SOL]: {
-      name: "SOL",
+      name: 'SOL',
       decimals: 9,
       address: SOL,
       priceID: TokenID.sol,
@@ -74,8 +78,8 @@ interface Faucets {
 }
 
 export const devFaucets: Faucets = {
-  usdtFaucet: "9zTnAGkYZSBAECLXYBqyisyUJiZaundV36FjVg5g61ev",
-  usdcFaucet: "ETAxYSigjMYiJnKkYsZCK3FnT1Grot8ejtE4d2CarmQU",
+  usdtFaucet: '9zTnAGkYZSBAECLXYBqyisyUJiZaundV36FjVg5g61ev',
+  usdcFaucet: 'ETAxYSigjMYiJnKkYsZCK3FnT1Grot8ejtE4d2CarmQU',
 }
 
 export const addresses: { dev: Addresses } = {

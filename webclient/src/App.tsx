@@ -39,7 +39,6 @@ import {
 import { AdventMarket, AdventPortfolio, AdventSDK } from '@advent/sdk'
 import { actions as userPortfolioActions } from './store/reducer/userPortfolio'
 import { actions as reservesAction } from './store/reducer/reserves'
-import { ToastContainer } from 'react-toastify'
 import Portfolio from './common/Portfolio'
 import { Toaster } from 'react-hot-toast'
 

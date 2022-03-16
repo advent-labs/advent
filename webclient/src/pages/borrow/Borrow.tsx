@@ -20,42 +20,157 @@ function Borrow() {
   const dispatch = useAppDispatch()
   const { isFixed, modalOpen } = useAppSelector(selectAppUIValues)
   const reserves = useAppSelector((s) => s.reserves.state)
+  const { balances } = useAppSelector((state) => state.userTokenAccounts)
+
+  const sol = balances[addresses?.mintUsdt] / 10 ** 6 || 0
+  const usdc = balances[addresses?.mintUsdc] / 10 ** 6 || 0
+  const ust = balances[addresses?.mintUST] / 10 ** 6 || 0
+  const btc = balances[addresses?.mintFrax] / 10 ** 6 || 0
 
   const mockDataFixed = [
-    {
-      value: 6.56,
-      currency: '%',
-      loadedOnce: true,
-      icon: rate,
-    },
-    {
-      value: 45000.32,
-      currency: 'USDC',
-      loadedOnce: true,
-    },
-    {
-      value: 10000000,
-      currency: 'USDC',
-      loadedOnce: true,
-    },
+    [
+      {
+        value: 6.56,
+        currency: '%',
+        loadedOnce: true,
+        icon: rate,
+      },
+      {
+        value: 512493.32,
+        currency: 'SOL',
+        loadedOnce: true,
+      },
+      {
+        value: sol,
+        currency: 'SOL',
+        loadedOnce: true,
+      },
+    ],
+    [
+      {
+        value: 9.31,
+        currency: '%',
+        loadedOnce: true,
+        icon: rate,
+      },
+      {
+        value: 358104.59,
+        currency: 'USDC',
+        loadedOnce: true,
+      },
+      {
+        value: usdc,
+        currency: 'USDC',
+        loadedOnce: true,
+      },
+    ],
+    [
+      {
+        value: 7.14,
+        currency: '%',
+        loadedOnce: true,
+        icon: rate,
+      },
+      {
+        value: 458371.92,
+        currency: 'UST',
+        loadedOnce: true,
+      },
+      {
+        value: ust,
+        currency: 'UST',
+        loadedOnce: true,
+      },
+    ],
+    [
+      {
+        value: 4.56,
+        currency: '%',
+        loadedOnce: true,
+        icon: rate,
+      },
+      {
+        value: 719.88,
+        currency: 'BTC',
+        loadedOnce: true,
+      },
+      {
+        value: btc,
+        currency: 'BTC',
+        loadedOnce: true,
+      },
+    ],
   ]
 
   const mockDataVar = [
-    {
-      value: 7.12,
-      currency: '%',
-      loadedOnce: true,
-    },
-    {
-      value: 0,
-      currency: 'USDC',
-      loadedOnce: true,
-    },
-    {
-      value: 9999999,
-      currency: 'USDC',
-      loadedOnce: true,
-    },
+    [
+      {
+        value: 7.34,
+        currency: '%',
+        loadedOnce: true,
+      },
+      {
+        value: 2192740.01,
+        currency: 'SOL',
+        loadedOnce: true,
+      },
+      {
+        value: sol,
+        currency: 'SOL',
+        loadedOnce: true,
+      },
+    ],
+    [
+      {
+        value: 8.46,
+        currency: '%',
+        loadedOnce: true,
+      },
+      {
+        value: 10283205.93,
+        currency: 'USDC',
+        loadedOnce: true,
+      },
+      {
+        value: usdc,
+        currency: 'USDC',
+        loadedOnce: true,
+      },
+    ],
+    [
+      {
+        value: 3.85,
+        currency: '%',
+        loadedOnce: true,
+      },
+      {
+        value: 857495.76,
+        currency: 'UST',
+        loadedOnce: true,
+      },
+      {
+        value: ust,
+        currency: 'UST',
+        loadedOnce: true,
+      },
+    ],
+    [
+      {
+        value: 4.45,
+        currency: '%',
+        loadedOnce: true,
+      },
+      {
+        value: 8713.34,
+        currency: 'BTC',
+        loadedOnce: true,
+      },
+      {
+        value: btc,
+        currency: 'BTC',
+        loadedOnce: true,
+      },
+    ],
   ]
 
   const fixedData = reserves.map((e, i) => {
@@ -65,7 +180,7 @@ function Borrow() {
       icon: icon,
       uTokenName: name,
       mint: e.token,
-      data: mockDataFixed,
+      data: mockDataFixed[i],
     }
   })
 
@@ -76,7 +191,7 @@ function Borrow() {
       icon: icon,
       uTokenName: name,
       mint: e.token,
-      data: mockDataVar,
+      data: mockDataVar[i],
     }
   })
 
