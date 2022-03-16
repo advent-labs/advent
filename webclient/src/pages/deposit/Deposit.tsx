@@ -1,17 +1,18 @@
-import { selectAppUIValues, actions as appActions } from '../../store/ui/appui'
-import { useAppDispatch, useAppSelector } from '../../store'
-import { actions as uiActions } from '../../store/ui/depositui'
-import { Context } from '../../App'
-import { useContext } from 'react'
-import Container from '../../blocks/Container'
-import RateTabs from '../../common/RateTabs'
-import Reserve from '../../common/Reserve'
-import { Modal } from '../../common/Modal'
-import DepositFixed from './DepositFixed'
-import DepositVar from './DepositVar'
-import rate from '../../assets/rate.svg'
-import Portfolio from '../../common/Portfolio'
-import { useWallet } from '@solana/wallet-adapter-react'
+import { selectAppUIValues, actions as appActions } from "../../store/ui/appui"
+import { useAppDispatch, useAppSelector } from "../../store"
+import { actions as uiActions } from "../../store/ui/depositui"
+import { Context } from "../../App"
+import { useContext } from "react"
+import Container from "../../blocks/Container"
+import RateTabs from "../../common/RateTabs"
+import Reserve, { ReserveProps } from "../../common/Reserve"
+import { Modal } from "../../common/Modal"
+import DepositFixed from "./DepositFixed"
+import DepositVar from "./DepositVar"
+import rate from "../../assets/rate.svg"
+import Portfolio from "../../common/Portfolio"
+import { useWallet } from "@solana/wallet-adapter-react"
+import { ReserveData } from "common/UserReserve"
 
 function Deposit() {
   const { addresses } = useContext(Context)
@@ -20,178 +21,36 @@ function Deposit() {
   const reserves = useAppSelector((s) => s.reserves.state)
   const { balances } = useAppSelector((state) => state.userTokenAccounts)
 
-  const sol = balances[addresses?.mintUsdt] / 10 ** 6 || 0
-  const usdc = balances[addresses?.mintUsdc] / 10 ** 6 || 0
-  const ust = balances[addresses?.mintUST] / 10 ** 6 || 0
-  const btc = balances[addresses?.mintFrax] / 10 ** 6 || 0
-
   const mockDataFixed = [
-    [
-      {
-        value: 6.56,
-        currency: '%',
-        loadedOnce: true,
-        icon: rate,
-      },
-      {
-        value: 512493.32,
-        currency: 'SOL',
-        loadedOnce: true,
-      },
-      {
-        value: sol,
-        currency: 'SOL',
-        loadedOnce: true,
-      },
-    ],
-    [
-      {
-        value: 9.31,
-        currency: '%',
-        loadedOnce: true,
-        icon: rate,
-      },
-      {
-        value: 358104.59,
-        currency: 'USDC',
-        loadedOnce: true,
-      },
-      {
-        value: usdc,
-        currency: 'USDC',
-        loadedOnce: true,
-      },
-    ],
-    [
-      {
-        value: 7.14,
-        currency: '%',
-        loadedOnce: true,
-        icon: rate,
-      },
-      {
-        value: 458371.92,
-        currency: 'UST',
-        loadedOnce: true,
-      },
-      {
-        value: ust,
-        currency: 'UST',
-        loadedOnce: true,
-      },
-    ],
-    [
-      {
-        value: 4.56,
-        currency: '%',
-        loadedOnce: true,
-        icon: rate,
-      },
-      {
-        value: 719.88,
-        currency: 'BTC',
-        loadedOnce: true,
-      },
-      {
-        value: btc,
-        currency: 'BTC',
-        loadedOnce: true,
-      },
-    ],
+    [7.34, 2192740.01],
+    [8.46, 10283205.93],
+    [3.85, 857495.76],
+    [4.45, 8713.34],
   ]
-
   const mockDataVar = [
-    [
-      {
-        value: 7.34,
-        currency: '%',
-        loadedOnce: true,
-      },
-      {
-        value: 2192740.01,
-        currency: 'SOL',
-        loadedOnce: true,
-      },
-      {
-        value: sol,
-        currency: 'SOL',
-        loadedOnce: true,
-      },
-    ],
-    [
-      {
-        value: 8.46,
-        currency: '%',
-        loadedOnce: true,
-      },
-      {
-        value: 10283205.93,
-        currency: 'USDC',
-        loadedOnce: true,
-      },
-      {
-        value: usdc,
-        currency: 'USDC',
-        loadedOnce: true,
-      },
-    ],
-    [
-      {
-        value: 3.85,
-        currency: '%',
-        loadedOnce: true,
-      },
-      {
-        value: 857495.76,
-        currency: 'UST',
-        loadedOnce: true,
-      },
-      {
-        value: ust,
-        currency: 'UST',
-        loadedOnce: true,
-      },
-    ],
-    [
-      {
-        value: 4.45,
-        currency: '%',
-        loadedOnce: true,
-      },
-      {
-        value: 8713.34,
-        currency: 'BTC',
-        loadedOnce: true,
-      },
-      {
-        value: btc,
-        currency: 'BTC',
-        loadedOnce: true,
-      },
-    ],
+    [7.34, 2192740.01],
+    [8.46, 10283205.93],
+    [3.85, 857495.76],
+    [4.45, 8713.34],
   ]
 
-  const fixedData = reserves.map((e, i) => {
-    const mintMeta = addresses?.mintMetaMap[e.token]
-    const { name, icon } = mintMeta
-    return {
-      icon: icon,
-      uTokenName: name,
-      mint: e.token,
-      data: mockDataFixed[i],
+  const toReserveData =
+    (fixedOrVar: "fixed" | "var") => (token: string, index: number) => {
+      const mintMeta = addresses?.mintMetaMap[token]
+      const { name, icon } = mintMeta
+      const balance = balances[token] / 10 ** 6 || 0
+      const dataPointSet = fixedOrVar === "fixed" ? mockDataFixed : mockDataVar
+      const [rate, supply] = dataPointSet[index]
+      return {
+        icon: icon,
+        token,
+        uTokenName: name,
+        dataPoints: [`${rate}%`, `${supply} ${name}`, `${balance} ${name}`],
+      }
     }
-  })
+  const fixedData = reserves.map((r) => r.token).map(toReserveData("fixed"))
 
-  const varData = reserves.map((e, i) => {
-    const mintMeta = addresses?.mintMetaMap[e.token]
-    const { name, icon } = mintMeta
-    return {
-      icon: icon,
-      uTokenName: name,
-      mint: e.token,
-      data: mockDataVar[i],
-    }
-  })
+  const varData = reserves.map((r) => r.token).map(toReserveData("var"))
 
   const onReserveClick = (v: string) => {
     dispatch(uiActions.setToken(v))
@@ -202,7 +61,7 @@ function Deposit() {
     <div className="columns is-mobile text-left">
       <p className="column is-3 text__medium-m is-grey-1">Asset</p>
       <p className="column is-3 text__medium-m is-grey-1">
-        {isFixed ? 'Fixed' : 'Variable'} lending rate
+        {isFixed ? "Fixed" : "Variable"} lending rate
       </p>
       <p className="column is-3 text__medium-m is-grey-1">Supply balance</p>
       <p className="column is-3 text__medium-m is-grey-1">Wallet balance</p>
@@ -211,10 +70,10 @@ function Deposit() {
 
   const reserveRows = isFixed
     ? fixedData.map((e, i) => {
-        return <Reserve {...e} key={i} action={() => onReserveClick(e.mint)} />
+        return <Reserve {...e} key={i} action={() => onReserveClick(e.token)} />
       })
     : varData.map((e, i) => {
-        return <Reserve {...e} key={i} action={() => onReserveClick(e.mint)} />
+        return <Reserve {...e} key={i} action={() => onReserveClick(e.token)} />
       })
 
   return (
