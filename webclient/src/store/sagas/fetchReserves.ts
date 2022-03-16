@@ -34,5 +34,5 @@ export function* fetchReserves() {
   yield put(actions.loaded(reserves))
 
   // now that reserves are loaded, get the user's balances for token accounts in the reserves
-  // yield put(portfolioActions.loadRequested())
+  yield put(portfolioActions.loadRequested())
 }
