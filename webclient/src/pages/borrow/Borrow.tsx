@@ -14,6 +14,7 @@ import BorrowFixed from "./BorrowFixed"
 import BorrowVar from "./BorrowVar"
 import rate from "../../assets/rate.svg"
 import Portfolio from "../../common/Portfolio"
+import { niceNum } from "toolbox"
 
 function Borrow() {
   const { addresses } = useContext(Context)
@@ -25,14 +26,14 @@ function Borrow() {
   const mockDataFixed = [
     [8.64, 2192740.01],
     [9.26, 10283205.93],
-    [6.15, 857495.76],
-    [7.48, 8713.34],
+    [6.15, 8595.76],
+    [7.48, 820713.34],
   ]
   const mockDataVar = [
     [7.34, 2192740.01],
     [8.46, 10283205.93],
-    [3.85, 857495.76],
-    [4.45, 8713.34],
+    [3.85, 8595.76],
+    [4.45, 820713.34],
   ]
 
   const toReserveData =
@@ -49,8 +50,8 @@ function Borrow() {
         uTokenName: name,
         dataPoints: [
           `${rate}%`,
-          `${supply} ${name}`,
-          `${balance.toFixed(2)} ${name}`,
+          `${niceNum(supply)} ${name}`,
+          `${niceNum(balance)} ${name}`,
         ],
       }
     }
@@ -91,11 +92,11 @@ function Borrow() {
       <div className="columns">
         <div className="width__70">
           <div className="center-column title-block">
-            <h1 className="text__xl6-semi is-white is-gilroy">Borrow crypto</h1>
+            <h1 className="text__xl6-semi is-white is-gilroy">Borrow assets</h1>
             <p className="text__large-semi is-alpha-60 width__65 mt-4">
-              Vestibulum ante ipsum primis in faucibus orci luctus et ultrices
-              posuere cubilia Curae; Donec velit neque, auctor sit amet aliquam
-              vel, ullamcorper sit amet.
+              Borrow with certainty. Choose between locking in interest rates
+              for a custom-term loan, or a flexible variable-rate loan you can
+              exit at any time.
             </p>
           </div>
           <Container
