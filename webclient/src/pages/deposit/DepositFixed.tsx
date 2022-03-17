@@ -23,28 +23,27 @@ import { selectAppUIValues } from "../../store/ui/appui"
 import WalletBalance from "common/WalletBalance"
 
 function DepositFixed() {
-  const dispatch = useAppDispatch()
   const { addresses } = useContext(Context)
-  const { amount, duration, tab, inputTime } = useAppSelector(
+  const token = useAppSelector((s) => s.depositui.token)
+  const reserve = useAppSelector(selectors.selectReserveByToken(token))
+  const { amount, duration, tab, durationString } = useAppSelector(
     selectDepositUIValues
   )
   const { timeTab } = useAppSelector(selectAppUIValues)
-  const isMonths = timeTab === "Months"
 
-  const isWithdraw = tab === "Withdraw"
-  const token = useAppSelector((s) => s.depositui.token)
-  const reserve = useAppSelector(selectors.selectReserveByToken(token))
   if (!reserve) return <></>
+
+  const isMonths = timeTab === "Months"
+  const isWithdraw = tab === "Withdraw"
   const mintMeta = addresses?.mintMetaMap[token]
   const { name } = mintMeta
-
+  const amountNormalized = amount * 10 ** reserve.decimals
   const totalInterestEarned = Reserve.math.availableInterestForDuration(
     reserve.settlementTable,
-    amount,
+    amountNormalized,
     duration
   )
-
-  const apr = (totalInterestEarned / amount / duration) * 12 || 0
+  const apr = (totalInterestEarned / amountNormalized / duration) * 365 || 0
   const tabOptions = ["Lend", "Withdraw"]
   const tabHandler = (tab: string) => uiActions.setTab(tab)
   const parameters = [
@@ -64,22 +63,22 @@ function DepositFixed() {
   const msDay = 8.64e7
   let date
   if (isMonths) {
-    date = new Date(now + msMonth * parseFloat(inputTime))
+    date = new Date(now + msMonth * duration)
   } else {
-    date = new Date(now + msDay * parseFloat(inputTime))
+    date = new Date(now + msDay * duration)
   }
   const displayDate = date.toString().slice(3, 16)
 
   const dataPoints = [
     {
       label: `Total at maturity | ${displayDate}`,
-      value: "0",
+      value: amount,
       currency: name,
       loadedOnce: true,
     },
     {
       label: "Interest earned",
-      value: "0",
+      value: (totalInterestEarned / 10 ** reserve.decimals).toFixed(2),
       currency: name,
       loadedOnce: true,
     },
@@ -134,23 +133,25 @@ function DepositFixed() {
                 handleInput={uiActions.inputHasChanged}
                 large
               />
-              <p className="text__medium is-black-30">≈$0</p>
+              {/* <p className="text__medium is-black-30">≈$0</p> */}
               <p className="text__medium-m is-grey-1 is-align-self-baseline mb-2">
                 Lend term (max. 1 year)
               </p>
               <div className="is-flex is-full-width">
                 <TimeInput
-                  value={inputTime}
-                  handleInput={uiActions.inputTimeHasChanged}
+                  value={durationString}
+                  handleInput={uiActions.setDuration}
                 />
                 <Container type="light" xtra="br__4 pt-2 pb-2 pl-4 pr-4 ml-4">
                   <p className="text__small is-grey-1">APR fixed</p>
-                  <p className="text__xl-m is-grey-1">{apr}%</p>
+                  <p className="text__xl-m is-grey-1">
+                    {(apr * 100).toFixed(2)}%
+                  </p>
                 </Container>
               </div>
               <TimeSlider
-                value={inputTime}
-                handleInput={uiActions.inputTimeHasChanged}
+                value={durationString}
+                handleInput={uiActions.setDuration}
                 isMonths={isMonths}
               />
             </div>

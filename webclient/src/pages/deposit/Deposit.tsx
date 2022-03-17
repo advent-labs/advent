@@ -45,7 +45,11 @@ function Deposit() {
         icon: icon,
         token,
         uTokenName: name,
-        dataPoints: [`${rate}%`, `${supply} ${name}`, `${balance} ${name}`],
+        dataPoints: [
+          `${rate}%`,
+          `${supply} ${name}`,
+          `${balance.toFixed(2)} ${name}`,
+        ],
       }
     }
   const fixedData = reserves.map((r) => r.token).map(toReserveData("fixed"))

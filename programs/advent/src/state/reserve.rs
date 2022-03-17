@@ -100,7 +100,13 @@ impl Reserve {
 
     pub fn make_fixed_borrow(&self, start: u64, duration: u64, amount: u64) -> FixedBorrow {
         // TODO - calc interest
-        let interest_amount = amount * 6 / 100;
+
+        // 6%
+        let annual_interest_amount = amount * 6 / 100;
+
+        // get portion of interest for the duration
+        let interest_amount = annual_interest_amount * duration / 365;
+
         let token = self.token;
         FixedBorrow {
             token,
