@@ -36,7 +36,7 @@ function BorrowFixed() {
   const mintMeta = addresses?.mintMetaMap[token]
   const { name } = mintMeta
   const rate = 0.06
-  const apr = rate + duration / 2000 || 0
+  const apr = rate + duration / 3000 || 0
   const totalInterestSpent = (amount * apr * duration) / 365
   const tabOptions = ["Borrow", "Repay"]
   const tabHandler = (tab: string) => uiActions.setTab(tab)
