@@ -1,6 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from ".."
 import { actions as reservesActions } from "../reducer/reserves"
+import { actions as fixedDepositActions } from "../reducer/fixedDeposit"
+import { actions as variableDepositActions } from "../reducer/variableDeposit"
 import { actions as uiActions } from "../ui/appui"
 export interface DepositRequestedPayload {
   amount: number
@@ -53,8 +55,18 @@ export const depositUI = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(variableDepositActions.succeeded, (s) => {
+      s.duration = "1"
+      s.amount = "0"
+    })
+    builder.addCase(fixedDepositActions.succeeded, (s) => {
+      s.duration = "1"
+      s.amount = "0"
+    })
     builder.addCase(reservesActions.loaded, (s, a) => {
-      s.token = a.payload[0].token
+      if (s.token === "") {
+        s.token = a.payload[0].token
+      }
     })
     builder.addCase(uiActions.setTimeTab, (s, a) => {
       s.duration = "1"

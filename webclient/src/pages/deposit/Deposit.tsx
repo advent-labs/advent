@@ -13,6 +13,7 @@ import rate from "../../assets/rate.svg"
 import Portfolio from "../../common/Portfolio"
 import { useWallet } from "@solana/wallet-adapter-react"
 import { ReserveData } from "common/UserReserve"
+import { niceNum } from "toolbox/nicenum"
 
 function Deposit() {
   const { addresses } = useContext(Context)
@@ -47,8 +48,8 @@ function Deposit() {
         uTokenName: name,
         dataPoints: [
           `${rate}%`,
-          `${supply} ${name}`,
-          `${balance.toFixed(2)} ${name}`,
+          `${niceNum(supply)} ${name}`,
+          `${niceNum(balance)} ${name}`,
         ],
       }
     }

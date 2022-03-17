@@ -127,7 +127,7 @@ function DepositVar() {
                 handleInput={uiActions.inputHasChanged}
                 large
               />
-              <p className="text__medium is-black-30">≈$0</p>
+              {/* <p className="text__medium is-black-30">≈$0</p> */}
             </div>
           )}
           <ChangeParameters params={parameters} />
