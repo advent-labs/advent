@@ -3,6 +3,7 @@ import { RootState } from ".."
 
 import { actions as fixedDepositActions } from "../reducer/fixedDeposit"
 import { actions as variableDepositActions } from "../reducer/variableDeposit"
+import { actions as fixedBorrowActions } from "../reducer/fixedBorrow"
 
 export type PortTab = "Overview" | "Lend" | "Borrow"
 export type TimeTab = "Months" | "Days"
@@ -64,6 +65,9 @@ export const appUI = createSlice({
       s.modalOpen = false
     })
     builder.addCase(fixedDepositActions.succeeded, (s) => {
+      s.modalOpen = false
+    })
+    builder.addCase(fixedBorrowActions.succeeded, (s) => {
       s.modalOpen = false
     })
   },

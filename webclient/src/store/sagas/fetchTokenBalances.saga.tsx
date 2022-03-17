@@ -1,20 +1,20 @@
-import { deserializeAccount, getATAAddress } from '@saberhq/token-utils'
-import { Connection, PublicKey } from '@solana/web3.js'
-import { Addresses } from '../../addresses'
-import Toast, { ToastData } from '../../common/Toast'
-import { toast } from 'react-hot-toast'
-import { call, getContext, put } from 'redux-saga/effects'
+import { deserializeAccount, getATAAddress } from "@saberhq/token-utils"
+import { Connection, PublicKey } from "@solana/web3.js"
+import { Addresses } from "../../addresses"
+import Toast, { ToastData } from "../../common/Toast"
+import { toast } from "react-hot-toast"
+import { call, getContext, put } from "redux-saga/effects"
 import {
   UserTokenBalances,
   userTokenBalancesStateErrored,
   userTokenBalancesStateLoaded,
-} from '../reducer/userTokenBalances'
-import { SolanaConnectionContext } from '../../solanaConnectionContext'
-import { Wallet } from '@project-serum/anchor/src/provider'
+} from "../reducer/userTokenBalances"
+import { SolanaConnectionContext } from "../../solanaConnectionContext"
+import { Wallet } from "@project-serum/anchor/src/provider"
 
 export function* fetchUserTokenBalances() {
   const { connection, wallet, addresses } = (yield getContext(
-    'solanaConnectionContext',
+    "solanaConnectionContext"
   )) as SolanaConnectionContext
   if (!connection || !wallet) return
 
@@ -23,7 +23,7 @@ export function* fetchUserTokenBalances() {
       doFetchUserTokenBalances,
       connection,
       wallet,
-      addresses,
+      addresses
     )) as {
       splBalances: UserTokenBalances
     }
@@ -33,7 +33,7 @@ export function* fetchUserTokenBalances() {
     const toastData: ToastData = {
       title: e.name,
       message: e.message,
-      type: 'error',
+      type: "error",
     }
     toast.error(e.name)
     console.log(e)
@@ -48,24 +48,24 @@ function deserializeToken(b: Buffer) {
 async function doFetchUserTokenBalances(
   connection: Connection,
   wallet: Wallet,
-  addresses: Addresses,
+  addresses: Addresses
 ): Promise<{
   splBalances: UserTokenBalances
 }> {
-  const { mintUsdc, mintUsdt } = addresses
+  const { mintUsdc, mintUsdt, mintFrax, mintUST } = addresses
 
-  const mintAdds = [mintUsdc, mintUsdt]
+  const mintAdds = [mintUsdc, mintUsdt, mintFrax, mintUST]
 
   const atas = await Promise.all(
     mintAdds
       .map((m) => new PublicKey(m))
-      .map((mint) => getATAAddress({ mint, owner: wallet.publicKey })),
+      .map((mint) => getATAAddress({ mint, owner: wallet.publicKey }))
   )
 
   const tokens = await connection.getMultipleAccountsInfo(atas)
 
   const tokenBalances = tokens.map((x) =>
-    x ? deserializeToken(x.data as Buffer) : 0,
+    x ? deserializeToken(x.data as Buffer) : 0
   )
 
   const solMint = wallet.publicKey
@@ -74,7 +74,7 @@ async function doFetchUserTokenBalances(
   // reduce to map by mint key
   let splBalances = mintAdds.reduce(
     (ac, k, i) => ({ ...ac, [k]: tokenBalances[i] }),
-    {},
+    {}
   )
 
   const solSPL: UserTokenBalances = { [solMint.toBase58()]: solBalance }

@@ -15,6 +15,7 @@ import {
   Transaction,
   TransactionInstruction,
 } from "@solana/web3.js"
+import { toast } from "react-toastify"
 
 export async function signAllAndSend(
   ixs: TransactionInstruction[],
@@ -42,6 +43,7 @@ export async function signAllAndSend(
 
   const rawTx = tx.serialize()
 
+  toast("Confirming transaction")
   try {
     const sig = await sendAndConfirmRawTransaction(connection, rawTx)
     console.log(sig)

@@ -18,7 +18,7 @@ import {
 import { Wallet } from "@project-serum/anchor"
 import { getOrCreateATA, signAllAndSend } from "./common"
 import { RootState } from "store"
-import toast from "react-hot-toast"
+import { toast } from "react-toastify"
 
 async function doFixedBorrow(
   sdk: AdventMarket,
@@ -65,6 +65,7 @@ async function doFixedBorrow(
   )
   ixs.push(ix)
   const sig = await signAllAndSend(ixs, wallet, connection, additionalSigners)
+  toast("Borrow succeeded")
   return sig
 }
 
@@ -100,7 +101,6 @@ export function* fixedBorrow(
       new PublicKey(token),
       positionsAddress
     )
-    toast("Borrow succeeded")
   } catch (e: any) {
     console.log(e.toString())
   }
