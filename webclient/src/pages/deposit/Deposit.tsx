@@ -9,10 +9,7 @@ import Reserve, { ReserveProps } from "../../common/Reserve"
 import { Modal } from "../../common/Modal"
 import DepositFixed from "./DepositFixed"
 import DepositVar from "./DepositVar"
-import rate from "../../assets/rate.svg"
 import Portfolio from "../../common/Portfolio"
-import { useWallet } from "@solana/wallet-adapter-react"
-import { ReserveData } from "common/UserReserve"
 import { niceNum } from "toolbox/nicenum"
 
 function Deposit() {
@@ -23,16 +20,16 @@ function Deposit() {
   const { balances } = useAppSelector((state) => state.userTokenAccounts)
 
   const mockDataFixed = [
-    [7.34, 2192740.01],
-    [8.46, 10283205.93],
-    [3.85, 857495.76],
-    [4.45, 8713.34],
+    [11.84, 2192740.01],
+    [7.46, 10283205.93],
+    [7.85, 857495.76],
+    [10.29, 8713.34],
   ]
   const mockDataVar = [
-    [7.34, 2192740.01],
+    [13.34, 2192740.01],
     [8.46, 10283205.93],
-    [3.85, 857495.76],
-    [4.45, 8713.34],
+    [8.85, 857495.76],
+    [12.45, 8713.34],
   ]
 
   const toReserveData =
@@ -91,7 +88,7 @@ function Deposit() {
         <div className="width__70">
           <div className="center-column title-block">
             <h1 className="text__xl6-semi is-white is-gilroy">
-              Lend crypto and get yield
+              Lend assets and earn yield
             </h1>
             <p className="text__large-semi is-alpha-60 width__65 mt-4">
               Build a stable portfolio with fixed rate income on your assets.
