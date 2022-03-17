@@ -33,12 +33,7 @@ import { selectVariableDeposits } from "store/selectors"
 function DepositVar() {
   const dispatch = useAppDispatch()
   const { addresses } = useContext(Context)
-  const { amount, duration, tab, inputTime } = useAppSelector(
-    selectDepositUIValues
-  )
-  const { status } = useAppSelector(selectVariableDepositStatus)
-  const { timeTab } = useAppSelector(selectAppUIValues)
-  const isMonths = timeTab === "Months"
+  const { amount, tab } = useAppSelector(selectDepositUIValues)
   const isWithdraw = tab === "Withdraw"
   const token = useAppSelector((s) => s.depositui.token)
   const depositedAmount = useAppSelector(selectUserVariableDeposit(token))
@@ -47,7 +42,7 @@ function DepositVar() {
   const mintMeta = addresses?.mintMetaMap[token]
   const { name } = mintMeta
 
-  const apr = 13.96
+  const apr = 0.1396
   const tabOptions = ["Lend", "Withdraw"]
   const tabHandler = (tab: string) => uiActions.setTab(tab)
 
