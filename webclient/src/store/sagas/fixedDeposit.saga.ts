@@ -15,6 +15,7 @@ import {
 } from "@solana/web3.js"
 import { Wallet } from "@project-serum/anchor"
 import { signAllAndSend } from "./common"
+import toast from "react-hot-toast"
 
 async function doFixedDeposit(
   sdk: AdventMarket,
@@ -70,15 +71,20 @@ export function* fixedDeposit(
   const state = (yield select()) as RootState
 
   // Do the work
-  yield call(
-    doFixedDeposit,
-    adventMarketSDK,
-    connection,
-    wallet as Wallet,
-    amount,
-    duration,
-    new PublicKey(token)
-  )
+  try {
+    yield call(
+      doFixedDeposit,
+      adventMarketSDK,
+      connection,
+      wallet as Wallet,
+      amount,
+      duration,
+      new PublicKey(token)
+    )
+    toast("Deposit completed")
+  } catch (e: any) {
+    console.log(e.toString())
+  }
 
   yield put(fixedDepositActions.succeeded())
   yield put(userTokenBalanceActions.userTokenBalancesStateRequested())

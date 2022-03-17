@@ -24,6 +24,7 @@ import {
 
 import { actions as variableDepositActions } from "../reducer/variableDeposit"
 import { getOrCreateATA, signAllAndSend } from "./common"
+import { toast } from "react-toastify"
 
 async function doVariableDeposit(
   amount: number,
@@ -149,6 +150,8 @@ export function* variableDeposit(
       useAsCollateral,
       positionsAddress
     )
+
+    toast("Deposit succeeded")
   } catch (e: any) {
     console.log(e)
   }

@@ -18,6 +18,7 @@ import {
 import { Wallet } from "@project-serum/anchor"
 import { getOrCreateATA, signAllAndSend } from "./common"
 import { RootState } from "store"
+import toast from "react-hot-toast"
 
 async function doFixedBorrow(
   sdk: AdventMarket,
@@ -88,16 +89,21 @@ export function* fixedBorrow(
     ? new PublicKey(state.userPortfolio.state.positionsAddress)
     : undefined
 
-  yield call(
-    doFixedBorrow,
-    adventMarketSDK,
-    connection,
-    wallet as Wallet,
-    amount,
-    duration,
-    new PublicKey(token),
-    positionsAddress
-  )
+  try {
+    yield call(
+      doFixedBorrow,
+      adventMarketSDK,
+      connection,
+      wallet as Wallet,
+      amount,
+      duration,
+      new PublicKey(token),
+      positionsAddress
+    )
+    toast("Borrow succeeded")
+  } catch (e: any) {
+    console.log(e.toString())
+  }
 
   yield put(fixedBorrowActions.succeeded())
   yield put(userTokenBalanceActions.userTokenBalancesStateRequested())
