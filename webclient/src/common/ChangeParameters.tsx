@@ -1,7 +1,4 @@
-import { useState } from "react"
 import Container from "../blocks/Container"
-import Button from "../blocks/Button"
-import chevron from "../assets/chevron.svg"
 import arrow from "../assets/arrow.svg"
 import LimitSlider from "../common/LimitSlider"
 
@@ -37,7 +34,9 @@ function ChangeParameters({ params }: ChangeParameterProps) {
     )
   })
 
-  const borrowLimit = [{ label: "Borrow limit used", value: 38, nextValue: 25 }]
+  const borrowLimit = [
+    { label: "Borrow limit used", value: 38, nextValue: undefined },
+  ]
 
   const displayBorrow = borrowLimit.map((e, i) => {
     return (

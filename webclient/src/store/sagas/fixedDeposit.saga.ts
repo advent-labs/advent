@@ -1,7 +1,8 @@
 import { call, getContext, put, select } from "redux-saga/effects"
 import { SolanaConnectionContext } from "../../solanaConnectionContext"
-import { actions } from "../ui/depositui"
 import { actions as reservesActions } from "../reducer/reserves"
+import { actions as fixedDepositActions } from "store/reducer/fixedDeposit"
+
 import { PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "store"
 import { actions as userTokenBalanceActions } from "store/reducer/userTokenBalances"
@@ -79,7 +80,7 @@ export function* fixedDeposit(
     new PublicKey(token)
   )
 
-  yield put(actions.depositSucceed())
+  yield put(fixedDepositActions.succeeded())
   yield put(userTokenBalanceActions.userTokenBalancesStateRequested())
   yield put(reservesActions.loadRequested())
 }

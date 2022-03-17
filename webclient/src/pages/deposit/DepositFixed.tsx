@@ -47,14 +47,13 @@ function DepositFixed() {
   const tabOptions = ["Lend", "Withdraw"]
   const tabHandler = (tab: string) => uiActions.setTab(tab)
   const parameters = [
-    { label: "Borrow limit", value: 80, nextValue: 85, square: "red" },
+    { label: "Borrow limit", value: 80, square: "red" },
     {
       label: "Liquidation threshold",
       value: 85,
-      nextValue: 88,
       square: "black",
     },
-    { label: "Health factor", value: 1.34, nextValue: 1.52 },
+    { label: "Health factor", value: 1.34 },
     { label: "Loan to value", value: 75 },
   ]
 
