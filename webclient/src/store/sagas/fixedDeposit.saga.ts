@@ -3,6 +3,7 @@ import { SolanaConnectionContext } from "../../solanaConnectionContext"
 import { actions as reservesActions } from "../reducer/reserves"
 import { actions as fixedDepositActions } from "store/reducer/fixedDeposit"
 
+import { selectors as portfolioSelectors } from "../reducer/userPortfolio"
 import { PayloadAction } from "@reduxjs/toolkit"
 import { RootState } from "store"
 import { actions as userTokenBalanceActions } from "store/reducer/userTokenBalances"
@@ -15,7 +16,7 @@ import {
 } from "@solana/web3.js"
 import { Wallet } from "@project-serum/anchor"
 import { signAllAndSend } from "./common"
-import toast from "react-hot-toast"
+import { toast } from "react-toastify"
 
 async function doFixedDeposit(
   sdk: AdventMarket,
@@ -24,12 +25,12 @@ async function doFixedDeposit(
   amount: number,
   duration: number,
   token: PublicKey,
-  positionsAddress = PublicKey.default
+  positionsAddress?: PublicKey
 ) {
   const ixs: TransactionInstruction[] = []
   const additionalSigners: Keypair[] = []
   // If no positions, then need to initialize portfolio
-  if (positionsAddress.equals(PublicKey.default)) {
+  if (!positionsAddress) {
     console.log("Init positions")
     const newPositions = Keypair.generate()
     const initPortfolioIXs = await sdk.initPortfolioIX(
@@ -53,6 +54,7 @@ async function doFixedDeposit(
   }
 
   const sig = await signAllAndSend(ixs, wallet, connection, additionalSigners)
+  toast("Deposit succeeded")
   return sig
 }
 
@@ -70,6 +72,12 @@ export function* fixedDeposit(
   }
   const state = (yield select()) as RootState
 
+  const isPortfolioInitalized = portfolioSelectors.isPortfolioInitialized(
+    state.userPortfolio
+  )
+  const positionsAddress = isPortfolioInitalized
+    ? new PublicKey(state.userPortfolio.state.positionsAddress)
+    : undefined
   // Do the work
   try {
     yield call(
@@ -79,9 +87,9 @@ export function* fixedDeposit(
       wallet as Wallet,
       amount,
       duration,
-      new PublicKey(token)
+      new PublicKey(token),
+      positionsAddress
     )
-    toast("Deposit completed")
   } catch (e: any) {
     console.log(e.toString())
   }

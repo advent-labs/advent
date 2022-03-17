@@ -65,7 +65,7 @@ impl<'info> FixedDeposit<'info> {
             Transfer {
                 from: self.user_reserve.to_account_info(),
                 to: self.reserve_vault.to_account_info(),
-                authority: self.market.to_account_info(),
+                authority: self.authority.to_account_info(),
             },
         )
     }

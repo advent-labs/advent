@@ -7,6 +7,7 @@ import {
   actions as uiActions,
   selectDepositUIValues,
 } from "../../store/ui/depositui"
+import { actions as fixedDepositActions } from "store/reducer/fixedDeposit"
 import { totalInterestEarnedForDeposit } from "../../sdk/eqs"
 import { selectors } from "../../store/reducer/reserves"
 import Tabs from "../../common/Tabs"
@@ -23,6 +24,7 @@ import { selectAppUIValues } from "../../store/ui/appui"
 import WalletBalance from "common/WalletBalance"
 
 function DepositFixed() {
+  const dispatch = useAppDispatch()
   const { addresses } = useContext(Context)
   const token = useAppSelector((s) => s.depositui.token)
   const reserve = useAppSelector(selectors.selectReserveByToken(token))
@@ -43,7 +45,11 @@ function DepositFixed() {
     amountNormalized,
     duration
   )
-  const apr = (totalInterestEarned / amountNormalized / duration) * 365 || 0
+  const apr =
+    amountNormalized === 0
+      ? 0
+      : (totalInterestEarned / amountNormalized / duration) * 365 || 0
+
   const tabOptions = ["Lend", "Withdraw"]
   const tabHandler = (tab: string) => uiActions.setTab(tab)
   const parameters = [
@@ -68,6 +74,19 @@ function DepositFixed() {
   }
   const displayDate = date.toString().slice(3, 16)
 
+  const handler = () => {
+    console.log(amount)
+    console.log(reserve.token)
+    const token = reserve.token
+
+    dispatch(
+      fixedDepositActions.requested({
+        amount: amount * 10 ** reserve.decimals,
+        token,
+        duration,
+      })
+    )
+  }
   const dataPoints = [
     {
       label: `Total at maturity | ${displayDate}`,
@@ -159,7 +178,7 @@ function DepositFixed() {
           <Button
             type="secondary"
             text={tab}
-            handler={() => toast.success("You did it")}
+            handler={handler}
             xtra="is-full-width mt-4"
           />
           <WalletBalance mint={token} name={name} />
